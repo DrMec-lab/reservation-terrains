@@ -1278,7 +1278,13 @@ async function doSwap(k1,k2) {
 }
 
 // ── Init dates ──
-const todayStr = new Date().toISOString().slice(0,10);
+function fmtLocal(dt) {
+  const y = dt.getFullYear();
+  const m = String(dt.getMonth()+1).padStart(2,"0");
+  const d = String(dt.getDate()).padStart(2,"0");
+  return `${y}-${m}-${d}`;
+}
+const todayStr = fmtLocal(new Date());
 const clamp = d => d < MIN_D ? MIN_D : (d > MAX_D ? MAX_D : d);
 const startDate = clamp(todayStr);
 
@@ -1295,7 +1301,7 @@ function setDate(v) {
   document.getElementById("datePickDsk").value = v;
 }
 function shiftDate(s, d) {
-  const dt = new Date(s+"T00:00:00"); dt.setDate(dt.getDate()+d); return dt.toISOString().slice(0,10);
+  const dt = new Date(s+"T00:00:00"); dt.setDate(dt.getDate()+d); return fmtLocal(dt);
 }
 function fmtDate(s) {
   const d = new Date(s+"T00:00:00");
