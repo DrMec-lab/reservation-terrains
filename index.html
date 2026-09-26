@@ -1,169 +1,1108 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Réservation des Terrains — EMI</title>
+<title>EMI — Réservation des Terrains</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#f5f6f8;--card:#ffffff;--text:#1a1d23;--sub:#6b7280;
-  --border:#e2e4e9;--accent:#2563eb;--accent-text:#fff;
-  --free:#eef2ff;--free-hover:#e0e7ff;--taken:#dcfce7;--taken-text:#166534;
-  --mine:#fef3c7;--mine-text:#92400e;--mine-border:#fcd34d;
-  --danger:#dc2626;--swap:#ea580c;
-  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
-  box-sizing:border-box;
+/* ═══════════════════════════════════════════
+   TOKENS
+═══════════════════════════════════════════ */
+:root {
+  --green-950: #052015;
+  --green-900: #0A3D2B;
+  --green-800: #0F5235;
+  --green-700: #1A6B47;
+  --green-600: #1D8055;
+  --green-500: #22C55E;
+  --green-400: #4ADE80;
+  --green-100: #DCFCE7;
+  --green-50:  #F0FDF4;
+
+  --slate-950: #020617;
+  --slate-900: #0F172A;
+  --slate-700: #334155;
+  --slate-500: #64748B;
+  --slate-300: #CBD5E1;
+  --slate-200: #E2E8F0;
+  --slate-100: #F1F5F9;
+  --slate-50:  #F8FAFC;
+  --white:     #FFFFFF;
+
+  --amber-500: #F59E0B;
+  --amber-100: #FEF3C7;
+  --amber-800: #92400E;
+
+  --red-500:   #EF4444;
+  --red-100:   #FEE2E2;
+  --red-800:   #991B1B;
+
+  /* Semantic */
+  --bg:         var(--slate-50);
+  --surface:    var(--white);
+  --surface-2:  var(--slate-100);
+  --text:       var(--slate-900);
+  --text-muted: var(--slate-500);
+  --border:     var(--slate-200);
+  --border-strong: var(--slate-300);
+
+  --slot-free:     var(--green-50);
+  --slot-free-h:   var(--green-100);
+  --slot-mine:     var(--amber-100);
+  --slot-mine-t:   var(--amber-800);
+  --slot-mine-b:   var(--amber-500);
+  --slot-other:    var(--green-100);
+  --slot-other-t:  var(--green-700);
+  --slot-blocked:  var(--slate-100);
+  --slot-blocked-t:var(--slate-400);
+
+  --radius-sm: 6px;
+  --radius:    10px;
+  --radius-lg: 16px;
+  --radius-xl: 22px;
+
+  font-family: 'Inter', -apple-system, sans-serif;
+  box-sizing: border-box;
 }
-@media(prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){
-    --bg:#14161a;--card:#1e2127;--text:#e5e7eb;--sub:#9ca3af;
-    --border:#2c2f36;--accent:#3b82f6;--accent-text:#fff;
-    --free:#1e2540;--free-hover:#28305a;--taken:#123023;--taken-text:#4ade80;
-    --mine:#3b2800;--mine-text:#fcd34d;--mine-border:#92400e;
-    --danger:#ef4444;--swap:#f97316;
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg:         #0B1512;
+    --surface:    #111C17;
+    --surface-2:  #182419;
+    --text:       #E2E8F0;
+    --text-muted: #64748B;
+    --border:     #1E2D26;
+    --border-strong: #2A3F35;
+
+    --slot-free:     #0D2318;
+    --slot-free-h:   #122B1F;
+    --slot-mine:     #2C1A00;
+    --slot-mine-t:   #FCD34D;
+    --slot-mine-b:   #92400E;
+    --slot-other:    #0A2B1A;
+    --slot-other-t:  #4ADE80;
+    --slot-blocked:  #0D1611;
+    --slot-blocked-t:#2D4A38;
   }
 }
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Segoe UI,Roboto,sans-serif;min-height:100vh}
-.wrap{max-width:860px;margin:0 auto;padding:16px 12px 48px}
+:root[data-theme="dark"] {
+  --bg:         #0B1512;
+  --surface:    #111C17;
+  --surface-2:  #182419;
+  --text:       #E2E8F0;
+  --text-muted: #64748B;
+  --border:     #1E2D26;
+  --border-strong: #2A3F35;
+  --slot-free:     #0D2318;
+  --slot-free-h:   #122B1F;
+  --slot-mine:     #2C1A00;
+  --slot-mine-t:   #FCD34D;
+  --slot-mine-b:   #92400E;
+  --slot-other:    #0A2B1A;
+  --slot-other-t:  #4ADE80;
+  --slot-blocked:  #0D1611;
+  --slot-blocked-t:#2D4A38;
+}
 
-/* ── LOGIN ── */
-#loginScreen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:80vh;gap:0}
-.login-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:28px 24px;width:100%;max-width:360px;display:flex;flex-direction:column;gap:16px}
-.login-logo{font-size:2rem;text-align:center;margin-bottom:4px}
-.login-title{font-size:1.1rem;font-weight:700;text-align:center;margin-bottom:2px}
-.login-sub{font-size:.8rem;color:var(--sub);text-align:center;margin-bottom:8px}
-.login-row{display:flex;flex-direction:column;gap:6px}
-.login-row label{font-size:.78rem;color:var(--sub);font-weight:600}
-select{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.95rem;appearance:none;-webkit-appearance:none;cursor:pointer}
-select:focus{outline:2px solid var(--accent);outline-offset:1px}
-.btn-login{width:100%;padding:11px;border-radius:10px;border:none;background:var(--accent);color:var(--accent-text);font-size:1rem;font-weight:600;cursor:pointer;margin-top:4px;transition:opacity .15s}
-.btn-login:hover{opacity:.88}
-.badge-user{display:inline-flex;align-items:center;gap:6px;background:var(--mine);color:var(--mine-text);border:1px solid var(--mine-border);border-radius:20px;padding:4px 12px;font-size:.78rem;font-weight:600;cursor:pointer;user-select:none}
-.badge-user:hover{opacity:.8}
+*, *::before, *::after { box-sizing: inherit; margin: 0; padding: 0; }
+html, body { min-height: 100vh; background: var(--bg); color: var(--text); }
 
-/* ── APP ── */
-#appScreen{display:none}
-.topbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:14px}
-.topbar h1{font-size:1.15rem;font-weight:700}
-.topbar .sub{font-size:.8rem;color:var(--sub);margin-top:1px}
+/* ═══════════════════════════════════════════
+   LOGIN SCREEN
+═══════════════════════════════════════════ */
+#loginScreen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  padding-top: max(24px, env(safe-area-inset-top));
+  padding-bottom: max(24px, env(safe-area-inset-bottom));
+  background:
+    radial-gradient(ellipse 80% 60% at 50% -10%, #1A6B4722 0%, transparent 70%),
+    var(--bg);
+}
 
-.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:14px}
-label.lbl{font-size:.8rem;color:var(--sub);display:block;margin-bottom:4px}
-input[type=date]{width:100%;padding:10px;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:1rem}
-.daynav{display:flex;gap:8px;margin-top:10px}
-.daynav button{flex:1;padding:8px;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--text);cursor:pointer;font-size:.82rem;transition:background .1s}
-.daynav button:hover{background:var(--free-hover)}
-.outofrange{color:var(--danger);font-size:.82rem;margin-top:8px}
+.login-wrap {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
 
-.grid-wrap{overflow-x:auto;border-radius:14px;border:1px solid var(--border)}
-table{border-collapse:collapse;width:100%;min-width:480px;background:var(--card)}
-th,td{padding:5px;text-align:center;font-size:.76rem;border-bottom:1px solid var(--border)}
-th{background:var(--bg);color:var(--sub);font-weight:700;position:sticky;top:0;z-index:1}
-td.hour{color:var(--sub);white-space:nowrap;font-weight:600;font-size:.75rem;padding:5px 8px}
-.slot{border-radius:9px;padding:7px 4px;min-height:36px;display:flex;flex-direction:column;justify-content:center;gap:2px;font-size:.74rem}
-.slot.free{background:var(--free);cursor:pointer}
-.slot.free:hover{background:var(--free-hover)}
-.slot.taken{background:var(--taken);color:var(--taken-text);font-weight:600}
-.slot.mine{background:var(--mine);color:var(--mine-text);font-weight:700;border:1.5px solid var(--mine-border)}
-.slot.selected-swap{outline:2.5px solid var(--swap);outline-offset:1px}
-.slot.blocked{background:var(--bg);cursor:not-allowed;opacity:.55}
+.login-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 32px;
+}
 
-.actions{display:flex;gap:3px;justify-content:center;margin-top:4px;flex-wrap:wrap}
-.actions button{border:none;border-radius:6px;padding:3px 8px;font-size:.67rem;cursor:pointer;color:#fff;font-weight:600}
-.btn-cancel{background:var(--danger)}
-.btn-swap{background:var(--swap)}
+.login-emblem {
+  width: 64px;
+  height: 64px;
+  background: var(--green-900);
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  box-shadow: 0 0 0 4px #1A6B4730;
+}
 
-.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:.72rem;color:var(--sub);margin-top:10px}
-.dot{width:10px;height:10px;border-radius:3px;display:inline-block;margin-right:4px;vertical-align:middle}
+.login-brand h1 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -.3px;
+  text-align: center;
+}
+.login-brand p {
+  font-size: .82rem;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.5;
+}
 
-.banner{background:var(--free);border:1px solid var(--accent);border-radius:10px;padding:8px 10px;font-size:.8rem;margin-bottom:12px;display:none;line-height:1.4}
-.banner a{cursor:pointer;text-decoration:underline;color:var(--accent)}
-.err-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1e2127;color:#f9fafb;padding:10px 18px;border-radius:10px;font-size:.83rem;z-index:999;display:none;max-width:320px;text-align:center;box-shadow:0 4px 16px rgba(0,0,0,.3)}
+.login-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.field-group label {
+  font-size: .75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.field-group select {
+  width: 100%;
+  padding: 11px 14px;
+  border-radius: var(--radius);
+  border: 1.5px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text);
+  font-family: inherit;
+  font-size: .95rem;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
+  transition: border-color .15s;
+}
+.field-group select:focus {
+  outline: none;
+  border-color: var(--green-600);
+  box-shadow: 0 0 0 3px #1A6B4720;
+}
+
+.login-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-muted);
+  font-size: .75rem;
+}
+.login-divider::before, .login-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 13px;
+  border-radius: var(--radius);
+  border: none;
+  background: var(--green-900);
+  color: #fff;
+  font-family: inherit;
+  font-size: .95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .15s, transform .1s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.btn-primary:hover { background: var(--green-800); }
+.btn-primary:active { transform: scale(.98); }
+
+.login-footer {
+  text-align: center;
+  font-size: .75rem;
+  color: var(--text-muted);
+  margin-top: 16px;
+  line-height: 1.6;
+}
+
+/* ═══════════════════════════════════════════
+   APP SCREEN — MOBILE FIRST
+═══════════════════════════════════════════ */
+#appScreen { display: none; min-height: 100vh; }
+
+/* ── Top bar (mobile) ── */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--green-900);
+  color: #fff;
+  padding: 0 16px;
+  padding-top: env(safe-area-inset-top, 0px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: calc(56px + env(safe-area-inset-top, 0px));
+  gap: 12px;
+}
+.topbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.topbar-icon {
+  width: 32px;
+  height: 32px;
+  background: rgba(255,255,255,.12);
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.topbar-title {
+  font-size: .92rem;
+  font-weight: 700;
+  letter-spacing: -.2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.topbar-sub {
+  font-size: .68rem;
+  opacity: .65;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-chip {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,.13);
+  border: 1px solid rgba(255,255,255,.2);
+  border-radius: 20px;
+  padding: 5px 10px 5px 7px;
+  cursor: pointer;
+  font-size: .75rem;
+  font-weight: 600;
+  color: #fff;
+  transition: background .15s;
+  white-space: nowrap;
+}
+.user-chip:hover { background: rgba(255,255,255,.2); }
+.user-avatar {
+  width: 22px;
+  height: 22px;
+  background: var(--green-500);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .6rem;
+  font-weight: 700;
+  color: var(--green-900);
+  flex-shrink: 0;
+}
+
+/* ── Mobile content ── */
+.mobile-content {
+  padding: 16px 14px;
+  padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ── Date card ── */
+.date-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.date-card-header {
+  background: var(--surface-2);
+  padding: 10px 14px;
+  font-size: .72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  border-bottom: 1px solid var(--border);
+}
+.date-card-body { padding: 12px 14px; display: flex; flex-direction: column; gap: 10px; }
+input[type=date] {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  border: 1.5px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text);
+  font-family: inherit;
+  font-size: .9rem;
+  cursor: pointer;
+}
+input[type=date]:focus { outline: none; border-color: var(--green-600); box-shadow: 0 0 0 3px #1A6B4720; }
+
+.daynav {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 6px;
+}
+.daynav button {
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text);
+  font-family: inherit;
+  font-size: .8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background .12s;
+  white-space: nowrap;
+}
+.daynav button:hover { background: var(--border); }
+.daynav .btn-today {
+  background: var(--green-900);
+  color: #fff;
+  border-color: var(--green-900);
+  font-size: .75rem;
+}
+.daynav .btn-today:hover { background: var(--green-800); }
+.oor-msg {
+  font-size: .78rem;
+  color: var(--red-500);
+  display: none;
+  padding: 6px 10px;
+  background: var(--red-100);
+  border-radius: var(--radius-sm);
+}
+
+/* ── Swap banner ── */
+.swap-banner {
+  display: none;
+  background: #FFF7ED;
+  border: 1.5px solid var(--amber-500);
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  font-size: .8rem;
+  color: var(--amber-800);
+  line-height: 1.5;
+  align-items: center;
+  gap: 10px;
+}
+.swap-banner.show { display: flex; }
+.swap-banner span { flex: 1; }
+.btn-cancel-swap {
+  flex-shrink: 0;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--amber-500);
+  background: transparent;
+  color: var(--amber-800);
+  font-family: inherit;
+  font-size: .75rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ── Grid ── */
+.grid-section { display: flex; flex-direction: column; gap: 8px; }
+.grid-section-title {
+  font-size: .72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  padding: 0 2px;
+}
+.grid-scroll {
+  overflow-x: auto;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  -webkit-overflow-scrolling: touch;
+}
+.grid-table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 500px;
+  background: var(--surface);
+}
+.grid-table th {
+  padding: 10px 8px;
+  font-size: .72rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+  text-align: center;
+  letter-spacing: .03em;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+.grid-table th:first-child { text-align: left; padding-left: 12px; min-width: 72px; }
+.grid-table td {
+  padding: 4px 6px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+.grid-table td.hour-cell {
+  font-size: .73rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  padding-left: 12px;
+  white-space: nowrap;
+  min-width: 72px;
+  background: var(--surface-2);
+  border-right: 1px solid var(--border);
+}
+.grid-table tr:last-child td { border-bottom: none; }
+
+/* ── Slots ── */
+.slot {
+  border-radius: var(--radius-sm);
+  padding: 7px 6px;
+  min-height: 42px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 3px;
+  font-size: .72rem;
+  text-align: center;
+  transition: background .12s;
+  cursor: default;
+}
+.slot.free {
+  background: var(--slot-free);
+  cursor: pointer;
+}
+.slot.free:hover { background: var(--slot-free-h); }
+.slot.free::after {
+  content: '+';
+  font-size: .9rem;
+  color: var(--green-600);
+  font-weight: 700;
+  opacity: .6;
+}
+.slot.mine {
+  background: var(--slot-mine);
+  color: var(--slot-mine-t);
+  font-weight: 600;
+  border: 1.5px solid var(--slot-mine-b);
+}
+.slot.other {
+  background: var(--slot-other);
+  color: var(--slot-other-t);
+  font-weight: 500;
+}
+.slot.blocked {
+  background: var(--slot-blocked);
+  color: var(--slot-blocked-t);
+  cursor: not-allowed;
+}
+.slot.blocked::after {
+  content: '—';
+  font-size: .8rem;
+  opacity: .5;
+}
+.slot.swap-selected { outline: 2px solid var(--amber-500); outline-offset: 1px; }
+
+.slot-name {
+  font-size: .7rem;
+  line-height: 1.3;
+  max-width: 90px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+}
+.slot-gp {
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 88px;
+}
+.slot-genre {
+  font-size: .63rem;
+  opacity: .8;
+  white-space: nowrap;
+}
+.slot-actions {
+  display: flex;
+  gap: 3px;
+  margin-top: 2px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.slot-actions button {
+  border: none;
+  border-radius: 4px;
+  padding: 2px 7px;
+  font-size: .62rem;
+  font-weight: 700;
+  cursor: pointer;
+  color: #fff;
+  font-family: inherit;
+  transition: opacity .12s;
+}
+.slot-actions button:hover { opacity: .85; }
+.btn-annuler { background: var(--red-500); }
+.btn-echanger { background: var(--green-700); }
+
+/* ── Legend ── */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  padding: 10px 2px;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: .72rem;
+  color: var(--text-muted);
+}
+.legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+/* ═══════════════════════════════════════════
+   DESKTOP LAYOUT (≥ 768px)
+═══════════════════════════════════════════ */
+@media (min-width: 768px) {
+  #appScreen { display: none; }
+  #appScreen.active { display: grid !important; grid-template-columns: 280px 1fr; min-height: 100vh; }
+
+  /* Sidebar */
+  .sidebar {
+    background: var(--green-900);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    padding: 28px 24px;
+    padding-top: max(28px, env(safe-area-inset-top));
+    padding-bottom: max(28px, env(safe-area-inset-bottom));
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    gap: 0;
+  }
+
+  .sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  .sidebar-emblem {
+    width: 42px;
+    height: 42px;
+    background: rgba(255,255,255,.1);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .sidebar-title { font-size: 1rem; font-weight: 700; line-height: 1.2; }
+  .sidebar-sub { font-size: .7rem; opacity: .55; margin-top: 2px; }
+
+  .sidebar-section {
+    margin-bottom: 24px;
+  }
+  .sidebar-label {
+    font-size: .65rem;
+    font-weight: 700;
+    letter-spacing: .1em;
+    opacity: .4;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .sidebar input[type=date] {
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.15);
+    color: #fff;
+    border-radius: var(--radius);
+    padding: 9px 12px;
+    font-size: .85rem;
+    width: 100%;
+    font-family: inherit;
+  }
+  .sidebar input[type=date]:focus {
+    outline: none;
+    border-color: var(--green-500);
+    box-shadow: 0 0 0 3px #22C55E25;
+  }
+  .sidebar input[type=date]::-webkit-calendar-picker-indicator { filter: invert(1); opacity: .5; }
+
+  .sidebar .daynav {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 8px;
+  }
+  .sidebar .daynav button {
+    background: rgba(255,255,255,.07);
+    border: 1px solid rgba(255,255,255,.1);
+    color: #fff;
+    font-size: .8rem;
+    padding: 8px 12px;
+    text-align: left;
+    border-radius: var(--radius-sm);
+  }
+  .sidebar .daynav button:hover { background: rgba(255,255,255,.14); }
+  .sidebar .btn-today {
+    background: var(--green-600) !important;
+    border-color: transparent !important;
+    font-weight: 600;
+  }
+
+  .sidebar-divider {
+    height: 1px;
+    background: rgba(255,255,255,.08);
+    margin: 20px 0;
+  }
+
+  .sidebar-user {
+    margin-top: auto;
+    background: rgba(255,255,255,.07);
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: background .12s;
+  }
+  .sidebar-user:hover { background: rgba(255,255,255,.12); }
+  .sidebar-user-avatar {
+    width: 36px;
+    height: 36px;
+    background: var(--green-500);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .7rem;
+    font-weight: 800;
+    color: var(--green-900);
+    flex-shrink: 0;
+  }
+  .sidebar-user-info { flex: 1; min-width: 0; }
+  .sidebar-user-name { font-size: .83rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sidebar-user-role { font-size: .68rem; opacity: .45; }
+  .sidebar-logout { font-size: .7rem; opacity: .4; }
+
+  .sidebar .oor-msg { background: rgba(239,68,68,.15); color: #FCA5A5; border-radius: var(--radius-sm); padding: 6px 8px; font-size: .75rem; margin-top: 8px; display: none; }
+
+  /* Legend in sidebar */
+  .sidebar .legend {
+    flex-direction: column;
+    gap: 6px;
+    padding: 0;
+  }
+  .sidebar .legend-item { font-size: .72rem; color: rgba(255,255,255,.45); }
+
+  /* Main area */
+  .main-area {
+    padding: 28px 28px 48px;
+    padding-top: max(28px, env(safe-area-inset-top));
+    overflow-y: auto;
+  }
+  .main-header {
+    margin-bottom: 22px;
+  }
+  .main-header h2 {
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: -.3px;
+    color: var(--text);
+  }
+  .main-header p {
+    font-size: .83rem;
+    color: var(--text-muted);
+    margin-top: 3px;
+  }
+
+  /* Desktop swap banner */
+  .swap-banner {
+    margin-bottom: 18px;
+    border-radius: var(--radius);
+  }
+
+  /* Desktop grid — full table */
+  .grid-scroll { border-radius: var(--radius-lg); }
+  .grid-table th { padding: 12px 10px; font-size: .75rem; }
+  .grid-table th:first-child { padding-left: 16px; min-width: 90px; }
+  .grid-table td.hour-cell { font-size: .78rem; padding-left: 16px; min-width: 90px; }
+  .slot { min-height: 48px; padding: 8px; font-size: .75rem; }
+  .slot-name { max-width: 110px; font-size: .73rem; }
+
+  /* Hide mobile topbar on desktop */
+  .topbar { display: none !important; }
+  .mobile-content { display: none !important; }
+}
+
+/* Mobile only: hide sidebar & main-area */
+@media (max-width: 767px) {
+  .sidebar { display: none !important; }
+  .main-area { display: none !important; }
+  #appScreen.active { display: block !important; }
+}
+
+/* ═══════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════ */
+.toast {
+  position: fixed;
+  bottom: max(24px, env(safe-area-inset-bottom, 0px));
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--slate-900);
+  color: #F8FAFC;
+  padding: 11px 20px;
+  border-radius: 24px;
+  font-size: .83rem;
+  font-weight: 500;
+  z-index: 9999;
+  max-width: calc(100vw - 40px);
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(0,0,0,.3);
+  transition: transform .25s cubic-bezier(.34,1.56,.64,1), opacity .25s;
+  opacity: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+.toast.green { background: var(--green-900); }
+.toast.red { background: #7F1D1D; }
+
+/* ── Modale mot de passe ── */
+#pwdModal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0,0,0,.55);
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+#pwdModal.open { display: flex; }
+.pwd-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 24px 20px;
+  width: 100%;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.pwd-card h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+}
+.pwd-card p {
+  font-size: .82rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+.pwd-card input {
+  width: 100%;
+  padding: 11px 14px;
+  border-radius: var(--radius);
+  border: 1.5px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text);
+  font-family: inherit;
+  font-size: .95rem;
+}
+.pwd-card input:focus { outline: none; border-color: var(--red-500); box-shadow: 0 0 0 3px #EF444420; }
+.pwd-btns { display: flex; gap: 8px; }
+.pwd-btns button {
+  flex: 1;
+  padding: 11px;
+  border-radius: var(--radius);
+  border: none;
+  font-family: inherit;
+  font-size: .9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn-pwd-cancel { background: var(--surface-2); color: var(--text); border: 1px solid var(--border) !important; }
+.btn-pwd-confirm { background: var(--red-500); color: #fff; }
 </style>
 </head>
 <body>
-<div class="wrap">
 
-<!-- ══ LOGIN ══ -->
+<!-- ══════════════════════════════════════
+     LOGIN
+══════════════════════════════════════ -->
 <div id="loginScreen">
-  <div class="login-card">
-    <div class="login-logo">🏟️</div>
-    <div class="login-title">Réservation des Terrains</div>
-    <div class="login-sub">Mini-foot · Basketball · Volleyball<br>Année scolaire 2026–2027 — EMI</div>
-
-    <div class="login-row">
-      <label>Génie</label>
-      <select id="selGenie">
-        <option value="">— Choisir —</option>
-        <option>G.Info</option>
-        <option>G.MIS</option>
-        <option>G.ProIndus</option>
-        <option>G.Indus</option>
-        <option>G.Méca</option>
-        <option>G.Min</option>
-        <option>G.RT</option>
-        <option>G.Élec</option>
-        <option>G.Civ</option>
-      </select>
+  <div class="login-wrap">
+    <div class="login-brand">
+      <div class="login-emblem">🏟️</div>
+      <h1>École Mohammadia d'Ingénieurs</h1>
+      <p>Réservation des terrains sportifs<br>Année scolaire 2026–2027</p>
     </div>
-    <div class="login-row">
-      <label>Promotion</label>
-      <select id="selPromo">
-        <option value="">— Choisir —</option>
-        <option>1A</option>
-        <option>2A</option>
-        <option>3A</option>
-      </select>
+    <div class="login-card">
+      <div class="field-group">
+        <label>Génie</label>
+        <select id="selGenie">
+          <option value="">Sélectionner votre génie</option>
+          <option>G.Info</option>
+          <option>G.MIS</option>
+          <option>G.ProIndus</option>
+          <option>G.Indus</option>
+          <option>G.Méca</option>
+          <option>G.Min</option>
+          <option>G.RT</option>
+          <option>G.Élec</option>
+          <option>G.Civ</option>
+          <option>Pays Amis</option>
+        </select>
+      </div>
+      <div class="login-divider">et</div>
+      <div class="field-group">
+        <label>Promotion</label>
+        <select id="selPromo">
+          <option value="">Sélectionner votre promotion</option>
+          <option>1A</option>
+          <option>2A</option>
+          <option>3A</option>
+        </select>
+      </div>
+      <div class="login-divider">et</div>
+      <div class="field-group">
+        <label>Genre</label>
+        <select id="selGenre">
+          <option value="">Sélectionner votre genre</option>
+          <option value="Garçons">Garçons</option>
+          <option value="Filles">Filles</option>
+        </select>
+      </div>
+      <button class="btn-primary" id="btnLogin">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+        Accéder à la plateforme
+      </button>
     </div>
-    <button class="btn-login" id="btnLogin">Accéder →</button>
+    <div class="login-footer">
+      Mini-foot · Basketball · Volleyball<br>
+      Chaque groupe (Génie · Promo · Genre) : 1 réservation par terrain par jour
+    </div>
   </div>
 </div>
 
-<!-- ══ APP ══ -->
+<!-- ══════════════════════════════════════
+     APP
+══════════════════════════════════════ -->
 <div id="appScreen">
+
+  <!-- MOBILE: topbar -->
   <div class="topbar">
-    <div>
-      <h1>🏟️ Réservation des Terrains</h1>
-      <div class="sub">Mini-foot · Basketball · Volleyball — année scolaire 2026–2027</div>
+    <div class="topbar-brand">
+      <div class="topbar-icon">🏟️</div>
+      <div>
+        <div class="topbar-title">Terrains EMI</div>
+        <div class="topbar-sub" id="topbarDate">—</div>
+      </div>
     </div>
-    <span class="badge-user" id="badgeUser" title="Cliquer pour changer de groupe">👥 <span id="badgeLabel"></span> ↩</span>
-  </div>
-
-  <div id="swapBanner" class="banner">
-    Mode échange actif — cliquez sur <strong>votre 2ᵉ créneau réservé</strong> pour permuter les deux groupes.
-    <a id="cancelSwap">Annuler</a>
-  </div>
-
-  <div class="card">
-    <label class="lbl" for="datePick">Date</label>
-    <input type="date" id="datePick" min="2026-09-01" max="2027-06-30">
-    <div class="daynav">
-      <button id="prevDay">← Veille</button>
-      <button id="today">Aujourd'hui</button>
-      <button id="nextDay">Lendemain →</button>
+    <div class="user-chip" id="chipUser">
+      <div class="user-avatar" id="chipAvatar"></div>
+      <span id="chipLabel"></span>
     </div>
-    <div id="outOfRange" class="outofrange"></div>
   </div>
 
-  <div class="grid-wrap">
-    <table id="grid">
-      <thead><tr><th>Heure</th><th>Mini-foot</th><th>Basketball</th><th>Volleyball</th></tr></thead>
-      <tbody id="gridBody"></tbody>
-    </table>
+  <!-- MOBILE: content -->
+  <div class="mobile-content">
+    <div id="swapBannerMob" class="swap-banner">
+      <span>Mode échange — sélectionnez votre 2ᵉ créneau pour permuter.</span>
+      <button class="btn-cancel-swap" id="cancelSwapMob">Annuler</button>
+    </div>
+    <div class="date-card">
+      <div class="date-card-header">Date de réservation</div>
+      <div class="date-card-body">
+        <input type="date" id="datePickMob" min="2026-09-01" max="2027-06-30">
+        <div class="daynav">
+          <button id="prevDayMob">← Veille</button>
+          <button class="btn-today" id="todayMob">Aujourd'hui</button>
+          <button id="nextDayMob">Lendemain →</button>
+        </div>
+        <div class="oor-msg" id="oorMob"></div>
+      </div>
+    </div>
+    <div class="grid-section">
+      <div class="grid-section-title">Créneaux disponibles — 8h à 22h</div>
+      <div class="grid-scroll">
+        <table class="grid-table" id="gridMob">
+          <thead>
+            <tr>
+              <th>Heure</th>
+              <th>⚽ Mini-foot</th>
+              <th>🏀 Basketball</th>
+              <th>🏐 Volleyball</th>
+            </tr>
+          </thead>
+          <tbody id="gridBodyMob"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--slot-free);border:1px solid var(--green-100)"></div> Libre</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--slot-mine);border:1.5px solid var(--slot-mine-b)"></div> Mon groupe</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--slot-other)"></div> Autre groupe</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--slot-blocked)"></div> Bloqué</div>
+    </div>
   </div>
 
-  <div class="legend">
-    <span><span class="dot" style="background:var(--free)"></span>Libre</span>
-    <span><span class="dot" style="background:var(--mine);border:1.5px solid var(--mine-border)"></span>Ma réservation</span>
-    <span><span class="dot" style="background:var(--taken)"></span>Réservé (autre)</span>
-    <span><span class="dot" style="background:var(--bg);border:1px solid var(--border);opacity:.6"></span>Bloqué (1 résa/terrain)</span>
+  <!-- DESKTOP: sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-emblem">🏟️</div>
+      <div>
+        <div class="sidebar-title">Terrains EMI</div>
+        <div class="sidebar-sub">Année 2026–2027</div>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Date</div>
+      <input type="date" id="datePickDsk" min="2026-09-01" max="2027-06-30">
+      <div class="daynav">
+        <button id="prevDayDsk">← Veille</button>
+        <button class="btn-today" id="todayDsk">Aujourd'hui</button>
+        <button id="nextDayDsk">Lendemain →</button>
+      </div>
+      <div class="oor-msg" id="oorDsk"></div>
+    </div>
+
+    <div class="sidebar-divider"></div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Légende</div>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--slot-free);border:1px solid #1A6B4740"></div> Libre</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--slot-mine);border:1.5px solid var(--slot-mine-b)"></div> Mon groupe</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--slot-other)"></div> Autre groupe</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--slot-blocked)"></div> Bloqué (1 résa/terrain)</div>
+      </div>
+    </div>
+
+    <div class="sidebar-divider"></div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Terrains</div>
+      <div class="legend">
+        <div class="legend-item" style="color:rgba(255,255,255,.55)">⚽ Mini-foot</div>
+        <div class="legend-item" style="color:rgba(255,255,255,.55)">🏀 Basketball</div>
+        <div class="legend-item" style="color:rgba(255,255,255,.55)">🏐 Volleyball</div>
+      </div>
+    </div>
+
+    <div class="sidebar-user" id="sidebarUser">
+      <div class="sidebar-user-avatar" id="sidebarAvatar"></div>
+      <div class="sidebar-user-info">
+        <div class="sidebar-user-name" id="sidebarName"></div>
+        <div class="sidebar-user-role">Changer de groupe</div>
+      </div>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+    </div>
+  </div>
+
+  <!-- DESKTOP: main -->
+  <div class="main-area">
+    <div class="main-header">
+      <h2 id="mainHeaderDate">Créneaux du jour</h2>
+      <p>Cliquez sur un créneau libre pour réserver · 1 réservation par terrain par jour</p>
+    </div>
+    <div id="swapBannerDsk" class="swap-banner" style="margin-bottom:18px">
+      <span>Mode échange actif — sélectionnez votre 2ᵉ créneau pour permuter les groupes.</span>
+      <button class="btn-cancel-swap" id="cancelSwapDsk">Annuler</button>
+    </div>
+    <div class="grid-scroll">
+      <table class="grid-table" id="gridDsk">
+        <thead>
+          <tr>
+            <th>Heure</th>
+            <th>⚽ Mini-foot</th>
+            <th>🏀 Basketball</th>
+            <th>🏐 Volleyball</th>
+          </tr>
+        </thead>
+        <tbody id="gridBodyDsk"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<div id="pwdModal">
+  <div class="pwd-card">
+    <h3>🔒 Confirmation requise</h3>
+    <p>Entrez le mot de passe de votre groupe pour annuler cette réservation.</p>
+    <input type="password" id="pwdInput" placeholder="Mot de passe">
+    <div class="pwd-btns">
+      <button class="btn-pwd-cancel" id="pwdCancelBtn">Annuler</button>
+      <button class="btn-pwd-confirm" id="pwdConfirmBtn">Confirmer</button>
+    </div>
   </div>
 </div>
 
-<div class="err-toast" id="errToast"></div>
-
-</div><!-- /wrap -->
+<div class="toast" id="toast"></div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
@@ -178,170 +1117,348 @@ const firebaseConfig = {
   messagingSenderId: "1036398595333",
   appId: "1:1036398595333:web:c62136e6e77aa965057b6c"
 };
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+
+const fbApp = initializeApp(firebaseConfig);
+const db = getFirestore(fbApp);
 const resCol = collection(db, "reservations");
 
 const COURTS = ["minifoot","basket","volley"];
-const COURT_LABELS = {minifoot:"Mini-foot",basket:"Basketball",volley:"Volleyball"};
-const START_HOUR = 8, END_HOUR = 22;
-const MIN_DATE = "2026-09-01", MAX_DATE = "2027-06-30";
+const S = 8, E = 22;
+const MIN_D = "2026-09-01", MAX_D = "2027-06-30";
 
-let currentUser = null;   // "G.Info 2A"
-let data = {};            // key -> {group, ts}
-let swapMode = null;      // {date, court, hour} of first selected slot
+let currentUser = null;
+let data = {};
+let swapMode = null;
 
-// ── Firestore live sync ──
+// ── Validation du format de clé ──
+// Format attendu : YYYY-MM-DD_court_heure  ex: 2026-09-26_volley_11
+const KEY_RE = /^\d{4}-\d{2}-\d{2}_(minifoot|basket|volley)_\d{1,2}$/;
+
+// ── Firebase sync + nettoyage des vieilles réservations ──
+// ── Migration : ancien format de groupe (sans " – Garçons/Filles") ──
+// Si group ne contient pas " – Garçons" ou " – Filles", on supprime la résa
+// (impossible de deviner le genre, et les anciens docs sont obsolètes)
+function needsMigration(group) {
+  if (!group) return false;
+  return !group.includes(" – Garçons") && !group.includes(" – Filles");
+}
+
 onSnapshot(resCol, snap => {
   data = {};
-  snap.forEach(d => { data[d.id] = d.data(); });
+  const toDelete = [];
+  snap.forEach(d => {
+    if (!KEY_RE.test(d.id)) {
+      toDelete.push(d.id); // clé hors format → supprimer
+    } else {
+      const entry = d.data();
+      if (needsMigration(entry.group)) {
+        toDelete.push(d.id); // ancien format sans genre → supprimer
+      } else {
+        data[d.id] = entry;
+      }
+    }
+  });
+  // Nettoyage silencieux
+  if (toDelete.length) {
+    const b = writeBatch(db);
+    toDelete.forEach(id => b.delete(doc(db, "reservations", id)));
+    b.commit().catch(console.error);
+  }
   render();
-}, err => console.error("Firestore:", err));
+}, err => console.error(err));
 
-async function reserve(k) {
-  await setDoc(doc(db, "reservations", k), { group: currentUser, ts: Date.now() });
-}
-async function cancel(k) {
-  await deleteDoc(doc(db, "reservations", k));
-}
-async function swapSlots(k1, k2) {
-  const g1 = data[k1].group, g2 = data[k2].group;
-  const batch = writeBatch(db);
-  batch.set(doc(db, "reservations", k1), { group: g2, ts: Date.now() });
-  batch.set(doc(db, "reservations", k2), { group: g1, ts: Date.now() });
-  await batch.commit();
+const key = (d, c, h) => `${d}_${c}_${h}`;
+const esc = s => s ? s.replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])) : "";
+
+// ── Mots de passe par groupe ──
+const GROUP_PASSWORDS = {
+  "G.Info 1A – Garçons":    "Faucon38",
+  "G.Info 1A – Filles":     "Tulipe77",
+  "G.Info 2A – Garçons":    "Cobalt52",
+  "G.Info 2A – Filles":     "Jasmin14",
+  "G.Info 3A – Garçons":    "Orage91",
+  "G.Info 3A – Filles":     "Brume43",
+  "G.MIS 1A – Garçons":     "Volcan29",
+  "G.MIS 1A – Filles":      "Cèdre66",
+  "G.MIS 2A – Garçons":     "Mistral5",
+  "G.MIS 2A – Filles":      "Aurore37",
+  "G.MIS 3A – Garçons":     "Zénith18",
+  "G.MIS 3A – Filles":      "Pivoine8",
+  "G.ProIndus 1A – Garçons":"Torrent4",
+  "G.ProIndus 1A – Filles": "Santal61",
+  "G.ProIndus 2A – Garçons":"Eclat73",
+  "G.ProIndus 2A – Filles": "Lierre26",
+  "G.ProIndus 3A – Garçons":"Basalte9",
+  "G.ProIndus 3A – Filles": "Opale55",
+  "G.Indus 1A – Garçons":   "Silex31",
+  "G.Indus 1A – Filles":    "Mandarine2",
+  "G.Indus 2A – Garçons":   "Phare67",
+  "G.Indus 2A – Filles":    "Glycine48",
+  "G.Indus 3A – Garçons":   "Granit84",
+  "G.Indus 3A – Filles":    "Nacre19",
+  "G.Méca 1A – Garçons":    "Ecorce72",
+  "G.Méca 1A – Filles":     "Safran36",
+  "G.Méca 2A – Garçons":    "Ravier53",
+  "G.Méca 2A – Filles":     "Dahlia97",
+  "G.Méca 3A – Garçons":    "Flint46",
+  "G.Méca 3A – Filles":     "Moraine3",
+  "G.Min 1A – Garçons":     "Bassin64",
+  "G.Min 1A – Filles":      "Corail21",
+  "G.Min 2A – Garçons":     "Nuage85",
+  "G.Min 2A – Filles":      "Vénus12",
+  "G.Min 3A – Garçons":     "Tamaris7",
+  "G.Min 3A – Filles":      "Oxyde44",
+  "G.RT 1A – Garçons":      "Pixel93",
+  "G.RT 1A – Filles":       "Liane58",
+  "G.RT 2A – Garçons":      "Ravin16",
+  "G.RT 2A – Filles":       "Mimosa39",
+  "G.RT 3A – Garçons":      "Forge71",
+  "G.RT 3A – Filles":       "Roseau6",
+  "G.Élec 1A – Garçons":    "Pollen82",
+  "G.Élec 1A – Filles":     "Quartz27",
+  "G.Élec 2A – Garçons":    "Ardoise5",
+  "G.Élec 2A – Filles":     "Limon49",
+  "G.Élec 3A – Garçons":    "Dune76",
+  "G.Élec 3A – Filles":     "Albâtre3",
+  "G.Civ 1A – Garçons":     "Marbre68",
+  "G.Civ 1A – Filles":      "Pivoine22",
+  "G.Civ 2A – Garçons":     "Scorpion9",
+  "G.Civ 2A – Filles":      "Tilleul57",
+  "G.Civ 3A – Garçons":     "Kaolin41",
+  "G.Civ 3A – Filles":      "Grès88",
+  "Pays Amis 1A – Garçons": "Alizé34",
+  "Pays Amis 1A – Filles":  "Mangrove6",
+  "Pays Amis 2A – Garçons": "Obsidien53",
+  "Pays Amis 2A – Filles":  "Verveine17",
+  "Pays Amis 3A – Garçons": "Steppe92",
+  "Pays Amis 3A – Filles":  "Cannelle45"
+};
+
+// ── Modale mot de passe ──
+let _pendingCancelKey = null;
+document.getElementById("pwdCancelBtn").onclick = () => {
+  document.getElementById("pwdModal").classList.remove("open");
+  document.getElementById("pwdInput").value = "";
+  _pendingCancelKey = null;
+};
+document.getElementById("pwdConfirmBtn").onclick = () => {
+  const input = document.getElementById("pwdInput").value;
+  const pwd = GROUP_PASSWORDS[currentUser];
+  document.getElementById("pwdModal").classList.remove("open");
+  document.getElementById("pwdInput").value = "";
+  if (input.trim() !== pwd) {
+    showToast("Mot de passe incorrect — vous n'avez pas le droit de supprimer une réservation, veuillez contacter votre Responsable.", "red");
+    _pendingCancelKey = null;
+    return;
+  }
+  if (_pendingCancelKey) {
+    deleteDoc(doc(db,"reservations",_pendingCancelKey)).then(() => showToast("Réservation annulée.", "red"));
+    _pendingCancelKey = null;
+  }
+};
+document.getElementById("pwdInput").addEventListener("keydown", e => {
+  if (e.key === "Enter") document.getElementById("pwdConfirmBtn").click();
+});
+
+async function reserve(k) { await setDoc(doc(db,"reservations",k),{group:currentUser,ts:Date.now()}); }
+function cancel(k) {
+  if (!GROUP_PASSWORDS[currentUser]) { showToast("Groupe non reconnu.", "red"); return; }
+  _pendingCancelKey = k;
+  document.getElementById("pwdInput").value = "";
+  document.getElementById("pwdModal").classList.add("open");
+  setTimeout(() => document.getElementById("pwdInput").focus(), 100);
 }
 
-function key(date, court, hour) { return `${date}_${court}_${hour}`; }
+async function doSwap(k1,k2) {
+  const g1=data[k1].group, g2=data[k2].group;
+  const b=writeBatch(db);
+  b.set(doc(db,"reservations",k1),{group:g2,ts:Date.now()});
+  b.set(doc(db,"reservations",k2),{group:g1,ts:Date.now()});
+  await b.commit();
+}
 
-// ── LOGIN ──
+// ── Init dates ──
+const todayStr = new Date().toISOString().slice(0,10);
+const clamp = d => d < MIN_D ? MIN_D : (d > MAX_D ? MAX_D : d);
+const startDate = clamp(todayStr);
+
+document.getElementById("datePickMob").value = startDate;
+document.getElementById("datePickDsk").value = startDate;
+
+function getDate() {
+  return window.innerWidth >= 768
+    ? document.getElementById("datePickDsk").value
+    : document.getElementById("datePickMob").value;
+}
+function setDate(v) {
+  document.getElementById("datePickMob").value = v;
+  document.getElementById("datePickDsk").value = v;
+}
+function shiftDate(s, d) {
+  const dt = new Date(s+"T00:00:00"); dt.setDate(dt.getDate()+d); return dt.toISOString().slice(0,10);
+}
+function fmtDate(s) {
+  const d = new Date(s+"T00:00:00");
+  return d.toLocaleDateString("fr-MA",{weekday:"long",day:"numeric",month:"long"});
+}
+
+// ── Login ──
 document.getElementById("btnLogin").onclick = () => {
-  const g = document.getElementById("selGenie").value;
-  const p = document.getElementById("selPromo").value;
-  if (!g || !p) { showToast("Choisir un génie et une promo."); return; }
-  currentUser = `${g} ${p}`;
-  document.getElementById("badgeLabel").textContent = currentUser;
+  const g  = document.getElementById("selGenie").value;
+  const p  = document.getElementById("selPromo").value;
+  const gr = document.getElementById("selGenre").value;
+  if (!g || !p || !gr) { showToast("Remplir tous les champs.", "red"); return; }
+  currentUser = `${g} ${p} – ${gr === "Garçons" ? "Garçons" : "Filles"}`;
+  const initials = g.replace("G.","").slice(0,2).toUpperCase() + p.replace("A","");
+  const genderIcon = gr === "Filles" ? "♀" : "♂";
+  document.getElementById("chipAvatar").textContent = genderIcon;
+  document.getElementById("chipLabel").textContent = `${g} ${p}`;
+  document.getElementById("sidebarAvatar").textContent = genderIcon;
+  document.getElementById("sidebarName").textContent = currentUser;
   document.getElementById("loginScreen").style.display = "none";
-  document.getElementById("appScreen").style.display = "block";
+  document.getElementById("appScreen").classList.add("active");
   render();
 };
-document.getElementById("badgeUser").onclick = () => {
-  if (!confirm("Se déconnecter et changer de groupe ?")) return;
-  currentUser = null;
-  swapMode = null;
-  document.getElementById("swapBanner").style.display = "none";
-  document.getElementById("appScreen").style.display = "none";
+
+function logout() {
+  if (!confirm("Changer de groupe ?")) return;
+  currentUser = null; swapMode = null;
+  document.getElementById("appScreen").classList.remove("active");
   document.getElementById("loginScreen").style.display = "flex";
-};
+  clearSwap();
+}
+document.getElementById("chipUser").onclick = logout;
+document.getElementById("sidebarUser").onclick = logout;
 
-// ── Date navigation ──
-const dateInput = document.getElementById("datePick");
-const today = new Date().toISOString().slice(0,10);
-dateInput.value = today < MIN_DATE ? MIN_DATE : (today > MAX_DATE ? MAX_DATE : today);
+// ── Date nav ──
+["Mob","Dsk"].forEach(sfx => {
+  document.getElementById("prevDay"+sfx).onclick = () => { setDate(shiftDate(getDate(),-1)); render(); };
+  document.getElementById("nextDay"+sfx).onclick = () => { setDate(shiftDate(getDate(), 1)); render(); };
+  document.getElementById("today"+sfx).onclick   = () => { setDate(todayStr); render(); };
+  document.getElementById("datePick"+sfx).addEventListener("change", e => { setDate(e.target.value); render(); });
+});
 
-dateInput.addEventListener("change", render);
-document.getElementById("prevDay").onclick  = () => { dateInput.value = shiftDate(dateInput.value, -1); render(); };
-document.getElementById("nextDay").onclick  = () => { dateInput.value = shiftDate(dateInput.value,  1); render(); };
-document.getElementById("today").onclick    = () => { dateInput.value = new Date().toISOString().slice(0,10); render(); };
-document.getElementById("cancelSwap").onclick = () => { swapMode = null; document.getElementById("swapBanner").style.display = "none"; render(); };
+// ── Swap ──
+function clearSwap() {
+  swapMode = null;
+  document.getElementById("swapBannerMob").classList.remove("show");
+  document.getElementById("swapBannerDsk").classList.remove("show");
+}
+["Mob","Dsk"].forEach(sfx => {
+  document.getElementById("cancelSwap"+sfx).onclick = () => { clearSwap(); render(); };
+});
 
-function shiftDate(str, delta) {
-  const d = new Date(str + "T00:00:00");
-  d.setDate(d.getDate() + delta);
-  return d.toISOString().slice(0,10);
+// ── Toast ──
+let toastTimer;
+function showToast(msg, type="") {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.className = "toast " + type;
+  requestAnimationFrame(() => { t.classList.add("show"); });
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { t.classList.remove("show"); }, 2800);
 }
 
-// ── Render grid ──
+// ── Render ──
 function render() {
   if (!currentUser) return;
-  const date = dateInput.value;
-  const oor = document.getElementById("outOfRange");
-  oor.textContent = (date < MIN_DATE || date > MAX_DATE)
-    ? "Cette date est hors de l'année scolaire (01/09/2026 – 30/06/2027)." : "";
+  const date = getDate();
+  const oor = date < MIN_D || date > MAX_D;
+  const fmted = fmtDate(date);
 
-  // Build a set of courts already reserved BY currentUser on this date (any hour)
+  document.getElementById("topbarDate").textContent = fmted;
+  document.getElementById("mainHeaderDate").textContent = fmted.charAt(0).toUpperCase() + fmted.slice(1);
+
+  ["oorMob","oorDsk"].forEach(id => {
+    const el = document.getElementById(id);
+    el.textContent = oor ? "Hors de l'année scolaire (sept. 2026 – juin 2027)" : "";
+    el.style.display = oor ? "block" : "none";
+  });
+
+  // Which courts does currentUser already have a booking on today?
   const myCourtToday = new Set();
   COURTS.forEach(court => {
-    for (let h = START_HOUR; h < END_HOUR; h++) {
-      const k = key(date, court, h);
-      if (data[k] && data[k].group === currentUser) { myCourtToday.add(court); break; }
+    for (let h = S; h < E; h++) {
+      if (data[key(date,court,h)]?.group === currentUser) { myCourtToday.add(court); break; }
     }
   });
 
-  const body = document.getElementById("gridBody");
+  buildGrid("gridBodyMob", date, myCourtToday);
+  buildGrid("gridBodyDsk", date, myCourtToday);
+}
+
+function buildGrid(bodyId, date, myCourtToday) {
+  const body = document.getElementById(bodyId);
   body.innerHTML = "";
 
-  for (let h = START_HOUR; h < END_HOUR; h++) {
+  for (let h = S; h < E; h++) {
     const tr = document.createElement("tr");
+
     const tdH = document.createElement("td");
-    tdH.className = "hour";
-    tdH.textContent = `${h}h–${h+1}h`;
+    tdH.className = "hour-cell";
+    tdH.textContent = `${h}h – ${h+1}h`;
     tr.appendChild(tdH);
 
     COURTS.forEach(court => {
       const td = document.createElement("td");
       const k = key(date, court, h);
       const entry = data[k];
-      const group = entry ? entry.group : null;
-      const isMySlot = group === currentUser;
-      const isFree   = !group;
-      // "Blocked" = free slot on a court where currentUser already has a booking today (but not this specific hour)
-      const isBlocked = isFree && myCourtToday.has(court) && !isMySlot;
+      const group = entry?.group ?? null;
+      const isMySlot  = group === currentUser;
+      const isFree    = !group;
+      const isBlocked = isFree && myCourtToday.has(court);
 
       const div = document.createElement("div");
 
       if (isMySlot) {
-        div.className = "slot mine";
-        if (swapMode && swapMode.date === date && swapMode.court === court && swapMode.hour === h)
-          div.classList.add("selected-swap");
-        div.innerHTML = `<div>${esc(group)}</div>`;
+        div.className = "slot mine" + (swapMode && swapMode.k === k ? " swap-selected" : "");
+        const nameDiv = document.createElement("div");
+        nameDiv.className = "slot-name";
+        const parts = group.split(" – ");
+        nameDiv.innerHTML = `<span class="slot-gp">${parts[0] || group}</span><span class="slot-genre">${parts[1] || ""}</span>`;
+        div.appendChild(nameDiv);
         const acts = document.createElement("div");
-        acts.className = "actions";
+        acts.className = "slot-actions";
 
-        const btnC = document.createElement("button");
-        btnC.className = "btn-cancel"; btnC.textContent = "Annuler";
-        btnC.onclick = e => { e.stopPropagation(); cancel(k); };
+        const bA = document.createElement("button");
+        bA.className = "btn-annuler"; bA.textContent = "Annuler";
+        bA.onclick = e => { e.stopPropagation(); cancel(k); };
 
-        const btnS = document.createElement("button");
-        btnS.className = "btn-swap"; btnS.textContent = "Échanger";
-        btnS.onclick = e => {
+        const bS = document.createElement("button");
+        bS.className = "btn-echanger"; bS.textContent = "Échanger";
+        bS.onclick = e => {
           e.stopPropagation();
           if (swapMode) {
-            // Second click — perform swap if different slot
-            if (swapMode.date === date && swapMode.court === court && swapMode.hour === h) {
-              swapMode = null;
-              document.getElementById("swapBanner").style.display = "none";
-            } else {
-              const k2 = key(swapMode.date, swapMode.court, swapMode.hour);
-              swapSlots(k, k2);
-              swapMode = null;
-              document.getElementById("swapBanner").style.display = "none";
-            }
+            if (swapMode.k === k) { clearSwap(); render(); return; }
+            doSwap(k, swapMode.k).then(() => { clearSwap(); showToast("Créneaux échangés ✓", "green"); });
           } else {
-            swapMode = { date, court, hour: h };
-            document.getElementById("swapBanner").style.display = "block";
+            swapMode = { k, date, court, h };
+            document.getElementById("swapBannerMob").classList.add("show");
+            document.getElementById("swapBannerDsk").classList.add("show");
+            render();
           }
-          render();
         };
-        acts.appendChild(btnC); acts.appendChild(btnS);
+        acts.appendChild(bA); acts.appendChild(bS);
         div.appendChild(acts);
 
       } else if (isFree && !isBlocked) {
         div.className = "slot free";
         div.onclick = () => {
-          if (!confirm(`Réserver ${COURT_LABELS[court]}, ${h}h–${h+1}h pour ${currentUser} ?`)) return;
-          reserve(k);
+          if (!confirm(`Réserver ce créneau (${h}h–${h+1}h) pour ${currentUser} ?`)) return;
+          reserve(k).then(() => showToast(`Réservé ✓ ${h}h–${h+1}h`, "green"));
         };
 
       } else if (isBlocked) {
         div.className = "slot blocked";
-        div.title = `Votre groupe a déjà une réservation sur ce terrain aujourd'hui.`;
-        div.textContent = "—";
+        div.title = "Votre groupe a déjà une réservation sur ce terrain aujourd'hui.";
 
       } else {
-        // Taken by another group
-        div.className = "slot taken";
-        div.innerHTML = `<div>${esc(group)}</div>`;
+        div.className = "slot other";
+        const nameDiv = document.createElement("div");
+        nameDiv.className = "slot-name";
+        const parts = group.split(" – ");
+        nameDiv.innerHTML = `<span class="slot-gp">${parts[0] || group}</span><span class="slot-genre">${parts[1] || ""}</span>`;
+        div.appendChild(nameDiv);
       }
 
       td.appendChild(div);
@@ -349,19 +1466,6 @@ function render() {
     });
     body.appendChild(tr);
   }
-}
-
-function esc(s) {
-  if (!s) return "";
-  return s.replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-}
-
-function showToast(msg) {
-  const t = document.getElementById("errToast");
-  t.textContent = msg;
-  t.style.display = "block";
-  clearTimeout(t._timer);
-  t._timer = setTimeout(() => { t.style.display = "none"; }, 3000);
 }
 </script>
 </body>
