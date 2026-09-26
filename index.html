@@ -12,895 +12,363 @@
    TOKENS
 ═══════════════════════════════════════════ */
 :root {
-  --green-950: #052015;
-  --green-900: #0A3D2B;
-  --green-800: #0F5235;
-  --green-700: #1A6B47;
-  --green-600: #1D8055;
-  --green-500: #22C55E;
-  --green-400: #4ADE80;
-  --green-100: #DCFCE7;
-  --green-50:  #F0FDF4;
-
-  --slate-950: #020617;
-  --slate-900: #0F172A;
-  --slate-700: #334155;
-  --slate-500: #64748B;
-  --slate-300: #CBD5E1;
-  --slate-200: #E2E8F0;
-  --slate-100: #F1F5F9;
-  --slate-50:  #F8FAFC;
-  --white:     #FFFFFF;
-
-  --amber-500: #F59E0B;
-  --amber-100: #FEF3C7;
-  --amber-800: #92400E;
-
-  --red-500:   #EF4444;
-  --red-100:   #FEE2E2;
-  --red-800:   #991B1B;
-
-  /* Semantic */
-  --bg:         var(--slate-50);
-  --surface:    var(--white);
-  --surface-2:  var(--slate-100);
-  --text:       var(--slate-900);
-  --text-muted: var(--slate-500);
-  --border:     var(--slate-200);
-  --border-strong: var(--slate-300);
-
-  --slot-free:     var(--green-50);
-  --slot-free-h:   var(--green-100);
-  --slot-mine:     var(--amber-100);
-  --slot-mine-t:   var(--amber-800);
-  --slot-mine-b:   var(--amber-500);
-  --slot-other:    var(--green-100);
-  --slot-other-t:  var(--green-700);
-  --slot-blocked:  var(--slate-100);
-  --slot-blocked-t:var(--slate-400);
-
-  --radius-sm: 6px;
-  --radius:    10px;
-  --radius-lg: 16px;
-  --radius-xl: 22px;
-
-  font-family: 'Inter', -apple-system, sans-serif;
-  box-sizing: border-box;
+  --green-950:#052015;--green-900:#0A3D2B;--green-800:#0F5235;--green-700:#1A6B47;
+  --green-600:#1D8055;--green-500:#22C55E;--green-400:#4ADE80;--green-100:#DCFCE7;--green-50:#F0FDF4;
+  --slate-950:#020617;--slate-900:#0F172A;--slate-700:#334155;--slate-500:#64748B;
+  --slate-300:#CBD5E1;--slate-200:#E2E8F0;--slate-100:#F1F5F9;--slate-50:#F8FAFC;--white:#FFFFFF;
+  --amber-500:#F59E0B;--amber-100:#FEF3C7;--amber-800:#92400E;
+  --red-500:#EF4444;--red-100:#FEE2E2;--red-800:#991B1B;
+  --bg:var(--slate-50);--surface:var(--white);--surface-2:var(--slate-100);
+  --text:var(--slate-900);--text-muted:var(--slate-500);--border:var(--slate-200);--border-strong:var(--slate-300);
+  --slot-free:var(--green-50);--slot-free-h:var(--green-100);
+  --slot-mine:var(--amber-100);--slot-mine-t:var(--amber-800);--slot-mine-b:var(--amber-500);
+  --slot-other:var(--green-100);--slot-other-t:var(--green-700);
+  --slot-blocked:var(--slate-100);--slot-blocked-t:var(--slate-400);
+  --radius-sm:6px;--radius:10px;--radius-lg:16px;--radius-xl:22px;
+  font-family:'Inter',-apple-system,sans-serif;box-sizing:border-box;
 }
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg:         #0B1512;
-    --surface:    #111C17;
-    --surface-2:  #182419;
-    --text:       #E2E8F0;
-    --text-muted: #64748B;
-    --border:     #1E2D26;
-    --border-strong: #2A3F35;
-
-    --slot-free:     #0D2318;
-    --slot-free-h:   #122B1F;
-    --slot-mine:     #2C1A00;
-    --slot-mine-t:   #FCD34D;
-    --slot-mine-b:   #92400E;
-    --slot-other:    #0A2B1A;
-    --slot-other-t:  #4ADE80;
-    --slot-blocked:  #0D1611;
-    --slot-blocked-t:#2D4A38;
+@media(prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1512;--surface:#111C17;--surface-2:#182419;--text:#E2E8F0;--text-muted:#64748B;
+    --border:#1E2D26;--border-strong:#2A3F35;
+    --slot-free:#0D2318;--slot-free-h:#122B1F;--slot-mine:#2C1A00;--slot-mine-t:#FCD34D;
+    --slot-mine-b:#92400E;--slot-other:#0A2B1A;--slot-other-t:#4ADE80;
+    --slot-blocked:#0D1611;--slot-blocked-t:#2D4A38;
   }
 }
-:root[data-theme="dark"] {
-  --bg:         #0B1512;
-  --surface:    #111C17;
-  --surface-2:  #182419;
-  --text:       #E2E8F0;
-  --text-muted: #64748B;
-  --border:     #1E2D26;
-  --border-strong: #2A3F35;
-  --slot-free:     #0D2318;
-  --slot-free-h:   #122B1F;
-  --slot-mine:     #2C1A00;
-  --slot-mine-t:   #FCD34D;
-  --slot-mine-b:   #92400E;
-  --slot-other:    #0A2B1A;
-  --slot-other-t:  #4ADE80;
-  --slot-blocked:  #0D1611;
-  --slot-blocked-t:#2D4A38;
+:root[data-theme="dark"]{
+  --bg:#0B1512;--surface:#111C17;--surface-2:#182419;--text:#E2E8F0;--text-muted:#64748B;
+  --border:#1E2D26;--border-strong:#2A3F35;
+  --slot-free:#0D2318;--slot-free-h:#122B1F;--slot-mine:#2C1A00;--slot-mine-t:#FCD34D;
+  --slot-mine-b:#92400E;--slot-other:#0A2B1A;--slot-other-t:#4ADE80;
+  --slot-blocked:#0D1611;--slot-blocked-t:#2D4A38;
+}
+*,*::before,*::after{box-sizing:inherit;margin:0;padding:0}
+html,body{min-height:100vh;background:var(--bg);color:var(--text)}
+
+/* LOGIN */
+#loginScreen{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  padding:24px 16px;
+  padding-top:max(24px,env(safe-area-inset-top));
+  padding-bottom:max(24px,env(safe-area-inset-bottom));
+  background:radial-gradient(ellipse 80% 60% at 50% -10%,#1A6B4722 0%,transparent 70%),var(--bg);
+}
+.login-wrap{width:100%;max-width:420px;display:flex;flex-direction:column;gap:0}
+.login-brand{display:flex;flex-direction:column;align-items:center;gap:12px;margin-bottom:32px}
+.login-emblem{
+  width:64px;height:64px;background:var(--green-900);border-radius:18px;
+  display:flex;align-items:center;justify-content:center;font-size:28px;
+  box-shadow:0 0 0 4px #1A6B4730;
+}
+.login-brand h1{font-size:1.35rem;font-weight:700;color:var(--text);letter-spacing:-.3px;text-align:center}
+.login-brand p{font-size:.82rem;color:var(--text-muted);text-align:center;line-height:1.5}
+.login-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);
+  padding:28px 24px;display:flex;flex-direction:column;gap:18px;
+}
+.field-group{display:flex;flex-direction:column;gap:6px}
+.field-group label{font-size:.75rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em}
+.field-group select{
+  width:100%;padding:11px 14px;border-radius:var(--radius);border:1.5px solid var(--border);
+  background:var(--surface-2);color:var(--text);font-family:inherit;font-size:.95rem;cursor:pointer;
+  appearance:none;-webkit-appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 12px center;padding-right:36px;transition:border-color .15s;
+}
+.field-group select:focus{outline:none;border-color:var(--green-600);box-shadow:0 0 0 3px #1A6B4720}
+.login-divider{display:flex;align-items:center;gap:12px;color:var(--text-muted);font-size:.75rem}
+.login-divider::before,.login-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.btn-primary{
+  width:100%;padding:13px;border-radius:var(--radius);border:none;background:var(--green-900);color:#fff;
+  font-family:inherit;font-size:.95rem;font-weight:600;cursor:pointer;
+  transition:background .15s,transform .1s;display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.btn-primary:hover{background:var(--green-800)}
+.btn-primary:active{transform:scale(.98)}
+.login-footer{text-align:center;font-size:.75rem;color:var(--text-muted);margin-top:16px;line-height:1.6}
+
+
+
+/* APP */
+#appScreen{display:none;min-height:100vh}
+
+/* TOPBAR (mobile) */
+.topbar{
+  position:sticky;top:0;z-index:100;background:var(--green-900);color:#fff;
+  padding:0 16px;padding-top:env(safe-area-inset-top,0px);
+  display:flex;align-items:center;justify-content:space-between;
+  height:calc(56px + env(safe-area-inset-top,0px));gap:8px;
+}
+.topbar-brand{display:flex;align-items:center;gap:10px;min-width:0;flex:1}
+.topbar-icon{width:32px;height:32px;background:rgba(255,255,255,.12);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.topbar-title{font-size:.92rem;font-weight:700;letter-spacing:-.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.topbar-sub{font-size:.68rem;opacity:.65;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+
+.user-chip{
+  flex-shrink:0;display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.13);
+  border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:5px 10px 5px 7px;
+  cursor:pointer;font-size:.75rem;font-weight:600;color:#fff;transition:background .15s;white-space:nowrap;
+}
+.user-chip:hover{background:rgba(255,255,255,.2)}
+.user-avatar{
+  width:22px;height:22px;background:var(--green-500);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:700;
+  color:var(--green-900);flex-shrink:0;
 }
 
-*, *::before, *::after { box-sizing: inherit; margin: 0; padding: 0; }
-html, body { min-height: 100vh; background: var(--bg); color: var(--text); }
-
-/* ═══════════════════════════════════════════
-   LOGIN SCREEN
-═══════════════════════════════════════════ */
-#loginScreen {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px 16px;
-  padding-top: max(24px, env(safe-area-inset-top));
-  padding-bottom: max(24px, env(safe-area-inset-bottom));
-  background:
-    radial-gradient(ellipse 80% 60% at 50% -10%, #1A6B4722 0%, transparent 70%),
-    var(--bg);
+/* MOBILE CONTENT */
+.mobile-content{
+  padding:16px 14px;padding-bottom:calc(32px + env(safe-area-inset-bottom,0px));
+  display:flex;flex-direction:column;gap:14px;
 }
 
-.login-wrap {
-  width: 100%;
-  max-width: 420px;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
+/* INCOMING SWAP ALERT BANNER */
+.swap-alert-banner{
+  display:none;background:#FFF7ED;border:2px solid var(--amber-500);border-radius:var(--radius);
+  padding:14px;font-size:.82rem;color:var(--amber-800);line-height:1.5;
+}
+.swap-alert-banner.show{display:block}
+.swap-alert-title{font-weight:700;font-size:.88rem;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.swap-alert-body{margin-bottom:12px;line-height:1.6}
+.swap-alert-actions{display:flex;gap:8px}
+.btn-accept-swap{
+  flex:1;padding:9px;border-radius:var(--radius-sm);border:none;background:var(--green-700);
+  color:#fff;font-family:inherit;font-size:.82rem;font-weight:700;cursor:pointer;
+}
+.btn-reject-swap{
+  flex:1;padding:9px;border-radius:var(--radius-sm);border:1px solid var(--amber-500);
+  background:transparent;color:var(--amber-800);font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;
 }
 
-.login-brand {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 32px;
+/* DATE CARD */
+.date-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden}
+.date-card-header{
+  background:var(--surface-2);padding:10px 14px;font-size:.72rem;font-weight:600;
+  color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--border);
+}
+.date-card-body{padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+input[type=date]{
+  width:100%;padding:10px 12px;border-radius:var(--radius);border:1.5px solid var(--border);
+  background:var(--surface-2);color:var(--text);font-family:inherit;font-size:.9rem;cursor:pointer;
+}
+input[type=date]:focus{outline:none;border-color:var(--green-600);box-shadow:0 0 0 3px #1A6B4720}
+.daynav{display:grid;grid-template-columns:1fr auto 1fr;gap:6px}
+.daynav button{
+  padding:8px 10px;border-radius:var(--radius-sm);border:1px solid var(--border);
+  background:var(--surface-2);color:var(--text);font-family:inherit;font-size:.8rem;font-weight:500;
+  cursor:pointer;transition:background .12s;white-space:nowrap;
+}
+.daynav button:hover{background:var(--border)}
+.daynav .btn-today{background:var(--green-900);color:#fff;border-color:var(--green-900);font-size:.75rem}
+.daynav .btn-today:hover{background:var(--green-800)}
+.oor-msg{font-size:.78rem;color:var(--red-500);display:none;padding:6px 10px;background:var(--red-100);border-radius:var(--radius-sm)}
+
+/* SWAP MODE BANNER */
+.swap-banner{
+  display:none;background:#FFF7ED;border:1.5px solid var(--amber-500);border-radius:var(--radius);
+  padding:10px 14px;font-size:.8rem;color:var(--amber-800);line-height:1.5;align-items:center;gap:10px;
+}
+.swap-banner.show{display:flex}
+.swap-banner span{flex:1}
+.btn-cancel-swap{
+  flex-shrink:0;padding:4px 10px;border-radius:var(--radius-sm);border:1px solid var(--amber-500);
+  background:transparent;color:var(--amber-800);font-family:inherit;font-size:.75rem;font-weight:600;cursor:pointer;
 }
 
-.login-emblem {
-  width: 64px;
-  height: 64px;
-  background: var(--green-900);
-  border-radius: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 28px;
-  box-shadow: 0 0 0 4px #1A6B4730;
+/* GRID */
+.grid-section{display:flex;flex-direction:column;gap:8px}
+.grid-section-title{font-size:.72rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;padding:0 2px}
+.grid-scroll{overflow-x:auto;border-radius:var(--radius-lg);border:1px solid var(--border);-webkit-overflow-scrolling:touch}
+.grid-table{border-collapse:collapse;width:100%;min-width:500px;background:var(--surface)}
+.grid-table th{
+  padding:10px 8px;font-size:.72rem;font-weight:700;color:var(--text-muted);background:var(--surface-2);
+  border-bottom:1px solid var(--border);text-align:center;letter-spacing:.03em;position:sticky;top:0;z-index:2;
 }
+.grid-table th:first-child{text-align:left;padding-left:12px;min-width:72px}
+.grid-table td{padding:4px 6px;border-bottom:1px solid var(--border);vertical-align:middle}
+.grid-table td.hour-cell{
+  font-size:.73rem;font-weight:600;color:var(--text-muted);padding-left:12px;white-space:nowrap;
+  min-width:72px;background:var(--surface-2);border-right:1px solid var(--border);
+}
+.grid-table tr:last-child td{border-bottom:none}
 
-.login-brand h1 {
-  font-size: 1.35rem;
-  font-weight: 700;
-  color: var(--text);
-  letter-spacing: -.3px;
-  text-align: center;
+/* SLOTS */
+.slot{
+  border-radius:var(--radius-sm);padding:7px 6px;min-height:42px;
+  display:flex;flex-direction:column;justify-content:center;align-items:center;
+  gap:3px;font-size:.72rem;text-align:center;transition:background .12s;cursor:default;
 }
-.login-brand p {
-  font-size: .82rem;
-  color: var(--text-muted);
-  text-align: center;
-  line-height: 1.5;
+.slot.free{background:var(--slot-free);cursor:pointer}
+.slot.free:hover{background:var(--slot-free-h)}
+.slot.free::after{content:'+';font-size:.9rem;color:var(--green-600);font-weight:700;opacity:.6}
+.slot.mine{background:var(--slot-mine);color:var(--slot-mine-t);font-weight:600;border:1.5px solid var(--slot-mine-b)}
+.slot.other{background:var(--slot-other);color:var(--slot-other-t);font-weight:500}
+.slot.blocked{background:var(--slot-blocked);color:var(--slot-blocked-t);cursor:not-allowed}
+.slot.blocked::after{content:'—';font-size:.8rem;opacity:.5}
+.slot.swap-selected{outline:2px solid var(--amber-500);outline-offset:1px}
+.slot-name{font-size:.7rem;line-height:1.3;max-width:90px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:1px}
+.slot-gp{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:88px}
+.slot-genre{font-size:.63rem;opacity:.8;white-space:nowrap}
+.slot-actions{display:flex;gap:3px;margin-top:2px;flex-wrap:wrap;justify-content:center}
+.slot-actions button{
+  border:none;border-radius:4px;padding:2px 7px;font-size:.62rem;font-weight:700;
+  cursor:pointer;color:#fff;font-family:inherit;transition:opacity .12s;
 }
+.slot-actions button:hover{opacity:.85}
+.btn-annuler{background:var(--red-500)}
+.btn-echanger{background:var(--green-700)}
+.btn-propose{background:#7C3AED}
+.slot-req-info{font-size:.6rem;line-height:1.25;text-align:center;color:var(--amber-500);font-weight:600;max-width:92px;margin-top:1px}
 
-.login-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-xl);
-  padding: 28px 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
+/* LEGEND */
+.legend{display:flex;flex-wrap:wrap;gap:10px 16px;padding:10px 2px}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:.72rem;color:var(--text-muted)}
+.legend-dot{width:12px;height:12px;border-radius:3px;flex-shrink:0}
 
-.field-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.field-group label {
-  font-size: .75rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: .06em;
-}
-.field-group select {
-  width: 100%;
-  padding: 11px 14px;
-  border-radius: var(--radius);
-  border: 1.5px solid var(--border);
-  background: var(--surface-2);
-  color: var(--text);
-  font-family: inherit;
-  font-size: .95rem;
-  cursor: pointer;
-  appearance: none;
-  -webkit-appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-  padding-right: 36px;
-  transition: border-color .15s;
-}
-.field-group select:focus {
-  outline: none;
-  border-color: var(--green-600);
-  box-shadow: 0 0 0 3px #1A6B4720;
-}
-
-.login-divider {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  color: var(--text-muted);
-  font-size: .75rem;
-}
-.login-divider::before, .login-divider::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: var(--border);
-}
-
-.btn-primary {
-  width: 100%;
-  padding: 13px;
-  border-radius: var(--radius);
-  border: none;
-  background: var(--green-900);
-  color: #fff;
-  font-family: inherit;
-  font-size: .95rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background .15s, transform .1s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-.btn-primary:hover { background: var(--green-800); }
-.btn-primary:active { transform: scale(.98); }
-
-.login-footer {
-  text-align: center;
-  font-size: .75rem;
-  color: var(--text-muted);
-  margin-top: 16px;
-  line-height: 1.6;
-}
-
-/* ═══════════════════════════════════════════
-   APP SCREEN — MOBILE FIRST
-═══════════════════════════════════════════ */
-#appScreen { display: none; min-height: 100vh; }
-
-/* ── Top bar (mobile) ── */
-.topbar {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: var(--green-900);
-  color: #fff;
-  padding: 0 16px;
-  padding-top: env(safe-area-inset-top, 0px);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: calc(56px + env(safe-area-inset-top, 0px));
-  gap: 12px;
-}
-.topbar-brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-width: 0;
-}
-.topbar-icon {
-  width: 32px;
-  height: 32px;
-  background: rgba(255,255,255,.12);
-  border-radius: 9px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  flex-shrink: 0;
-}
-.topbar-title {
-  font-size: .92rem;
-  font-weight: 700;
-  letter-spacing: -.2px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.topbar-sub {
-  font-size: .68rem;
-  opacity: .65;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.user-chip {
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(255,255,255,.13);
-  border: 1px solid rgba(255,255,255,.2);
-  border-radius: 20px;
-  padding: 5px 10px 5px 7px;
-  cursor: pointer;
-  font-size: .75rem;
-  font-weight: 600;
-  color: #fff;
-  transition: background .15s;
-  white-space: nowrap;
-}
-.user-chip:hover { background: rgba(255,255,255,.2); }
-.user-avatar {
-  width: 22px;
-  height: 22px;
-  background: var(--green-500);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: .6rem;
-  font-weight: 700;
-  color: var(--green-900);
-  flex-shrink: 0;
-}
-
-/* ── Mobile content ── */
-.mobile-content {
-  padding: 16px 14px;
-  padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px));
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-/* ── Date card ── */
-.date-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-}
-.date-card-header {
-  background: var(--surface-2);
-  padding: 10px 14px;
-  font-size: .72rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: .06em;
-  border-bottom: 1px solid var(--border);
-}
-.date-card-body { padding: 12px 14px; display: flex; flex-direction: column; gap: 10px; }
-input[type=date] {
-  width: 100%;
-  padding: 10px 12px;
-  border-radius: var(--radius);
-  border: 1.5px solid var(--border);
-  background: var(--surface-2);
-  color: var(--text);
-  font-family: inherit;
-  font-size: .9rem;
-  cursor: pointer;
-}
-input[type=date]:focus { outline: none; border-color: var(--green-600); box-shadow: 0 0 0 3px #1A6B4720; }
-
-.daynav {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  gap: 6px;
-}
-.daynav button {
-  padding: 8px 10px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border);
-  background: var(--surface-2);
-  color: var(--text);
-  font-family: inherit;
-  font-size: .8rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background .12s;
-  white-space: nowrap;
-}
-.daynav button:hover { background: var(--border); }
-.daynav .btn-today {
-  background: var(--green-900);
-  color: #fff;
-  border-color: var(--green-900);
-  font-size: .75rem;
-}
-.daynav .btn-today:hover { background: var(--green-800); }
-.oor-msg {
-  font-size: .78rem;
-  color: var(--red-500);
-  display: none;
-  padding: 6px 10px;
-  background: var(--red-100);
-  border-radius: var(--radius-sm);
-}
-
-/* ── Swap banner ── */
-.swap-banner {
-  display: none;
-  background: #FFF7ED;
-  border: 1.5px solid var(--amber-500);
-  border-radius: var(--radius);
-  padding: 10px 14px;
-  font-size: .8rem;
-  color: var(--amber-800);
-  line-height: 1.5;
-  align-items: center;
-  gap: 10px;
-}
-.swap-banner.show { display: flex; }
-.swap-banner span { flex: 1; }
-.btn-cancel-swap {
-  flex-shrink: 0;
-  padding: 4px 10px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--amber-500);
-  background: transparent;
-  color: var(--amber-800);
-  font-family: inherit;
-  font-size: .75rem;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-/* ── Grid ── */
-.grid-section { display: flex; flex-direction: column; gap: 8px; }
-.grid-section-title {
-  font-size: .72rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: .06em;
-  padding: 0 2px;
-}
-.grid-scroll {
-  overflow-x: auto;
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border);
-  -webkit-overflow-scrolling: touch;
-}
-.grid-table {
-  border-collapse: collapse;
-  width: 100%;
-  min-width: 500px;
-  background: var(--surface);
-}
-.grid-table th {
-  padding: 10px 8px;
-  font-size: .72rem;
-  font-weight: 700;
-  color: var(--text-muted);
-  background: var(--surface-2);
-  border-bottom: 1px solid var(--border);
-  text-align: center;
-  letter-spacing: .03em;
-  position: sticky;
-  top: 0;
-  z-index: 2;
-}
-.grid-table th:first-child { text-align: left; padding-left: 12px; min-width: 72px; }
-.grid-table td {
-  padding: 4px 6px;
-  border-bottom: 1px solid var(--border);
-  vertical-align: middle;
-}
-.grid-table td.hour-cell {
-  font-size: .73rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  padding-left: 12px;
-  white-space: nowrap;
-  min-width: 72px;
-  background: var(--surface-2);
-  border-right: 1px solid var(--border);
-}
-.grid-table tr:last-child td { border-bottom: none; }
-
-/* ── Slots ── */
-.slot {
-  border-radius: var(--radius-sm);
-  padding: 7px 6px;
-  min-height: 42px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 3px;
-  font-size: .72rem;
-  text-align: center;
-  transition: background .12s;
-  cursor: default;
-}
-.slot.free {
-  background: var(--slot-free);
-  cursor: pointer;
-}
-.slot.free:hover { background: var(--slot-free-h); }
-.slot.free::after {
-  content: '+';
-  font-size: .9rem;
-  color: var(--green-600);
-  font-weight: 700;
-  opacity: .6;
-}
-.slot.mine {
-  background: var(--slot-mine);
-  color: var(--slot-mine-t);
-  font-weight: 600;
-  border: 1.5px solid var(--slot-mine-b);
-}
-.slot.other {
-  background: var(--slot-other);
-  color: var(--slot-other-t);
-  font-weight: 500;
-}
-.slot.blocked {
-  background: var(--slot-blocked);
-  color: var(--slot-blocked-t);
-  cursor: not-allowed;
-}
-.slot.blocked::after {
-  content: '—';
-  font-size: .8rem;
-  opacity: .5;
-}
-.slot.swap-selected { outline: 2px solid var(--amber-500); outline-offset: 1px; }
-
-.slot-name {
-  font-size: .7rem;
-  line-height: 1.3;
-  max-width: 90px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1px;
-}
-.slot-gp {
-  font-weight: 700;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  max-width: 88px;
-}
-.slot-genre {
-  font-size: .63rem;
-  opacity: .8;
-  white-space: nowrap;
-}
-.slot-actions {
-  display: flex;
-  gap: 3px;
-  margin-top: 2px;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-.slot-actions button {
-  border: none;
-  border-radius: 4px;
-  padding: 2px 7px;
-  font-size: .62rem;
-  font-weight: 700;
-  cursor: pointer;
-  color: #fff;
-  font-family: inherit;
-  transition: opacity .12s;
-}
-.slot-actions button:hover { opacity: .85; }
-.btn-annuler { background: var(--red-500); }
-.btn-echanger { background: var(--green-700); }
-.slot-req-info {
-  font-size: .6rem;
-  line-height: 1.25;
-  text-align: center;
-  color: var(--amber-500);
-  font-weight: 600;
-  max-width: 92px;
-  margin-top: 1px;
-}
-
-/* ── Legend ── */
-.legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px 16px;
-  padding: 10px 2px;
-}
-.legend-item {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: .72rem;
-  color: var(--text-muted);
-}
-.legend-dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 3px;
-  flex-shrink: 0;
-}
-
-/* ═══════════════════════════════════════════
-   DESKTOP LAYOUT (≥ 768px)
-═══════════════════════════════════════════ */
-@media (min-width: 768px) {
-  #appScreen { display: none; }
-  #appScreen.active { display: grid !important; grid-template-columns: 280px 1fr; min-height: 100vh; }
-
-  /* Sidebar */
-  .sidebar {
-    background: var(--green-900);
-    color: #fff;
-    display: flex;
-    flex-direction: column;
-    padding: 28px 24px;
-    padding-top: max(28px, env(safe-area-inset-top));
-    padding-bottom: max(28px, env(safe-area-inset-bottom));
-    position: sticky;
-    top: 0;
-    height: 100vh;
-    overflow-y: auto;
-    gap: 0;
+/* DESKTOP (≥768px) */
+@media(min-width:768px){
+  #appScreen{display:none}
+  #appScreen.active{display:grid !important;grid-template-columns:300px 1fr;min-height:100vh}
+  .sidebar{
+    background:var(--green-900);color:#fff;display:flex;flex-direction:column;
+    padding:28px 24px;padding-top:max(28px,env(safe-area-inset-top));
+    padding-bottom:max(28px,env(safe-area-inset-bottom));
+    position:sticky;top:0;height:100vh;overflow-y:auto;gap:0;
   }
+  .sidebar-brand{display:flex;align-items:center;gap:12px;margin-bottom:28px}
+  .sidebar-emblem{
+    width:42px;height:42px;background:rgba(255,255,255,.1);border-radius:12px;
+    display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;
+  }
+  .sidebar-title{font-size:1rem;font-weight:700;line-height:1.2}
+  .sidebar-sub{font-size:.7rem;opacity:.55;margin-top:2px}
+  .sidebar-section{margin-bottom:20px}
+  .sidebar-label{font-size:.65rem;font-weight:700;letter-spacing:.1em;opacity:.4;text-transform:uppercase;margin-bottom:10px}
+  .sidebar input[type=date]{
+    background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#fff;
+    border-radius:var(--radius);padding:9px 12px;font-size:.85rem;width:100%;font-family:inherit;
+  }
+  .sidebar input[type=date]:focus{outline:none;border-color:var(--green-500);box-shadow:0 0 0 3px #22C55E25}
+  .sidebar input[type=date]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.5}
+  .sidebar .daynav{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+  .sidebar .daynav button{
+    background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);color:#fff;
+    font-size:.8rem;padding:8px 12px;text-align:left;border-radius:var(--radius-sm);
+  }
+  .sidebar .daynav button:hover{background:rgba(255,255,255,.14)}
+  .sidebar .btn-today{background:var(--green-600) !important;border-color:transparent !important;font-weight:600}
+  .sidebar-divider{height:1px;background:rgba(255,255,255,.08);margin:16px 0}
+  .sidebar-user{
+    margin-top:auto;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);
+    border-radius:var(--radius);padding:12px 14px;display:flex;align-items:center;gap:10px;
+    cursor:pointer;transition:background .12s;
+  }
+  .sidebar-user:hover{background:rgba(255,255,255,.12)}
+  .sidebar-user-avatar{
+    width:36px;height:36px;background:var(--green-500);border-radius:50%;
+    display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:800;
+    color:var(--green-900);flex-shrink:0;
+  }
+  .sidebar-user-info{flex:1;min-width:0}
+  .sidebar-user-name{font-size:.83rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .sidebar-user-role{font-size:.68rem;opacity:.45}
+  .sidebar .oor-msg{background:rgba(239,68,68,.15);color:#FCA5A5;border-radius:var(--radius-sm);padding:6px 8px;font-size:.75rem;margin-top:8px;display:none}
+  .sidebar .legend{flex-direction:column;gap:6px;padding:0}
+  .sidebar .legend-item{font-size:.72rem;color:rgba(255,255,255,.45)}
 
-  .sidebar-brand {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 32px;
-  }
-  .sidebar-emblem {
-    width: 42px;
-    height: 42px;
-    background: rgba(255,255,255,.1);
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    flex-shrink: 0;
-  }
-  .sidebar-title { font-size: 1rem; font-weight: 700; line-height: 1.2; }
-  .sidebar-sub { font-size: .7rem; opacity: .55; margin-top: 2px; }
 
-  .sidebar-section {
-    margin-bottom: 24px;
-  }
-  .sidebar-label {
-    font-size: .65rem;
-    font-weight: 700;
-    letter-spacing: .1em;
-    opacity: .4;
-    text-transform: uppercase;
-    margin-bottom: 10px;
-  }
 
-  .sidebar input[type=date] {
-    background: rgba(255,255,255,.08);
-    border: 1px solid rgba(255,255,255,.15);
-    color: #fff;
-    border-radius: var(--radius);
-    padding: 9px 12px;
-    font-size: .85rem;
-    width: 100%;
-    font-family: inherit;
-  }
-  .sidebar input[type=date]:focus {
-    outline: none;
-    border-color: var(--green-500);
-    box-shadow: 0 0 0 3px #22C55E25;
-  }
-  .sidebar input[type=date]::-webkit-calendar-picker-indicator { filter: invert(1); opacity: .5; }
-
-  .sidebar .daynav {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    margin-top: 8px;
-  }
-  .sidebar .daynav button {
-    background: rgba(255,255,255,.07);
-    border: 1px solid rgba(255,255,255,.1);
-    color: #fff;
-    font-size: .8rem;
-    padding: 8px 12px;
-    text-align: left;
-    border-radius: var(--radius-sm);
-  }
-  .sidebar .daynav button:hover { background: rgba(255,255,255,.14); }
-  .sidebar .btn-today {
-    background: var(--green-600) !important;
-    border-color: transparent !important;
-    font-weight: 600;
-  }
-
-  .sidebar-divider {
-    height: 1px;
-    background: rgba(255,255,255,.08);
-    margin: 20px 0;
-  }
-
-  .sidebar-user {
-    margin-top: auto;
-    background: rgba(255,255,255,.07);
-    border: 1px solid rgba(255,255,255,.1);
-    border-radius: var(--radius);
-    padding: 12px 14px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-    transition: background .12s;
-  }
-  .sidebar-user:hover { background: rgba(255,255,255,.12); }
-  .sidebar-user-avatar {
-    width: 36px;
-    height: 36px;
-    background: var(--green-500);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: .7rem;
-    font-weight: 800;
-    color: var(--green-900);
-    flex-shrink: 0;
-  }
-  .sidebar-user-info { flex: 1; min-width: 0; }
-  .sidebar-user-name { font-size: .83rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .sidebar-user-role { font-size: .68rem; opacity: .45; }
-  .sidebar-logout { font-size: .7rem; opacity: .4; }
-
-  .sidebar .oor-msg { background: rgba(239,68,68,.15); color: #FCA5A5; border-radius: var(--radius-sm); padding: 6px 8px; font-size: .75rem; margin-top: 8px; display: none; }
-
-  /* Legend in sidebar */
-  .sidebar .legend {
-    flex-direction: column;
-    gap: 6px;
-    padding: 0;
-  }
-  .sidebar .legend-item { font-size: .72rem; color: rgba(255,255,255,.45); }
-
-  /* Main area */
-  .main-area {
-    padding: 28px 28px 48px;
-    padding-top: max(28px, env(safe-area-inset-top));
-    overflow-y: auto;
-  }
-  .main-header {
-    margin-bottom: 22px;
-  }
-  .main-header h2 {
-    font-size: 1.35rem;
-    font-weight: 700;
-    letter-spacing: -.3px;
-    color: var(--text);
-  }
-  .main-header p {
-    font-size: .83rem;
-    color: var(--text-muted);
-    margin-top: 3px;
-  }
-
-  /* Desktop swap banner */
-  .swap-banner {
-    margin-bottom: 18px;
-    border-radius: var(--radius);
-  }
-
-  /* Desktop grid — full table */
-  .grid-scroll { border-radius: var(--radius-lg); }
-  .grid-table th { padding: 12px 10px; font-size: .75rem; }
-  .grid-table th:first-child { padding-left: 16px; min-width: 90px; }
-  .grid-table td.hour-cell { font-size: .78rem; padding-left: 16px; min-width: 90px; }
-  .slot { min-height: 48px; padding: 8px; font-size: .75rem; }
-  .slot-name { max-width: 110px; font-size: .73rem; }
-
-  /* Hide mobile topbar on desktop */
-  .topbar { display: none !important; }
-  .mobile-content { display: none !important; }
+  .main-area{padding:28px 28px 48px;padding-top:max(28px,env(safe-area-inset-top));overflow-y:auto}
+  .main-header{margin-bottom:18px}
+  .main-header h2{font-size:1.35rem;font-weight:700;letter-spacing:-.3px;color:var(--text)}
+  .main-header p{font-size:.83rem;color:var(--text-muted);margin-top:3px}
+  .swap-banner{margin-bottom:18px;border-radius:var(--radius)}
+  .swap-alert-banner{margin-bottom:18px}
+  .grid-scroll{border-radius:var(--radius-lg)}
+  .grid-table th{padding:12px 10px;font-size:.75rem}
+  .grid-table th:first-child{padding-left:16px;min-width:90px}
+  .grid-table td.hour-cell{font-size:.78rem;padding-left:16px;min-width:90px}
+  .slot{min-height:48px;padding:8px;font-size:.75rem}
+  .slot-name{max-width:110px;font-size:.73rem}
+  .topbar{display:none !important}
+  .mobile-content{display:none !important}
+}
+@media(max-width:767px){
+  .sidebar{display:none !important}
+  .main-area{display:none !important}
+  #appScreen.active{display:block !important}
 }
 
-/* Mobile only: hide sidebar & main-area */
-@media (max-width: 767px) {
-  .sidebar { display: none !important; }
-  .main-area { display: none !important; }
-  #appScreen.active { display: block !important; }
+/* TOAST */
+.toast{
+  position:fixed;bottom:max(24px,env(safe-area-inset-bottom,0px));left:50%;
+  transform:translateX(-50%) translateY(80px);background:var(--slate-900);color:#F8FAFC;
+  padding:11px 20px;border-radius:24px;font-size:.83rem;font-weight:500;z-index:9999;
+  max-width:calc(100vw - 40px);text-align:center;box-shadow:0 8px 32px rgba(0,0,0,.3);
+  transition:transform .25s cubic-bezier(.34,1.56,.64,1),opacity .25s;opacity:0;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+.toast.green{background:var(--green-900)}
+.toast.red{background:#7F1D1D}
 
-/* ═══════════════════════════════════════════
-   TOAST
-═══════════════════════════════════════════ */
-.toast {
-  position: fixed;
-  bottom: max(24px, env(safe-area-inset-bottom, 0px));
-  left: 50%;
-  transform: translateX(-50%) translateY(80px);
-  background: var(--slate-900);
-  color: #F8FAFC;
-  padding: 11px 20px;
-  border-radius: 24px;
-  font-size: .83rem;
-  font-weight: 500;
-  z-index: 9999;
-  max-width: calc(100vw - 40px);
-  text-align: center;
-  box-shadow: 0 8px 32px rgba(0,0,0,.3);
-  transition: transform .25s cubic-bezier(.34,1.56,.64,1), opacity .25s;
-  opacity: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-.toast.green { background: var(--green-900); }
-.toast.red { background: #7F1D1D; }
 
-/* ── Modale mot de passe ── */
-#pwdModal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  background: rgba(0,0,0,.55);
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
+/* PASSWORD MODAL */
+#pwdModal{
+  display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.55);
+  align-items:center;justify-content:center;padding:24px;
 }
-#pwdModal.open { display: flex; }
-.pwd-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-xl);
-  padding: 24px 20px;
-  width: 100%;
-  max-width: 360px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+#pwdModal.open{display:flex}
+.pwd-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);
+  padding:24px 20px;width:100%;max-width:360px;display:flex;flex-direction:column;gap:16px;
+  animation:slideUp .2s cubic-bezier(.34,1.56,.64,1);
 }
-.pwd-card h3 {
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--text);
+@keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+.pwd-icon{
+  width:44px;height:44px;background:var(--red-100);border-radius:12px;
+  display:flex;align-items:center;justify-content:center;font-size:20px;
 }
-.pwd-card p {
-  font-size: .82rem;
-  color: var(--text-muted);
-  line-height: 1.5;
+.pwd-card h3{font-size:1rem;font-weight:700;color:var(--text)}
+.pwd-card p{font-size:.82rem;color:var(--text-muted);line-height:1.5}
+.pwd-card input{
+  width:100%;padding:11px 14px;border-radius:var(--radius);border:1.5px solid var(--border);
+  background:var(--surface-2);color:var(--text);font-family:inherit;font-size:.95rem;
+  transition:border-color .15s;
 }
-.pwd-card input {
-  width: 100%;
-  padding: 11px 14px;
-  border-radius: var(--radius);
-  border: 1.5px solid var(--border);
-  background: var(--surface-2);
-  color: var(--text);
-  font-family: inherit;
-  font-size: .95rem;
+.pwd-card input:focus{outline:none;border-color:var(--red-500);box-shadow:0 0 0 3px #EF444420}
+.pwd-card input.shake{animation:shake .3s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.pwd-err{font-size:.75rem;color:var(--red-500);min-height:18px}
+.pwd-btns{display:flex;gap:8px}
+.pwd-btns button{flex:1;padding:11px;border-radius:var(--radius);border:none;font-family:inherit;font-size:.9rem;font-weight:600;cursor:pointer}
+.btn-pwd-cancel{background:var(--surface-2);color:var(--text);border:1px solid var(--border) !important}
+.btn-pwd-confirm{background:var(--red-500);color:#fff}
+
+/* CONFIRM MODAL (reserve) */
+#confirmModal{
+  display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.55);
+  align-items:center;justify-content:center;padding:24px;
 }
-.pwd-card input:focus { outline: none; border-color: var(--red-500); box-shadow: 0 0 0 3px #EF444420; }
-.pwd-btns { display: flex; gap: 8px; }
-.pwd-btns button {
-  flex: 1;
-  padding: 11px;
-  border-radius: var(--radius);
-  border: none;
-  font-family: inherit;
-  font-size: .9rem;
-  font-weight: 600;
-  cursor: pointer;
+#confirmModal.open{display:flex}
+.confirm-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);
+  padding:24px 20px;width:100%;max-width:360px;display:flex;flex-direction:column;gap:16px;
+  animation:slideUp .2s cubic-bezier(.34,1.56,.64,1);
 }
-.btn-pwd-cancel { background: var(--surface-2); color: var(--text); border: 1px solid var(--border) !important; }
-.btn-pwd-confirm { background: var(--red-500); color: #fff; }
+.confirm-card h3{font-size:1rem;font-weight:700;color:var(--text)}
+.confirm-card p{font-size:.85rem;color:var(--text-muted);line-height:1.55}
+.confirm-btns{display:flex;gap:8px}
+.confirm-btns button{flex:1;padding:11px;border-radius:var(--radius);border:none;font-family:inherit;font-size:.9rem;font-weight:600;cursor:pointer}
+.btn-confirm-cancel{background:var(--surface-2);color:var(--text);border:1px solid var(--border) !important}
+.btn-confirm-ok{background:var(--green-900);color:#fff}
 </style>
 </head>
 <body>
 
-<!-- ══════════════════════════════════════
-     LOGIN
-══════════════════════════════════════ -->
+<!-- ═══ LOGIN ═══ -->
 <div id="loginScreen">
   <div class="login-wrap">
     <div class="login-brand">
@@ -913,15 +381,9 @@ input[type=date]:focus { outline: none; border-color: var(--green-600); box-shad
         <label>Génie</label>
         <select id="selGenie">
           <option value="">Sélectionner votre génie</option>
-          <option>G.Info</option>
-          <option>G.MIS</option>
-          <option>G.ProIndus</option>
-          <option>G.Indus</option>
-          <option>G.Méca</option>
-          <option>G.Min</option>
-          <option>G.RT</option>
-          <option>G.Élec</option>
-          <option>G.Civ</option>
+          <option>G.Info</option><option>G.MIS</option><option>G.ProIndus</option>
+          <option>G.Indus</option><option>G.Méca</option><option>G.Min</option>
+          <option>G.RT</option><option>G.Élec</option><option>G.Civ</option>
           <option>Pays Amis</option>
         </select>
       </div>
@@ -930,9 +392,7 @@ input[type=date]:focus { outline: none; border-color: var(--green-600); box-shad
         <label>Promotion</label>
         <select id="selPromo">
           <option value="">Sélectionner votre promotion</option>
-          <option>1A</option>
-          <option>2A</option>
-          <option>3A</option>
+          <option>1A</option><option>2A</option><option>3A</option>
         </select>
       </div>
       <div class="login-divider">et</div>
@@ -949,19 +409,14 @@ input[type=date]:focus { outline: none; border-color: var(--green-600); box-shad
         Accéder à la plateforme
       </button>
     </div>
-    <div class="login-footer">
-      Mini-foot · Basketball · Volleyball<br>
-      Chaque groupe (Génie · Promo · Genre) : 1 réservation par terrain par jour
-    </div>
+    <div class="login-footer">Mini-foot · Basketball · Volleyball<br>Chaque groupe (Génie · Promo · Genre) : 1 réservation par terrain par jour</div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════
-     APP
-══════════════════════════════════════ -->
+<!-- ═══ APP ═══ -->
 <div id="appScreen">
 
-  <!-- MOBILE: topbar -->
+  <!-- MOBILE topbar -->
   <div class="topbar">
     <div class="topbar-brand">
       <div class="topbar-icon">🏟️</div>
@@ -970,16 +425,25 @@ input[type=date]:focus { outline: none; border-color: var(--green-600); box-shad
         <div class="topbar-sub" id="topbarDate">—</div>
       </div>
     </div>
+
     <div class="user-chip" id="chipUser">
       <div class="user-avatar" id="chipAvatar"></div>
       <span id="chipLabel"></span>
     </div>
   </div>
 
-  <!-- MOBILE: content -->
+  <!-- MOBILE content -->
   <div class="mobile-content">
+    <div id="swapAlertMob" class="swap-alert-banner">
+      <div class="swap-alert-title">🔄 Demande d'échange reçue</div>
+      <div class="swap-alert-body" id="swapAlertBodyMob"></div>
+      <div class="swap-alert-actions">
+        <button class="btn-accept-swap" id="btnAcceptSwapMob">✓ Accepter</button>
+        <button class="btn-reject-swap" id="btnRejectSwapMob">✗ Refuser</button>
+      </div>
+    </div>
     <div id="swapBannerMob" class="swap-banner">
-      <span>Mode échange — sélectionnez votre 2ᵉ créneau pour permuter.</span>
+      <span id="swapBannerTextMob">Mode échange — sélectionnez votre 2ᵉ créneau.</span>
       <button class="btn-cancel-swap" id="cancelSwapMob">Annuler</button>
     </div>
     <div class="date-card">
@@ -997,28 +461,21 @@ input[type=date]:focus { outline: none; border-color: var(--green-600); box-shad
     <div class="grid-section">
       <div class="grid-section-title">Créneaux disponibles — 8h à 22h</div>
       <div class="grid-scroll">
-        <table class="grid-table" id="gridMob">
-          <thead>
-            <tr>
-              <th>Heure</th>
-              <th>⚽ Mini-foot</th>
-              <th>🏀 Basketball</th>
-              <th>🏐 Volleyball</th>
-            </tr>
-          </thead>
+        <table class="grid-table">
+          <thead><tr><th>Heure</th><th>⚽ Mini-foot</th><th>🏀 Basketball</th><th>🏐 Volleyball</th></tr></thead>
           <tbody id="gridBodyMob"></tbody>
         </table>
       </div>
     </div>
     <div class="legend">
-      <div class="legend-item"><div class="legend-dot" style="background:var(--slot-free);border:1px solid var(--green-100)"></div> Libre</div>
-      <div class="legend-item"><div class="legend-dot" style="background:var(--slot-mine);border:1.5px solid var(--slot-mine-b)"></div> Mon groupe</div>
-      <div class="legend-item"><div class="legend-dot" style="background:var(--slot-other)"></div> Autre groupe</div>
-      <div class="legend-item"><div class="legend-dot" style="background:var(--slot-blocked)"></div> Bloqué</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--slot-free);border:1px solid var(--green-100)"></div>Libre</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--slot-mine);border:1.5px solid var(--slot-mine-b)"></div>Mon groupe</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--slot-other)"></div>Autre groupe</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--slot-blocked)"></div>Bloqué</div>
     </div>
   </div>
 
-  <!-- DESKTOP: sidebar -->
+  <!-- DESKTOP sidebar -->
   <div class="sidebar">
     <div class="sidebar-brand">
       <div class="sidebar-emblem">🏟️</div>
@@ -1044,10 +501,10 @@ input[type=date]:focus { outline: none; border-color: var(--green-600); box-shad
     <div class="sidebar-section">
       <div class="sidebar-label">Légende</div>
       <div class="legend">
-        <div class="legend-item"><div class="legend-dot" style="background:var(--slot-free);border:1px solid #1A6B4740"></div> Libre</div>
-        <div class="legend-item"><div class="legend-dot" style="background:var(--slot-mine);border:1.5px solid var(--slot-mine-b)"></div> Mon groupe</div>
-        <div class="legend-item"><div class="legend-dot" style="background:var(--slot-other)"></div> Autre groupe</div>
-        <div class="legend-item"><div class="legend-dot" style="background:var(--slot-blocked)"></div> Bloqué (1 résa/terrain)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--slot-free);border:1px solid #1A6B4740"></div>Libre</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--slot-mine);border:1.5px solid var(--slot-mine-b)"></div>Mon groupe</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--slot-other)"></div>Autre groupe</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--slot-blocked)"></div>Bloqué (1 résa/terrain)</div>
       </div>
     </div>
 
@@ -1072,38 +529,41 @@ input[type=date]:focus { outline: none; border-color: var(--green-600); box-shad
     </div>
   </div>
 
-  <!-- DESKTOP: main -->
+  <!-- DESKTOP main -->
   <div class="main-area">
     <div class="main-header">
       <h2 id="mainHeaderDate">Créneaux du jour</h2>
       <p>Cliquez sur un créneau libre pour réserver · 1 réservation par terrain par jour</p>
     </div>
+    <div id="swapAlertDsk" class="swap-alert-banner" style="margin-bottom:18px">
+      <div class="swap-alert-title">🔄 Demande d'échange reçue</div>
+      <div class="swap-alert-body" id="swapAlertBodyDsk"></div>
+      <div class="swap-alert-actions">
+        <button class="btn-accept-swap" id="btnAcceptSwapDsk">✓ Accepter l'échange</button>
+        <button class="btn-reject-swap" id="btnRejectSwapDsk">✗ Refuser</button>
+      </div>
+    </div>
     <div id="swapBannerDsk" class="swap-banner" style="margin-bottom:18px">
-      <span>Mode échange actif — sélectionnez votre 2ᵉ créneau pour permuter les groupes.</span>
+      <span id="swapBannerTextDsk">Mode échange actif — sélectionnez votre 2ᵉ créneau.</span>
       <button class="btn-cancel-swap" id="cancelSwapDsk">Annuler</button>
     </div>
     <div class="grid-scroll">
-      <table class="grid-table" id="gridDsk">
-        <thead>
-          <tr>
-            <th>Heure</th>
-            <th>⚽ Mini-foot</th>
-            <th>🏀 Basketball</th>
-            <th>🏐 Volleyball</th>
-          </tr>
-        </thead>
+      <table class="grid-table">
+        <thead><tr><th>Heure</th><th>⚽ Mini-foot</th><th>🏀 Basketball</th><th>🏐 Volleyball</th></tr></thead>
         <tbody id="gridBodyDsk"></tbody>
       </table>
     </div>
   </div>
-
 </div>
 
+<!-- PASSWORD MODAL -->
 <div id="pwdModal">
   <div class="pwd-card">
-    <h3>🔒 Confirmation requise</h3>
-    <p id="pwdModalText">Entrez le mot de passe de votre groupe pour annuler cette réservation.</p>
-    <input type="password" id="pwdInput" placeholder="Mot de passe">
+    <div class="pwd-icon">🔒</div>
+    <h3>Confirmation requise</h3>
+    <p id="pwdModalText">Entrez le mot de passe de votre groupe pour confirmer cette action.</p>
+    <input type="password" id="pwdInput" placeholder="Mot de passe du groupe">
+    <div class="pwd-err" id="pwdErr"></div>
     <div class="pwd-btns">
       <button class="btn-pwd-cancel" id="pwdCancelBtn">Annuler</button>
       <button class="btn-pwd-confirm" id="pwdConfirmBtn">Confirmer</button>
@@ -1111,445 +571,465 @@ input[type=date]:focus { outline: none; border-color: var(--green-600); box-shad
   </div>
 </div>
 
+<!-- CONFIRM MODAL (reserve) -->
+<div id="confirmModal">
+  <div class="confirm-card">
+    <h3>Confirmer la réservation</h3>
+    <p id="confirmModalText"></p>
+    <div class="confirm-btns">
+      <button class="btn-confirm-cancel" id="confirmCancelBtn">Annuler</button>
+      <button class="btn-confirm-ok" id="confirmOkBtn">✓ Réserver</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot, writeBatch }
-  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyAtUTqkXD6AzFX_ZDVmUJ91vl7vsmI8zKM",
-  authDomain: "drmec-reservation-terrains.firebaseapp.com",
-  projectId: "drmec-reservation-terrains",
-  storageBucket: "drmec-reservation-terrains.firebasestorage.app",
-  messagingSenderId: "1036398595333",
-  appId: "1:1036398595333:web:c62136e6e77aa965057b6c"
-};
-
-const fbApp = initializeApp(firebaseConfig);
-const db = getFirestore(fbApp);
-const resCol = collection(db, "reservations");
-const swapReqCol = collection(db, "swapRequests");
-
+<script>
+/* ═══════════════════════════════════════════════════════════
+   CONSTANTES
+═══════════════════════════════════════════════════════════ */
 const COURTS = ["minifoot","basket","volley"];
 const COURT_LABELS = {minifoot:"Mini-foot",basket:"Basketball",volley:"Volleyball"};
 const S = 8, E = 22;
 const MIN_D = "2026-09-01", MAX_D = "2027-06-30";
+const LS_RES   = "emi_reservations";
+const LS_SWAPS = "emi_swap_requests";
 
+/* ═══════════════════════════════════════════════════════════
+   MOTS DE PASSE (60 groupes)
+═══════════════════════════════════════════════════════════ */
+const PASSWORDS = {
+  "G.Info 1A – Garçons":"Faucon38","G.Info 1A – Filles":"Tulipe77",
+  "G.Info 2A – Garçons":"Cobalt52","G.Info 2A – Filles":"Jasmin14",
+  "G.Info 3A – Garçons":"Orage91","G.Info 3A – Filles":"Brume43",
+  "G.MIS 1A – Garçons":"Volcan29","G.MIS 1A – Filles":"Cèdre66",
+  "G.MIS 2A – Garçons":"Mistral5","G.MIS 2A – Filles":"Aurore37",
+  "G.MIS 3A – Garçons":"Zénith18","G.MIS 3A – Filles":"Pivoine8",
+  "G.ProIndus 1A – Garçons":"Torrent4","G.ProIndus 1A – Filles":"Santal61",
+  "G.ProIndus 2A – Garçons":"Eclat73","G.ProIndus 2A – Filles":"Lierre26",
+  "G.ProIndus 3A – Garçons":"Basalte9","G.ProIndus 3A – Filles":"Opale55",
+  "G.Indus 1A – Garçons":"Silex31","G.Indus 1A – Filles":"Mandarine2",
+  "G.Indus 2A – Garçons":"Phare67","G.Indus 2A – Filles":"Glycine48",
+  "G.Indus 3A – Garçons":"Granit84","G.Indus 3A – Filles":"Nacre19",
+  "G.Méca 1A – Garçons":"Ecorce72","G.Méca 1A – Filles":"Safran36",
+  "G.Méca 2A – Garçons":"Ravier53","G.Méca 2A – Filles":"Dahlia97",
+  "G.Méca 3A – Garçons":"Flint46","G.Méca 3A – Filles":"Moraine3",
+  "G.Min 1A – Garçons":"Bassin64","G.Min 1A – Filles":"Corail21",
+  "G.Min 2A – Garçons":"Nuage85","G.Min 2A – Filles":"Vénus12",
+  "G.Min 3A – Garçons":"Tamaris7","G.Min 3A – Filles":"Oxyde44",
+  "G.RT 1A – Garçons":"Pixel93","G.RT 1A – Filles":"Liane58",
+  "G.RT 2A – Garçons":"Ravin16","G.RT 2A – Filles":"Mimosa39",
+  "G.RT 3A – Garçons":"Forge71","G.RT 3A – Filles":"Roseau6",
+  "G.Élec 1A – Garçons":"Pollen82","G.Élec 1A – Filles":"Quartz27",
+  "G.Élec 2A – Garçons":"Ardoise5","G.Élec 2A – Filles":"Limon49",
+  "G.Élec 3A – Garçons":"Dune76","G.Élec 3A – Filles":"Albâtre3",
+  "G.Civ 1A – Garçons":"Marbre68","G.Civ 1A – Filles":"Pivoine22",
+  "G.Civ 2A – Garçons":"Scorpion9","G.Civ 2A – Filles":"Tilleul57",
+  "G.Civ 3A – Garçons":"Kaolin41","G.Civ 3A – Filles":"Grès88",
+  "Pays Amis 1A – Garçons":"Alizé34","Pays Amis 1A – Filles":"Mangrove6",
+  "Pays Amis 2A – Garçons":"Obsidien53","Pays Amis 2A – Filles":"Verveine17",
+  "Pays Amis 3A – Garçons":"Steppe92","Pays Amis 3A – Filles":"Cannelle45"
+};
+
+/* ═══════════════════════════════════════════════════════════
+   ÉTAT GLOBAL
+═══════════════════════════════════════════════════════════ */
 let currentUser = null;
-let data = {};
-let swapReqs = {}; // clé de la résa demandeuse -> {targetKey, requesterGroup, targetGroup, ts}
-let swapMode = null;
+let swapMode    = null; // {k, date, court, h}
 
-// ── Validation du format de clé ──
-// Format attendu : YYYY-MM-DD_court_heure  ex: 2026-09-26_volley_11
-const KEY_RE = /^\d{4}-\d{2}-\d{2}_(minifoot|basket|volley)_\d{1,2}$/;
-
-// ── Firebase sync + nettoyage des vieilles réservations ──
-// ── Migration : ancien format de groupe (sans " – Garçons/Filles") ──
-// Si group ne contient pas " – Garçons" ou " – Filles", on supprime la résa
-// (impossible de deviner le genre, et les anciens docs sont obsolètes)
-function needsMigration(group) {
-  if (!group) return false;
-  return !group.includes(" – Garçons") && !group.includes(" – Filles");
-}
-
-onSnapshot(resCol, snap => {
-  data = {};
-  const toDelete = [];
-  snap.forEach(d => {
-    if (!KEY_RE.test(d.id)) {
-      toDelete.push(d.id); // clé hors format → supprimer
-    } else {
-      const entry = d.data();
-      if (needsMigration(entry.group)) {
-        toDelete.push(d.id); // ancien format sans genre → supprimer
-      } else {
-        data[d.id] = entry;
-      }
-    }
-  });
-  // Nettoyage silencieux
-  if (toDelete.length) {
-    const b = writeBatch(db);
-    toDelete.forEach(id => b.delete(doc(db, "reservations", id)));
-    b.commit().catch(console.error);
-  }
-  render();
-}, err => console.error(err));
-
-onSnapshot(swapReqCol, snap => {
-  swapReqs = {};
-  snap.forEach(d => { swapReqs[d.id] = d.data(); });
-  render();
-}, err => console.error(err));
-
-function findIncomingRequest(targetKey) {
-  for (const [reqKey, req] of Object.entries(swapReqs)) {
-    if (req.targetKey === targetKey) return { reqKey, ...req };
-  }
-  return null;
-}
-
-const key = (d, c, h) => `${d}_${c}_${h}`;
-const esc = s => s ? s.replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])) : "";
-
-// ── Mots de passe par groupe ──
-const GROUP_PASSWORDS = {
-  "G.Info 1A – Garçons":    "Faucon38",
-  "G.Info 1A – Filles":     "Tulipe77",
-  "G.Info 2A – Garçons":    "Cobalt52",
-  "G.Info 2A – Filles":     "Jasmin14",
-  "G.Info 3A – Garçons":    "Orage91",
-  "G.Info 3A – Filles":     "Brume43",
-  "G.MIS 1A – Garçons":     "Volcan29",
-  "G.MIS 1A – Filles":      "Cèdre66",
-  "G.MIS 2A – Garçons":     "Mistral5",
-  "G.MIS 2A – Filles":      "Aurore37",
-  "G.MIS 3A – Garçons":     "Zénith18",
-  "G.MIS 3A – Filles":      "Pivoine8",
-  "G.ProIndus 1A – Garçons":"Torrent4",
-  "G.ProIndus 1A – Filles": "Santal61",
-  "G.ProIndus 2A – Garçons":"Eclat73",
-  "G.ProIndus 2A – Filles": "Lierre26",
-  "G.ProIndus 3A – Garçons":"Basalte9",
-  "G.ProIndus 3A – Filles": "Opale55",
-  "G.Indus 1A – Garçons":   "Silex31",
-  "G.Indus 1A – Filles":    "Mandarine2",
-  "G.Indus 2A – Garçons":   "Phare67",
-  "G.Indus 2A – Filles":    "Glycine48",
-  "G.Indus 3A – Garçons":   "Granit84",
-  "G.Indus 3A – Filles":    "Nacre19",
-  "G.Méca 1A – Garçons":    "Ecorce72",
-  "G.Méca 1A – Filles":     "Safran36",
-  "G.Méca 2A – Garçons":    "Ravier53",
-  "G.Méca 2A – Filles":     "Dahlia97",
-  "G.Méca 3A – Garçons":    "Flint46",
-  "G.Méca 3A – Filles":     "Moraine3",
-  "G.Min 1A – Garçons":     "Bassin64",
-  "G.Min 1A – Filles":      "Corail21",
-  "G.Min 2A – Garçons":     "Nuage85",
-  "G.Min 2A – Filles":      "Vénus12",
-  "G.Min 3A – Garçons":     "Tamaris7",
-  "G.Min 3A – Filles":      "Oxyde44",
-  "G.RT 1A – Garçons":      "Pixel93",
-  "G.RT 1A – Filles":       "Liane58",
-  "G.RT 2A – Garçons":      "Ravin16",
-  "G.RT 2A – Filles":       "Mimosa39",
-  "G.RT 3A – Garçons":      "Forge71",
-  "G.RT 3A – Filles":       "Roseau6",
-  "G.Élec 1A – Garçons":    "Pollen82",
-  "G.Élec 1A – Filles":     "Quartz27",
-  "G.Élec 2A – Garçons":    "Ardoise5",
-  "G.Élec 2A – Filles":     "Limon49",
-  "G.Élec 3A – Garçons":    "Dune76",
-  "G.Élec 3A – Filles":     "Albâtre3",
-  "G.Civ 1A – Garçons":     "Marbre68",
-  "G.Civ 1A – Filles":      "Pivoine22",
-  "G.Civ 2A – Garçons":     "Scorpion9",
-  "G.Civ 2A – Filles":      "Tilleul57",
-  "G.Civ 3A – Garçons":     "Kaolin41",
-  "G.Civ 3A – Filles":      "Grès88",
-  "Pays Amis 1A – Garçons": "Alizé34",
-  "Pays Amis 1A – Filles":  "Mangrove6",
-  "Pays Amis 2A – Garçons": "Obsidien53",
-  "Pays Amis 2A – Filles":  "Verveine17",
-  "Pays Amis 3A – Garçons": "Steppe92",
-  "Pays Amis 3A – Filles":  "Cannelle45"
-};
-
-// ── Modale mot de passe (générique : annulation ou acceptation d'échange) ──
-let _pendingAction = null; // {type: "cancel"|"acceptSwap", key, reqKey, targetKey}
-document.getElementById("pwdCancelBtn").onclick = () => {
-  document.getElementById("pwdModal").classList.remove("open");
-  document.getElementById("pwdInput").value = "";
-  _pendingAction = null;
-};
-document.getElementById("pwdConfirmBtn").onclick = () => {
-  const input = document.getElementById("pwdInput").value;
-  const pwd = GROUP_PASSWORDS[currentUser];
-  document.getElementById("pwdModal").classList.remove("open");
-  document.getElementById("pwdInput").value = "";
-  if (input.trim() !== pwd) {
-    showToast("Mot de passe incorrect — vous n'avez pas le droit de faire cette action, veuillez contacter votre Responsable.", "red");
-    _pendingAction = null;
-    return;
-  }
-  const action = _pendingAction;
-  _pendingAction = null;
-  if (!action) return;
-  if (action.type === "cancel") {
-    deleteDoc(doc(db,"reservations",action.key)).then(() => {
-      showToast("Réservation annulée.", "red");
-      if (swapMode && swapMode.k === action.key) { clearSwap(); render(); }
-    });
-  } else if (action.type === "acceptSwap") {
-    doAcceptSwap(action.reqKey, action.requesterKey, action.myKey)
-      .then(() => showToast("Échange confirmé ✓", "green"));
-  }
-};
-document.getElementById("pwdInput").addEventListener("keydown", e => {
-  if (e.key === "Enter") document.getElementById("pwdConfirmBtn").click();
-});
-function openPwdModal(action, text) {
-  _pendingAction = action;
-  document.getElementById("pwdModalText").textContent = text;
-  document.getElementById("pwdInput").value = "";
-  document.getElementById("pwdModal").classList.add("open");
-  setTimeout(() => document.getElementById("pwdInput").focus(), 100);
-}
-
-async function reserve(k) { await setDoc(doc(db,"reservations",k),{group:currentUser,ts:Date.now()}); }
-function cancel(k) {
-  if (!GROUP_PASSWORDS[currentUser]) { showToast("Groupe non reconnu.", "red"); return; }
-  openPwdModal({type:"cancel", key:k}, "Entrez le mot de passe de votre groupe pour annuler cette réservation.");
-}
-
-// Échange direct entre deux créneaux de VOTRE PROPRE groupe (pas de confirmation nécessaire)
-async function doSwap(k1,k2) {
-  const g1=data[k1].group, g2=data[k2].group;
-  const b=writeBatch(db);
-  b.set(doc(db,"reservations",k1),{group:g2,ts:Date.now()});
-  b.set(doc(db,"reservations",k2),{group:g1,ts:Date.now()});
-  await b.commit();
-}
-
-// ── Demandes d'échange entre DEUX GROUPES DIFFÉRENTS ──
-async function proposeSwap(fromKey, toKey) {
-  await setDoc(doc(db,"swapRequests",fromKey), {
-    targetKey: toKey,
-    requesterGroup: currentUser,
-    targetGroup: data[toKey]?.group || null,
-    ts: Date.now()
-  });
-}
-async function cancelOutgoingRequest(fromKey) {
-  await deleteDoc(doc(db,"swapRequests",fromKey));
-}
-async function rejectSwapRequest(reqKey) {
-  await deleteDoc(doc(db,"swapRequests",reqKey));
-}
-function acceptSwapRequest(reqKey, requesterKey, myKey) {
-  if (!GROUP_PASSWORDS[currentUser]) { showToast("Groupe non reconnu.", "red"); return; }
-  openPwdModal(
-    {type:"acceptSwap", reqKey, requesterKey, myKey},
-    "Entrez le mot de passe de votre groupe pour accepter cet échange de créneau."
-  );
-}
-async function doAcceptSwap(reqKey, requesterKey, myKey) {
-  const req = swapReqs[reqKey];
-  if (!req || !data[requesterKey] || !data[myKey]) {
-    await deleteDoc(doc(db,"swapRequests",reqKey)); // demande obsolète
-    return;
-  }
-  const g1 = data[requesterKey].group, g2 = data[myKey].group;
-  const b = writeBatch(db);
-  b.set(doc(db,"reservations",requesterKey), {group:g2, ts:Date.now()});
-  b.set(doc(db,"reservations",myKey), {group:g1, ts:Date.now()});
-  b.delete(doc(db,"swapRequests",reqKey));
-  await b.commit();
-}
-
-// ── Init dates ──
-function fmtLocal(dt) {
-  const y = dt.getFullYear();
-  const m = String(dt.getMonth()+1).padStart(2,"0");
-  const d = String(dt.getDate()).padStart(2,"0");
+/* ═══════════════════════════════════════════════════════════
+   UTILITAIRES DE BASE — déclarés en premier car utilisés partout
+═══════════════════════════════════════════════════════════ */
+function key(d,c,h) { return `${d}_${c}_${h}`; }
+function esc(s) { return s ? s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])) : ""; }
+function todayStr() {
+  const n=new Date(); const y=n.getFullYear(),m=String(n.getMonth()+1).padStart(2,"0"),d=String(n.getDate()).padStart(2,"0");
   return `${y}-${m}-${d}`;
 }
-const todayStr = fmtLocal(new Date());
-const clamp = d => d < MIN_D ? MIN_D : (d > MAX_D ? MAX_D : d);
-const startDate = clamp(todayStr);
-
-document.getElementById("datePickMob").value = startDate;
-document.getElementById("datePickDsk").value = startDate;
-
+function shiftDate(s,delta) {
+  const d=new Date(s+"T00:00:00"); d.setDate(d.getDate()+delta);
+  const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,"0"),dd=String(d.getDate()).padStart(2,"0");
+  return `${y}-${m}-${dd}`;
+}
+function fmtDate(s) {
+  return new Date(s+"T00:00:00").toLocaleDateString("fr-MA",{weekday:"long",day:"numeric",month:"long"});
+}
 function getDate() {
-  return window.innerWidth >= 768
+  return window.innerWidth>=768
     ? document.getElementById("datePickDsk").value
     : document.getElementById("datePickMob").value;
 }
 function setDate(v) {
-  document.getElementById("datePickMob").value = v;
-  document.getElementById("datePickDsk").value = v;
-}
-function shiftDate(s, d) {
-  const dt = new Date(s+"T00:00:00"); dt.setDate(dt.getDate()+d); return fmtLocal(dt);
-}
-function fmtDate(s) {
-  const d = new Date(s+"T00:00:00");
-  return d.toLocaleDateString("fr-MA",{weekday:"long",day:"numeric",month:"long"});
+  document.getElementById("datePickMob").value=v;
+  document.getElementById("datePickDsk").value=v;
 }
 
-// ── Login ──
-document.getElementById("btnLogin").onclick = () => {
-  const g  = document.getElementById("selGenie").value;
-  const p  = document.getElementById("selPromo").value;
-  const gr = document.getElementById("selGenre").value;
-  if (!g || !p || !gr) { showToast("Remplir tous les champs.", "red"); return; }
-  currentUser = `${g} ${p} – ${gr === "Garçons" ? "Garçons" : "Filles"}`;
-  const initials = g.replace("G.","").slice(0,2).toUpperCase() + p.replace("A","");
-  const genderIcon = gr === "Filles" ? "♀" : "♂";
-  document.getElementById("chipAvatar").textContent = genderIcon;
-  document.getElementById("chipLabel").textContent = `${g} ${p}`;
-  document.getElementById("sidebarAvatar").textContent = genderIcon;
-  document.getElementById("sidebarName").textContent = currentUser;
-  document.getElementById("loginScreen").style.display = "none";
+/* ═══════════════════════════════════════════════════════════
+   LOCALSTORAGE HELPERS
+═══════════════════════════════════════════════════════════ */
+function loadData()   { try { return JSON.parse(localStorage.getItem(LS_RES)  || "{}"); } catch(e){ return {}; } }
+function loadSwaps()  { try { return JSON.parse(localStorage.getItem(LS_SWAPS)|| "{}"); } catch(e){ return {}; } }
+function saveData(d)  { try { localStorage.setItem(LS_RES,   JSON.stringify(d)); } catch(e){} }
+function saveSwaps(s) { try { localStorage.setItem(LS_SWAPS, JSON.stringify(s)); } catch(e){} }
+
+
+
+/* ═══════════════════════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════════════════════ */
+let toastTimer;
+function showToast(msg,type="") {
+  const t=document.getElementById("toast");
+  t.textContent=msg; t.className="toast "+type;
+  requestAnimationFrame(()=>t.classList.add("show"));
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove("show"),3200);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MODALE MOT DE PASSE
+═══════════════════════════════════════════════════════════ */
+let _pendingAction=null;
+
+function openPwdModal(action,text) {
+  _pendingAction=action;
+  document.getElementById("pwdModalText").textContent=text;
+  document.getElementById("pwdInput").value="";
+  document.getElementById("pwdErr").textContent="";
+  document.getElementById("pwdInput").classList.remove("shake");
+  document.getElementById("pwdModal").classList.add("open");
+  setTimeout(()=>document.getElementById("pwdInput").focus(),120);
+}
+document.getElementById("pwdCancelBtn").onclick=()=>{
+  document.getElementById("pwdModal").classList.remove("open");
+  _pendingAction=null;
+};
+document.getElementById("pwdInput").addEventListener("keydown",e=>{ if(e.key==="Enter") document.getElementById("pwdConfirmBtn").click(); });
+document.getElementById("pwdConfirmBtn").onclick=()=>{
+  const val=document.getElementById("pwdInput").value.trim();
+  const expected=PASSWORDS[currentUser];
+  if(val!==expected) {
+    const inp=document.getElementById("pwdInput");
+    inp.classList.remove("shake"); void inp.offsetWidth; inp.classList.add("shake");
+    document.getElementById("pwdErr").textContent="Mot de passe incorrect — contactez votre Responsable.";
+    inp.value=""; inp.focus();
+    return;
+  }
+  document.getElementById("pwdModal").classList.remove("open");
+  const action=_pendingAction; _pendingAction=null;
+  if(!action) return;
+  if(action.type==="cancel") {
+    const d=loadData(); delete d[action.k]; saveData(d);
+    if(swapMode&&swapMode.k===action.k){clearSwap();}
+    render(); showToast("Réservation annulée.","red");
+  } else if(action.type==="acceptSwap") {
+    execAcceptSwap(action.reqId);
+  }
+};
+
+/* ═══════════════════════════════════════════════════════════
+   MODALE CONFIRMATION RÉSERVATION
+═══════════════════════════════════════════════════════════ */
+let _pendingReserveKey=null;
+function openConfirmModal(k,label) {
+  _pendingReserveKey=k;
+  document.getElementById("confirmModalText").textContent=`Réserver ce créneau (${label}) pour ${currentUser} ?`;
+  document.getElementById("confirmModal").classList.add("open");
+  setTimeout(()=>document.getElementById("confirmOkBtn").focus(),80);
+}
+document.getElementById("confirmCancelBtn").onclick=()=>{
+  document.getElementById("confirmModal").classList.remove("open");
+  _pendingReserveKey=null;
+};
+document.getElementById("confirmOkBtn").onclick=()=>{
+  document.getElementById("confirmModal").classList.remove("open");
+  if(!_pendingReserveKey) return;
+  const k=_pendingReserveKey; _pendingReserveKey=null;
+  const d=loadData(); d[k]={group:currentUser,ts:Date.now()}; saveData(d);
+  const parts=k.split("_"); const h=parseInt(parts[2]);
+  render(); showToast(`Réservé ✓ ${h}h–${h+1}h`,"green");
+};
+
+/* ═══════════════════════════════════════════════════════════
+   SWAP LOGIC
+═══════════════════════════════════════════════════════════ */
+function findIncomingSwap() {
+  // Cherche une demande d'échange ciblant l'un de mes créneaux
+  const swaps=loadSwaps(); const d=loadData();
+  for(const [id,req] of Object.entries(swaps)) {
+    if(req.targetGroup===currentUser && req.status==="pending") {
+      return {reqId:id,...req};
+    }
+  }
+  return null;
+}
+function findOutgoingSwap(k) {
+  const swaps=loadSwaps();
+  return swaps[k]||null;
+}
+
+function execAcceptSwap(reqId) {
+  const swaps=loadSwaps(); const req=swaps[reqId];
+  if(!req) { showToast("Demande introuvable ou expirée.","red"); render(); return; }
+  const d=loadData();
+  const fromK=req.fromKey, toK=req.targetKey;
+  if(!d[fromK]||!d[toK]) { delete swaps[reqId]; saveSwaps(swaps); render(); showToast("Un créneau n'existe plus.","red"); return; }
+  const g1=d[fromK].group, g2=d[toK].group;
+  d[fromK]={group:g2,ts:Date.now()}; d[toK]={group:g1,ts:Date.now()};
+  req.status="accepted"; swaps[reqId]=req;
+  saveData(d); saveSwaps(swaps);
+  render(); showToast(`Échange confirmé avec ${req.requesterGroup} ✓`,"green");
+}
+
+function proposeSwap(fromK, toK) {
+  const d=loadData();
+  const swaps=loadSwaps();
+  const reqId=fromK;
+  swaps[reqId]={
+    fromKey:fromK, targetKey:toK,
+    requesterGroup:currentUser,
+    targetGroup:d[toK]?.group||null,
+    status:"pending", ts:Date.now()
+  };
+  saveSwaps(swaps);
+  clearSwap(); render();
+  showToast(`Demande envoyée à ${d[toK]?.group} — en attente.`,"green");
+}
+
+function cancelOutgoingSwap(fromK) {
+  const swaps=loadSwaps(); delete swaps[fromK]; saveSwaps(swaps);
+  render(); showToast("Demande d'échange annulée.","");
+}
+
+function rejectSwap(reqId) {
+  const swaps=loadSwaps(); const req=swaps[reqId];
+  if(req) { req.status="refused"; swaps[reqId]=req; saveSwaps(swaps); }
+  render(); showToast("Demande refusée.","red");
+}
+
+/* ═══════════════════════════════════════════════════════════
+   LOGIN
+═══════════════════════════════════════════════════════════ */
+const _today=todayStr();
+document.getElementById("datePickMob").value=_today;
+document.getElementById("datePickDsk").value=_today;
+
+document.getElementById("btnLogin").onclick=()=>{
+  const g=document.getElementById("selGenie").value;
+  const p=document.getElementById("selPromo").value;
+  const gr=document.getElementById("selGenre").value;
+  if(!g||!p||!gr){showToast("Remplir tous les champs.","red");return;}
+  currentUser=`${g} ${p} – ${gr}`;
+  const icon=gr==="Filles"?"♀":"♂";
+  document.getElementById("chipAvatar").textContent=icon;
+  document.getElementById("chipLabel").textContent=`${g} ${p}`;
+  document.getElementById("sidebarAvatar").textContent=icon;
+  document.getElementById("sidebarName").textContent=currentUser;
+  document.getElementById("loginScreen").style.display="none";
   document.getElementById("appScreen").classList.add("active");
+
+  // Vérifier si une demande d'échange a été acceptée/refusée depuis la dernière session
+  checkSwapFeedback();
   render();
 };
 
+function checkSwapFeedback() {
+  const swaps=loadSwaps();
+  for(const [id,req] of Object.entries(swaps)){
+    if(req.requesterGroup===currentUser){
+      if(req.status==="accepted") {
+        showToast(`Échange accepté par ${req.targetGroup} ✓`,"green");
+        delete swaps[id]; saveSwaps(swaps);
+      } else if(req.status==="refused") {
+        showToast(`Malheureusement, ${req.targetGroup} n'a pas voulu échanger avec vous.`,"red");
+        delete swaps[id]; saveSwaps(swaps);
+      }
+    }
+  }
+}
+
 function logout() {
-  if (!confirm("Changer de groupe ?")) return;
-  currentUser = null; swapMode = null;
+  if(!confirm("Changer de groupe ?")) return;
+  currentUser=null; swapMode=null;
   document.getElementById("appScreen").classList.remove("active");
-  document.getElementById("loginScreen").style.display = "flex";
+  document.getElementById("loginScreen").style.display="flex";
   clearSwap();
 }
-document.getElementById("chipUser").onclick = logout;
-document.getElementById("sidebarUser").onclick = logout;
+document.getElementById("chipUser").onclick=logout;
+document.getElementById("sidebarUser").onclick=logout;
 
-// ── Date nav ──
-["Mob","Dsk"].forEach(sfx => {
-  document.getElementById("prevDay"+sfx).onclick = () => { setDate(shiftDate(getDate(),-1)); render(); };
-  document.getElementById("nextDay"+sfx).onclick = () => { setDate(shiftDate(getDate(), 1)); render(); };
-  document.getElementById("today"+sfx).onclick   = () => { setDate(todayStr); render(); };
-  document.getElementById("datePick"+sfx).addEventListener("change", e => { setDate(e.target.value); render(); });
+/* ═══════════════════════════════════════════════════════════
+   DATE NAV
+═══════════════════════════════════════════════════════════ */
+["Mob","Dsk"].forEach(sfx=>{
+  document.getElementById("prevDay"+sfx).onclick=()=>{setDate(shiftDate(getDate(),-1));render();};
+  document.getElementById("nextDay"+sfx).onclick=()=>{setDate(shiftDate(getDate(), 1));render();};
+  document.getElementById("today"+sfx).onclick=()=>{setDate(_today);render();};
+  document.getElementById("datePick"+sfx).addEventListener("change",e=>{setDate(e.target.value);render();});
 });
 
-// ── Swap ──
-const DEFAULT_SWAP_TXT = "Mode échange — sélectionnez votre 2ᵉ créneau (même jour ou un autre jour) pour permuter.";
+
+
+/* ═══════════════════════════════════════════════════════════
+   SWAP MODE UI
+═══════════════════════════════════════════════════════════ */
 function clearSwap() {
-  swapMode = null;
-  document.querySelectorAll(".swap-banner span").forEach(s => s.textContent = DEFAULT_SWAP_TXT);
-  document.getElementById("swapBannerMob").classList.remove("show");
-  document.getElementById("swapBannerDsk").classList.remove("show");
+  swapMode=null;
+  ["Mob","Dsk"].forEach(sfx=>{
+    document.getElementById("swapBanner"+sfx).classList.remove("show");
+  });
 }
-["Mob","Dsk"].forEach(sfx => {
-  document.getElementById("cancelSwap"+sfx).onclick = () => { clearSwap(); render(); };
+["Mob","Dsk"].forEach(sfx=>{
+  document.getElementById("cancelSwap"+sfx).onclick=()=>{clearSwap();render();};
 });
 
-// ── Toast ──
-let toastTimer;
-function showToast(msg, type="") {
-  const t = document.getElementById("toast");
-  t.textContent = msg;
-  t.className = "toast " + type;
-  requestAnimationFrame(() => { t.classList.add("show"); });
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => { t.classList.remove("show"); }, 2800);
+function setSwapBannerText(txt) {
+  document.getElementById("swapBannerTextMob").textContent=txt;
+  document.getElementById("swapBannerTextDsk").textContent=txt;
 }
 
-// ── Render ──
-function render() {
-  if (!currentUser) return;
-  const date = getDate();
-  const oor = date < MIN_D || date > MAX_D;
-  const fmted = fmtDate(date);
+/* ═══════════════════════════════════════════════════════════
+   INCOMING SWAP ALERT BANNER
+═══════════════════════════════════════════════════════════ */
+let _currentIncomingReq=null;
 
-  document.getElementById("topbarDate").textContent = fmted;
-  document.getElementById("mainHeaderDate").textContent = fmted.charAt(0).toUpperCase() + fmted.slice(1);
-
-  ["oorMob","oorDsk"].forEach(id => {
-    const el = document.getElementById(id);
-    el.textContent = oor ? "Hors de l'année scolaire (sept. 2026 – juin 2027)" : "";
-    el.style.display = oor ? "block" : "none";
-  });
-
-  // Which courts does currentUser already have a booking on today?
-  const myCourtToday = new Set();
-  COURTS.forEach(court => {
-    for (let h = S; h < E; h++) {
-      if (data[key(date,court,h)]?.group === currentUser) { myCourtToday.add(court); break; }
+function renderSwapAlert() {
+  _currentIncomingReq=findIncomingSwap();
+  const show=!!_currentIncomingReq;
+  ["Mob","Dsk"].forEach(sfx=>{
+    const banner=document.getElementById("swapAlert"+sfx);
+    banner.classList.toggle("show",show);
+    if(show && _currentIncomingReq) {
+      const d=loadData();
+      const req=_currentIncomingReq;
+      const fromLabel=COURTS.includes(req.fromKey.split("_")[1])?COURT_LABELS[req.fromKey.split("_")[1]]:"?";
+      const fromH=req.fromKey.split("_")[2];
+      const toLabel=COURTS.includes(req.targetKey.split("_")[1])?COURT_LABELS[req.targetKey.split("_")[1]]:"?";
+      const toH=req.targetKey.split("_")[2];
+      const fromDate=fmtDate(req.fromKey.split("_")[0]);
+      const toDate=fmtDate(req.targetKey.split("_")[0]);
+      document.getElementById("swapAlertBody"+sfx).innerHTML=
+        `<strong>${esc(req.requesterGroup)}</strong> vous propose d'échanger :<br>
+         • Leur créneau : <strong>${fromLabel}, ${fromDate}, ${fromH}h–${parseInt(fromH)+1}h</strong><br>
+         • Contre votre créneau : <strong>${toLabel}, ${toDate}, ${toH}h–${parseInt(toH)+1}h</strong>`;
     }
   });
-
-  buildGrid("gridBodyMob", date, myCourtToday);
-  buildGrid("gridBodyDsk", date, myCourtToday);
 }
 
-function buildGrid(bodyId, date, myCourtToday) {
-  const body = document.getElementById(bodyId);
-  body.innerHTML = "";
+["Mob","Dsk"].forEach(sfx=>{
+  document.getElementById("btnAcceptSwap"+sfx).onclick=()=>{
+    if(!_currentIncomingReq) return;
+    openPwdModal({type:"acceptSwap",reqId:_currentIncomingReq.reqId},"Entrez le mot de passe de votre groupe pour accepter cet échange.");
+  };
+  document.getElementById("btnRejectSwap"+sfx).onclick=()=>{
+    if(!_currentIncomingReq) return;
+    rejectSwap(_currentIncomingReq.reqId);
+  };
+});
 
-  for (let h = S; h < E; h++) {
-    const tr = document.createElement("tr");
+/* ═══════════════════════════════════════════════════════════
+   RENDER
+═══════════════════════════════════════════════════════════ */
+function render() {
+  if(!currentUser) return;
+  const date=getDate();
+  const oor=date<MIN_D||date>MAX_D;
+  const fmted=fmtDate(date);
+  document.getElementById("topbarDate").textContent=fmted;
+  document.getElementById("mainHeaderDate").textContent=fmted.charAt(0).toUpperCase()+fmted.slice(1);
+  ["oorMob","oorDsk"].forEach(id=>{
+    const el=document.getElementById(id);
+    el.textContent=oor?"Hors de l'année scolaire (sept. 2026 – juin 2027)":"";
+    el.style.display=oor?"block":"none";
+  });
 
-    const tdH = document.createElement("td");
-    tdH.className = "hour-cell";
-    tdH.textContent = `${h}h – ${h+1}h`;
+  renderSwapAlert();
+
+  const d=loadData();
+  const myCourtToday=new Set();
+  COURTS.forEach(court=>{
+    for(let h=S;h<E;h++){
+      if(d[key(date,court,h)]?.group===currentUser){myCourtToday.add(court);break;}
+    }
+  });
+  buildGrid("gridBodyMob",date,myCourtToday,d);
+  buildGrid("gridBodyDsk",date,myCourtToday,d);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BUILD GRID
+═══════════════════════════════════════════════════════════ */
+function buildGrid(bodyId,date,myCourtToday,d) {
+  const body=document.getElementById(bodyId);
+  body.innerHTML="";
+  const swaps=loadSwaps();
+
+  for(let h=S;h<E;h++){
+    const tr=document.createElement("tr");
+    const tdH=document.createElement("td"); tdH.className="hour-cell"; tdH.textContent=`${h}h – ${h+1}h`;
     tr.appendChild(tdH);
 
-    COURTS.forEach(court => {
-      const td = document.createElement("td");
-      const k = key(date, court, h);
-      const entry = data[k];
-      const group = entry?.group ?? null;
-      const isMySlot  = group === currentUser;
-      const isFree    = !group;
-      const isBlocked = isFree && myCourtToday.has(court);
+    COURTS.forEach(court=>{
+      const td=document.createElement("td");
+      const k=key(date,court,h);
+      const entry=d[k];
+      const group=entry?.group??null;
+      const isMySlot=group===currentUser;
+      const isFree=!group;
+      const isBlocked=isFree&&myCourtToday.has(court);
 
-      const div = document.createElement("div");
-      const outgoingReq = swapReqs[k];              // MA résa a une demande sortante vers ailleurs
-      const incomingReq = findIncomingRequest(k);    // un autre groupe a demandé CE créneau
+      // Requêtes d'échange sur ce créneau
+      const outgoing=swaps[k];                // moi qui ai initié depuis ce créneau
+      const incoming=Object.values(swaps).find(r=>r.targetKey===k&&r.status==="pending"&&r.targetGroup===currentUser);
+      const pendingOnSlot=Object.values(swaps).find(r=>(r.fromKey===k||r.targetKey===k)&&r.status==="pending");
 
-      function nameBlock(g) {
-        const nd = document.createElement("div");
-        nd.className = "slot-name";
-        const parts = g.split(" – ");
-        nd.innerHTML = `<span class="slot-gp">${esc(parts[0]||g)}</span><span class="slot-genre">${esc(parts[1]||"")}</span>`;
+      const div=document.createElement("div");
+
+      function nameBlock(g){
+        const nd=document.createElement("div"); nd.className="slot-name";
+        const parts=g.split(" – ");
+        nd.innerHTML=`<span class="slot-gp">${esc(parts[0]||g)}</span><span class="slot-genre">${esc(parts[1]||"")}</span>`;
         return nd;
       }
 
-      if (isMySlot) {
-        div.className = "slot mine" + (swapMode && swapMode.k === k ? " swap-selected" : "");
+      if(isMySlot){
+        div.className="slot mine"+(swapMode&&swapMode.k===k?" swap-selected":"");
         div.appendChild(nameBlock(group));
-        const acts = document.createElement("div");
-        acts.className = "slot-actions";
+        const acts=document.createElement("div"); acts.className="slot-actions";
 
-        if (outgoingReq) {
-          // J'attends que l'autre groupe confirme
-          const info = document.createElement("div");
-          info.className = "slot-req-info";
-          info.textContent = `⏳ Demande envoyée à ${outgoingReq.targetGroup} — en attente`;
+        if(outgoing&&outgoing.status==="pending"){
+          // Demande sortante en attente
+          const info=document.createElement("div"); info.className="slot-req-info";
+          info.textContent=`⏳ Attente de ${outgoing.targetGroup}`;
           div.appendChild(info);
-          const bC = document.createElement("button");
-          bC.className = "btn-annuler"; bC.textContent = "Annuler la demande";
-          bC.onclick = e => { e.stopPropagation(); cancelOutgoingRequest(k); };
+          const bC=document.createElement("button"); bC.className="btn-annuler"; bC.textContent="Annuler la demande";
+          bC.onclick=e=>{e.stopPropagation();cancelOutgoingSwap(k);};
           acts.appendChild(bC);
-
-        } else if (incomingReq) {
-          // Un autre groupe me propose un échange
-          const info = document.createElement("div");
-          info.className = "slot-req-info";
-          info.textContent = `🔄 ${incomingReq.requesterGroup} propose un échange`;
-          div.appendChild(info);
-          const bAcc = document.createElement("button");
-          bAcc.className = "btn-echanger"; bAcc.textContent = "Accepter";
-          bAcc.onclick = e => { e.stopPropagation(); acceptSwapRequest(incomingReq.reqKey, incomingReq.reqKey, k); };
-          const bRej = document.createElement("button");
-          bRej.className = "btn-annuler"; bRej.textContent = "Refuser";
-          bRej.onclick = e => { e.stopPropagation(); rejectSwapRequest(incomingReq.reqKey).then(()=>showToast("Demande refusée.","red")); };
-          acts.appendChild(bAcc); acts.appendChild(bRej);
-
         } else {
-          const bA = document.createElement("button");
-          bA.className = "btn-annuler"; bA.textContent = "Annuler";
-          bA.onclick = e => { e.stopPropagation(); cancel(k); };
-
-          const bS = document.createElement("button");
-          bS.className = "btn-echanger"; bS.textContent = "Échanger";
-          bS.onclick = e => {
+          // Bouton Annuler (avec mot de passe)
+          const bA=document.createElement("button"); bA.className="btn-annuler"; bA.textContent="Annuler";
+          bA.onclick=e=>{
             e.stopPropagation();
-            if (swapMode) {
-              if (swapMode.k === k) { clearSwap(); render(); return; }
-              // Échange direct : les deux créneaux vous appartiennent déjà tous les deux
-              doSwap(k, swapMode.k).then(() => { clearSwap(); showToast("Créneaux échangés ✓", "green"); });
+            openPwdModal({type:"cancel",k},"Entrez le mot de passe de votre groupe pour annuler cette réservation.");
+          };
+          // Bouton Échanger
+          const bS=document.createElement("button"); bS.className="btn-echanger"; bS.textContent="Échanger";
+          bS.onclick=e=>{
+            e.stopPropagation();
+            if(swapMode){
+              if(swapMode.k===k){clearSwap();render();return;}
+              // Échange direct entre 2 de mes créneaux
+              const d2=loadData();
+              const g1=d2[k]?.group, g2=d2[swapMode.k]?.group;
+              if(g1===currentUser&&g2===currentUser){
+                d2[k]={group:g2,ts:Date.now()}; d2[swapMode.k]={group:g1,ts:Date.now()};
+                saveData(d2); clearSwap(); render(); showToast("Créneaux échangés ✓","green");
+              }
             } else {
-              swapMode = { k, date, court, h };
-              const pendingTxt = `En attente : ${COURT_LABELS[court]}, ${fmtDate(date)}, ${h}h–${h+1}h. Choisissez le 2ᵉ créneau (même jour ou un autre jour). Si c'est le créneau d'un autre groupe, une demande lui sera envoyée.`;
-              document.querySelectorAll(".swap-banner span").forEach(s => s.textContent = pendingTxt);
+              swapMode={k,date,court,h};
+              const txt=`Sélectionnez le 2ᵉ créneau · ${COURT_LABELS[court]}, ${fmtDate(date)}, ${h}h–${h+1}h · Si l'autre créneau est pris par un autre groupe, une demande lui sera envoyée.`;
+              setSwapBannerText(txt);
               document.getElementById("swapBannerMob").classList.add("show");
               document.getElementById("swapBannerDsk").classList.add("show");
               render();
@@ -1559,47 +1039,45 @@ function buildGrid(bodyId, date, myCourtToday) {
         }
         div.appendChild(acts);
 
-      } else if (isFree && !isBlocked) {
-        div.className = "slot free";
-        div.onclick = () => {
-          if (!confirm(`Réserver ce créneau (${h}h–${h+1}h) pour ${currentUser} ?`)) return;
-          reserve(k).then(() => showToast(`Réservé ✓ ${h}h–${h+1}h`, "green"));
+      } else if(isFree&&!isBlocked){
+        div.className="slot free";
+        div.onclick=()=>{
+          if(swapMode){
+            // Créneau libre sélectionné en mode échange = déplacer directement
+            const d2=loadData();
+            const myEntry=d2[swapMode.k];
+            if(!myEntry||myEntry.group!==currentUser){clearSwap();render();return;}
+            d2[k]={group:currentUser,ts:Date.now()}; delete d2[swapMode.k];
+            saveData(d2); clearSwap(); render(); showToast("Créneau déplacé ✓","green");
+          } else {
+            openConfirmModal(k,`${COURT_LABELS[court]}, ${h}h–${h+1}h`);
+          }
         };
 
-      } else if (isBlocked) {
-        div.className = "slot blocked";
-        div.title = "Votre groupe a déjà une réservation sur ce terrain aujourd'hui.";
+      } else if(isBlocked){
+        div.className="slot blocked";
+        div.title="Votre groupe a déjà une réservation sur ce terrain aujourd'hui.";
 
       } else {
-        // Créneau réservé par un AUTRE groupe
-        div.className = "slot other";
+        // Créneau d'un autre groupe
+        div.className="slot other";
         div.appendChild(nameBlock(group));
 
-        if (outgoingReq || incomingReq) {
-          const info = document.createElement("div");
-          info.className = "slot-req-info";
-          info.textContent = "⏳ Échange en attente sur ce créneau";
+        if(pendingOnSlot){
+          const info=document.createElement("div"); info.className="slot-req-info";
+          info.textContent="⏳ Échange en cours";
           div.appendChild(info);
-        } else if (swapMode && swapMode.k !== k) {
-          const bP = document.createElement("button");
-          bP.className = "btn-echanger"; bP.textContent = "Proposer un échange";
-          bP.onclick = e => {
-            e.stopPropagation();
-            const fromKey = swapMode.k;
-            proposeSwap(fromKey, k).then(() => {
-              clearSwap();
-              showToast(`Demande envoyée à ${group} — en attente de confirmation.`, "green");
-            });
-          };
-          const acts = document.createElement("div");
-          acts.className = "slot-actions";
+        } else if(swapMode&&swapMode.k!==k){
+          // En mode échange : proposer un échange
+          const acts=document.createElement("div"); acts.className="slot-actions";
+          const bP=document.createElement("button"); bP.className="btn-propose"; bP.textContent="Proposer un échange";
+          bP.onclick=e=>{e.stopPropagation(); proposeSwap(swapMode.k,k);};
           acts.appendChild(bP);
           div.appendChild(acts);
         }
       }
 
-      td.appendChild(div);
-      tr.appendChild(td);
+      td.appendChild(div); tr.appendChild(td);
     });
     body.appendChild(tr);
   }
