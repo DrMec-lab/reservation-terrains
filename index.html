@@ -1280,7 +1280,10 @@ document.getElementById("pwdConfirmBtn").onclick = () => {
   _pendingAction = null;
   if (!action) return;
   if (action.type === "cancel") {
-    deleteDoc(doc(db,"reservations",action.key)).then(() => showToast("Réservation annulée.", "red"));
+    deleteDoc(doc(db,"reservations",action.key)).then(() => {
+      showToast("Réservation annulée.", "red");
+      if (swapMode && swapMode.k === action.key) { clearSwap(); render(); }
+    });
   } else if (action.type === "acceptSwap") {
     doAcceptSwap(action.reqKey, action.requesterKey, action.myKey)
       .then(() => showToast("Échange confirmé ✓", "green"));
