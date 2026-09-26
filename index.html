@@ -3,66 +3,140 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Réservation des Terrains</title>
+<title>Réservation des Terrains — EMI</title>
 <style>
 :root{
-  --bg:#f5f6f8; --card:#ffffff; --text:#1a1d23; --sub:#6b7280;
-  --border:#e2e4e9; --accent:#2563eb; --accent-text:#fff;
-  --free:#eef2ff; --free-hover:#e0e7ff; --taken:#dcfce7; --taken-text:#166534;
-  --danger:#dc2626; --swap:#ea580c;
-  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#f5f6f8;--card:#ffffff;--text:#1a1d23;--sub:#6b7280;
+  --border:#e2e4e9;--accent:#2563eb;--accent-text:#fff;
+  --free:#eef2ff;--free-hover:#e0e7ff;--taken:#dcfce7;--taken-text:#166534;
+  --mine:#fef3c7;--mine-text:#92400e;--mine-border:#fcd34d;
+  --danger:#dc2626;--swap:#ea580c;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
   box-sizing:border-box;
 }
-@media (prefers-color-scheme: dark){
+@media(prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
-    --bg:#14161a; --card:#1e2127; --text:#e5e7eb; --sub:#9ca3af;
-    --border:#2c2f36; --accent:#3b82f6; --accent-text:#fff;
-    --free:#1e2540; --free-hover:#28305a; --taken:#123023; --taken-text:#4ade80;
+    --bg:#14161a;--card:#1e2127;--text:#e5e7eb;--sub:#9ca3af;
+    --border:#2c2f36;--accent:#3b82f6;--accent-text:#fff;
+    --free:#1e2540;--free-hover:#28305a;--taken:#123023;--taken-text:#4ade80;
+    --mine:#3b2800;--mine-text:#fcd34d;--mine-border:#92400e;
+    --danger:#ef4444;--swap:#f97316;
   }
 }
-:root[data-theme="dark"]{
-  --bg:#14161a; --card:#1e2127; --text:#e5e7eb; --sub:#9ca3af;
-  --border:#2c2f36; --accent:#3b82f6; --accent-text:#fff;
-  --free:#1e2540; --free-hover:#28305a; --taken:#123023; --taken-text:#4ade80;
-}
-*{box-sizing:border-box}
-html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,Segoe UI,Roboto,sans-serif}
-.wrap{max-width:820px;margin:0 auto;padding:16px 14px 40px}
-h1{font-size:1.25rem;margin:6px 0 2px}
-.sub{color:var(--sub);font-size:.85rem;margin-bottom:16px}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Segoe UI,Roboto,sans-serif;min-height:100vh}
+.wrap{max-width:860px;margin:0 auto;padding:16px 12px 48px}
+
+/* ── LOGIN ── */
+#loginScreen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:80vh;gap:0}
+.login-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:28px 24px;width:100%;max-width:360px;display:flex;flex-direction:column;gap:16px}
+.login-logo{font-size:2rem;text-align:center;margin-bottom:4px}
+.login-title{font-size:1.1rem;font-weight:700;text-align:center;margin-bottom:2px}
+.login-sub{font-size:.8rem;color:var(--sub);text-align:center;margin-bottom:8px}
+.login-row{display:flex;flex-direction:column;gap:6px}
+.login-row label{font-size:.78rem;color:var(--sub);font-weight:600}
+select{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.95rem;appearance:none;-webkit-appearance:none;cursor:pointer}
+select:focus{outline:2px solid var(--accent);outline-offset:1px}
+.btn-login{width:100%;padding:11px;border-radius:10px;border:none;background:var(--accent);color:var(--accent-text);font-size:1rem;font-weight:600;cursor:pointer;margin-top:4px;transition:opacity .15s}
+.btn-login:hover{opacity:.88}
+.badge-user{display:inline-flex;align-items:center;gap:6px;background:var(--mine);color:var(--mine-text);border:1px solid var(--mine-border);border-radius:20px;padding:4px 12px;font-size:.78rem;font-weight:600;cursor:pointer;user-select:none}
+.badge-user:hover{opacity:.8}
+
+/* ── APP ── */
+#appScreen{display:none}
+.topbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.topbar h1{font-size:1.15rem;font-weight:700}
+.topbar .sub{font-size:.8rem;color:var(--sub);margin-top:1px}
+
 .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:14px}
-label{font-size:.8rem;color:var(--sub);display:block;margin-bottom:4px}
+label.lbl{font-size:.8rem;color:var(--sub);display:block;margin-bottom:4px}
 input[type=date]{width:100%;padding:10px;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:1rem}
 .daynav{display:flex;gap:8px;margin-top:10px}
-.daynav button{flex:1;padding:8px;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--text);cursor:pointer;font-size:.85rem}
+.daynav button{flex:1;padding:8px;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--text);cursor:pointer;font-size:.82rem;transition:background .1s}
+.daynav button:hover{background:var(--free-hover)}
+.outofrange{color:var(--danger);font-size:.82rem;margin-top:8px}
+
 .grid-wrap{overflow-x:auto;border-radius:14px;border:1px solid var(--border)}
-table{border-collapse:collapse;width:100%;min-width:520px;background:var(--card)}
-th,td{padding:6px;text-align:center;font-size:.78rem;border-bottom:1px solid var(--border)}
-th{background:var(--bg);color:var(--sub);font-weight:600;position:sticky;top:0}
-td.hour{color:var(--sub);white-space:nowrap;font-weight:600}
-.slot{border-radius:9px;padding:8px 4px;cursor:pointer;user-select:none;min-height:38px;display:flex;flex-direction:column;justify-content:center;gap:2px}
-.slot.free{background:var(--free)}
+table{border-collapse:collapse;width:100%;min-width:480px;background:var(--card)}
+th,td{padding:5px;text-align:center;font-size:.76rem;border-bottom:1px solid var(--border)}
+th{background:var(--bg);color:var(--sub);font-weight:700;position:sticky;top:0;z-index:1}
+td.hour{color:var(--sub);white-space:nowrap;font-weight:600;font-size:.75rem;padding:5px 8px}
+.slot{border-radius:9px;padding:7px 4px;min-height:36px;display:flex;flex-direction:column;justify-content:center;gap:2px;font-size:.74rem}
+.slot.free{background:var(--free);cursor:pointer}
 .slot.free:hover{background:var(--free-hover)}
 .slot.taken{background:var(--taken);color:var(--taken-text);font-weight:600}
-.slot.selected{outline:2px solid var(--swap)}
-.slot small{font-weight:400;opacity:.75;font-size:.68rem}
-.actions{display:flex;gap:4px;justify-content:center;margin-top:3px}
-.actions button{border:none;border-radius:6px;padding:2px 6px;font-size:.68rem;cursor:pointer;color:#fff}
+.slot.mine{background:var(--mine);color:var(--mine-text);font-weight:700;border:1.5px solid var(--mine-border)}
+.slot.selected-swap{outline:2.5px solid var(--swap);outline-offset:1px}
+.slot.blocked{background:var(--bg);cursor:not-allowed;opacity:.55}
+
+.actions{display:flex;gap:3px;justify-content:center;margin-top:4px;flex-wrap:wrap}
+.actions button{border:none;border-radius:6px;padding:3px 8px;font-size:.67rem;cursor:pointer;color:#fff;font-weight:600}
 .btn-cancel{background:var(--danger)}
 .btn-swap{background:var(--swap)}
-.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.75rem;color:var(--sub);margin-top:10px}
-.dot{width:10px;height:10px;border-radius:3px;display:inline-block;margin-right:5px;vertical-align:middle}
-.banner{background:var(--free);border:1px solid var(--accent);border-radius:10px;padding:8px 10px;font-size:.8rem;margin-bottom:12px;display:none}
-.outofrange{color:var(--danger);font-size:.85rem;margin-top:8px}
+
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:.72rem;color:var(--sub);margin-top:10px}
+.dot{width:10px;height:10px;border-radius:3px;display:inline-block;margin-right:4px;vertical-align:middle}
+
+.banner{background:var(--free);border:1px solid var(--accent);border-radius:10px;padding:8px 10px;font-size:.8rem;margin-bottom:12px;display:none;line-height:1.4}
+.banner a{cursor:pointer;text-decoration:underline;color:var(--accent)}
+.err-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1e2127;color:#f9fafb;padding:10px 18px;border-radius:10px;font-size:.83rem;z-index:999;display:none;max-width:320px;text-align:center;box-shadow:0 4px 16px rgba(0,0,0,.3)}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1>🏟️ Réservation des Terrains</h1>
-  <div class="sub">Mini-foot • Basketball • Volleyball — créneaux de 8h à 22h, année scolaire 2026–2027</div>
+
+<!-- ══ LOGIN ══ -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo">🏟️</div>
+    <div class="login-title">Réservation des Terrains</div>
+    <div class="login-sub">Mini-foot · Basketball · Volleyball<br>Année scolaire 2026–2027 — EMI</div>
+
+    <div class="login-row">
+      <label>Génie</label>
+      <select id="selGenie">
+        <option value="">— Choisir —</option>
+        <option>G.Info</option>
+        <option>G.MIS</option>
+        <option>G.ProIndus</option>
+        <option>G.Indus</option>
+        <option>G.Méca</option>
+        <option>G.Min</option>
+        <option>G.RT</option>
+        <option>G.Élec</option>
+        <option>G.Civ</option>
+      </select>
+    </div>
+    <div class="login-row">
+      <label>Promotion</label>
+      <select id="selPromo">
+        <option value="">— Choisir —</option>
+        <option>1A</option>
+        <option>2A</option>
+        <option>3A</option>
+      </select>
+    </div>
+    <button class="btn-login" id="btnLogin">Accéder →</button>
+  </div>
+</div>
+
+<!-- ══ APP ══ -->
+<div id="appScreen">
+  <div class="topbar">
+    <div>
+      <h1>🏟️ Réservation des Terrains</h1>
+      <div class="sub">Mini-foot · Basketball · Volleyball — année scolaire 2026–2027</div>
+    </div>
+    <span class="badge-user" id="badgeUser" title="Cliquer pour changer de groupe">👥 <span id="badgeLabel"></span> ↩</span>
+  </div>
+
+  <div id="swapBanner" class="banner">
+    Mode échange actif — cliquez sur <strong>votre 2ᵉ créneau réservé</strong> pour permuter les deux groupes.
+    <a id="cancelSwap">Annuler</a>
+  </div>
 
   <div class="card">
-    <label for="datePick">Choisir une date</label>
+    <label class="lbl" for="datePick">Date</label>
     <input type="date" id="datePick" min="2026-09-01" max="2027-06-30">
     <div class="daynav">
       <button id="prevDay">← Veille</button>
@@ -71,8 +145,6 @@ td.hour{color:var(--sub);white-space:nowrap;font-weight:600}
     </div>
     <div id="outOfRange" class="outofrange"></div>
   </div>
-
-  <div id="swapBanner" class="banner">Mode échange : cliquez sur un 2ᵉ créneau réservé pour échanger les deux groupes. <span id="cancelSwap" style="cursor:pointer;text-decoration:underline">Annuler</span></div>
 
   <div class="grid-wrap">
     <table id="grid">
@@ -83,16 +155,21 @@ td.hour{color:var(--sub);white-space:nowrap;font-weight:600}
 
   <div class="legend">
     <span><span class="dot" style="background:var(--free)"></span>Libre</span>
-    <span><span class="dot" style="background:var(--taken)"></span>Réservé</span>
+    <span><span class="dot" style="background:var(--mine);border:1.5px solid var(--mine-border)"></span>Ma réservation</span>
+    <span><span class="dot" style="background:var(--taken)"></span>Réservé (autre)</span>
+    <span><span class="dot" style="background:var(--bg);border:1px solid var(--border);opacity:.6"></span>Bloqué (1 résa/terrain)</span>
   </div>
 </div>
+
+<div class="err-toast" id="errToast"></div>
+
+</div><!-- /wrap -->
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot, writeBatch }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-// >>> REMPLACE ces valeurs par ta propre config Firebase (étape "Récupérer la configuration web") <<<
 const firebaseConfig = {
   apiKey: "AIzaSyAtUTqkXD6AzFX_ZDVmUJ91vl7vsmI8zKM",
   authDomain: "drmec-reservation-terrains.firebaseapp.com",
@@ -102,104 +179,190 @@ const firebaseConfig = {
   appId: "1:1036398595333:web:c62136e6e77aa965057b6c"
 };
 const app = initializeApp(firebaseConfig);
-const dbFire = getFirestore(app);
-const resCol = collection(dbFire, "reservations");
+const db = getFirestore(app);
+const resCol = collection(db, "reservations");
 
-const COURTS=["minifoot","basket","volley"];
-const COURT_LABELS={minifoot:"Mini-foot",basket:"Basketball",volley:"Volleyball"};
-const START_HOUR=8, END_HOUR=22;
-const MIN_DATE="2026-09-01", MAX_DATE="2027-06-30";
+const COURTS = ["minifoot","basket","volley"];
+const COURT_LABELS = {minifoot:"Mini-foot",basket:"Basketball",volley:"Volleyball"};
+const START_HOUR = 8, END_HOUR = 22;
+const MIN_DATE = "2026-09-01", MAX_DATE = "2027-06-30";
 
-let data = {}; // populated live from Firestore, key -> nom de l'étudiant
+let currentUser = null;   // "G.Info 2A"
+let data = {};            // key -> {group, ts}
+let swapMode = null;      // {date, court, hour} of first selected slot
 
-// Real-time sync: any change (this device or any other) re-renders everyone
-onSnapshot(resCol, (snap)=>{
+// ── Firestore live sync ──
+onSnapshot(resCol, snap => {
   data = {};
-  snap.forEach(d=>{ data[d.id] = d.data().nom; });
+  snap.forEach(d => { data[d.id] = d.data(); });
   render();
-}, (err)=>{ console.error("Firestore error", err); });
+}, err => console.error("Firestore:", err));
 
-async function reserve(k, nom){ await setDoc(doc(dbFire, "reservations", k), { nom, ts: Date.now() }); }
-async function cancel(k){ await deleteDoc(doc(dbFire, "reservations", k)); }
-async function swap(k1, k2, nom1, nom2){
-  const batch = writeBatch(dbFire);
-  batch.set(doc(dbFire, "reservations", k1), { nom: nom2, ts: Date.now() });
-  batch.set(doc(dbFire, "reservations", k2), { nom: nom1, ts: Date.now() });
+async function reserve(k) {
+  await setDoc(doc(db, "reservations", k), { group: currentUser, ts: Date.now() });
+}
+async function cancel(k) {
+  await deleteDoc(doc(db, "reservations", k));
+}
+async function swapSlots(k1, k2) {
+  const g1 = data[k1].group, g2 = data[k2].group;
+  const batch = writeBatch(db);
+  batch.set(doc(db, "reservations", k1), { group: g2, ts: Date.now() });
+  batch.set(doc(db, "reservations", k2), { group: g1, ts: Date.now() });
   await batch.commit();
 }
 
-const dateInput = document.getElementById('datePick');
-const today = new Date();
-dateInput.value = today.toISOString().slice(0,10) < MIN_DATE ? MIN_DATE :
-                  (today.toISOString().slice(0,10) > MAX_DATE ? MAX_DATE : today.toISOString().slice(0,10));
+function key(date, court, hour) { return `${date}_${court}_${hour}`; }
 
-let swapMode = null; // {date,court,hour} of first selected slot
-const swapBanner = document.getElementById('swapBanner');
-document.getElementById('cancelSwap').onclick = ()=>{ swapMode=null; swapBanner.style.display='none'; render(); };
+// ── LOGIN ──
+document.getElementById("btnLogin").onclick = () => {
+  const g = document.getElementById("selGenie").value;
+  const p = document.getElementById("selPromo").value;
+  if (!g || !p) { showToast("Choisir un génie et une promo."); return; }
+  currentUser = `${g} ${p}`;
+  document.getElementById("badgeLabel").textContent = currentUser;
+  document.getElementById("loginScreen").style.display = "none";
+  document.getElementById("appScreen").style.display = "block";
+  render();
+};
+document.getElementById("badgeUser").onclick = () => {
+  if (!confirm("Se déconnecter et changer de groupe ?")) return;
+  currentUser = null;
+  swapMode = null;
+  document.getElementById("swapBanner").style.display = "none";
+  document.getElementById("appScreen").style.display = "none";
+  document.getElementById("loginScreen").style.display = "flex";
+};
 
-function key(date,court,hour){ return date+'_'+court+'_'+hour; }
+// ── Date navigation ──
+const dateInput = document.getElementById("datePick");
+const today = new Date().toISOString().slice(0,10);
+dateInput.value = today < MIN_DATE ? MIN_DATE : (today > MAX_DATE ? MAX_DATE : today);
 
-function render(){
+dateInput.addEventListener("change", render);
+document.getElementById("prevDay").onclick  = () => { dateInput.value = shiftDate(dateInput.value, -1); render(); };
+document.getElementById("nextDay").onclick  = () => { dateInput.value = shiftDate(dateInput.value,  1); render(); };
+document.getElementById("today").onclick    = () => { dateInput.value = new Date().toISOString().slice(0,10); render(); };
+document.getElementById("cancelSwap").onclick = () => { swapMode = null; document.getElementById("swapBanner").style.display = "none"; render(); };
+
+function shiftDate(str, delta) {
+  const d = new Date(str + "T00:00:00");
+  d.setDate(d.getDate() + delta);
+  return d.toISOString().slice(0,10);
+}
+
+// ── Render grid ──
+function render() {
+  if (!currentUser) return;
   const date = dateInput.value;
-  const outOfRange = document.getElementById('outOfRange');
-  if(date < MIN_DATE || date > MAX_DATE){
-    outOfRange.textContent = "Cette date est en dehors de l'année scolaire (01/09/2026 – 30/06/2027).";
-  } else {
-    outOfRange.textContent = "";
-  }
-  const body = document.getElementById('gridBody');
-  body.innerHTML = '';
-  for(let h=START_HOUR; h<END_HOUR; h++){
-    const tr = document.createElement('tr');
-    const tdHour = document.createElement('td');
-    tdHour.className='hour';
-    tdHour.textContent = h+"h–"+(h+1)+"h";
-    tr.appendChild(tdHour);
-    COURTS.forEach(court=>{
-      const td = document.createElement('td');
-      const k = key(date,court,h);
-      const group = data[k];
-      const div = document.createElement('div');
-      div.className = 'slot ' + (group ? 'taken' : 'free');
-      if(swapMode && swapMode.date===date && swapMode.court===court && swapMode.hour===h){
-        div.classList.add('selected');
-      }
-      if(group){
-        div.innerHTML = '<div>'+escapeHtml(group)+'</div><div class="actions"><button class="btn-cancel">Annuler</button><button class="btn-swap">Échanger</button></div>';
-        div.querySelector('.btn-cancel').onclick = (e)=>{ e.stopPropagation(); cancel(k); };
-        div.querySelector('.btn-swap').onclick = (e)=>{
+  const oor = document.getElementById("outOfRange");
+  oor.textContent = (date < MIN_DATE || date > MAX_DATE)
+    ? "Cette date est hors de l'année scolaire (01/09/2026 – 30/06/2027)." : "";
+
+  // Build a set of courts already reserved BY currentUser on this date (any hour)
+  const myCourtToday = new Set();
+  COURTS.forEach(court => {
+    for (let h = START_HOUR; h < END_HOUR; h++) {
+      const k = key(date, court, h);
+      if (data[k] && data[k].group === currentUser) { myCourtToday.add(court); break; }
+    }
+  });
+
+  const body = document.getElementById("gridBody");
+  body.innerHTML = "";
+
+  for (let h = START_HOUR; h < END_HOUR; h++) {
+    const tr = document.createElement("tr");
+    const tdH = document.createElement("td");
+    tdH.className = "hour";
+    tdH.textContent = `${h}h–${h+1}h`;
+    tr.appendChild(tdH);
+
+    COURTS.forEach(court => {
+      const td = document.createElement("td");
+      const k = key(date, court, h);
+      const entry = data[k];
+      const group = entry ? entry.group : null;
+      const isMySlot = group === currentUser;
+      const isFree   = !group;
+      // "Blocked" = free slot on a court where currentUser already has a booking today (but not this specific hour)
+      const isBlocked = isFree && myCourtToday.has(court) && !isMySlot;
+
+      const div = document.createElement("div");
+
+      if (isMySlot) {
+        div.className = "slot mine";
+        if (swapMode && swapMode.date === date && swapMode.court === court && swapMode.hour === h)
+          div.classList.add("selected-swap");
+        div.innerHTML = `<div>${esc(group)}</div>`;
+        const acts = document.createElement("div");
+        acts.className = "actions";
+
+        const btnC = document.createElement("button");
+        btnC.className = "btn-cancel"; btnC.textContent = "Annuler";
+        btnC.onclick = e => { e.stopPropagation(); cancel(k); };
+
+        const btnS = document.createElement("button");
+        btnS.className = "btn-swap"; btnS.textContent = "Échanger";
+        btnS.onclick = e => {
           e.stopPropagation();
-          if(swapMode && (swapMode.date!==date||swapMode.court!==court||swapMode.hour!==h)){
-            const k2 = key(swapMode.date,swapMode.court,swapMode.hour);
-            swap(k, k2, data[k], data[k2]);
-            swapMode=null; swapBanner.style.display='none';
+          if (swapMode) {
+            // Second click — perform swap if different slot
+            if (swapMode.date === date && swapMode.court === court && swapMode.hour === h) {
+              swapMode = null;
+              document.getElementById("swapBanner").style.display = "none";
+            } else {
+              const k2 = key(swapMode.date, swapMode.court, swapMode.hour);
+              swapSlots(k, k2);
+              swapMode = null;
+              document.getElementById("swapBanner").style.display = "none";
+            }
           } else {
-            swapMode = {date,court,hour:h};
-            swapBanner.style.display='block';
-            render();
+            swapMode = { date, court, hour: h };
+            document.getElementById("swapBanner").style.display = "block";
           }
+          render();
         };
+        acts.appendChild(btnC); acts.appendChild(btnS);
+        div.appendChild(acts);
+
+      } else if (isFree && !isBlocked) {
+        div.className = "slot free";
+        div.onclick = () => {
+          if (!confirm(`Réserver ${COURT_LABELS[court]}, ${h}h–${h+1}h pour ${currentUser} ?`)) return;
+          reserve(k);
+        };
+
+      } else if (isBlocked) {
+        div.className = "slot blocked";
+        div.title = `Votre groupe a déjà une réservation sur ce terrain aujourd'hui.`;
+        div.textContent = "—";
+
       } else {
-        div.onclick = ()=>{
-          const nom = prompt("Votre nom (pour réserver "+COURT_LABELS[court]+", "+h+"h-"+(h+1)+"h) :");
-          if(nom && nom.trim()){ reserve(k, nom.trim()); }
-        };
+        // Taken by another group
+        div.className = "slot taken";
+        div.innerHTML = `<div>${esc(group)}</div>`;
       }
+
       td.appendChild(div);
       tr.appendChild(td);
     });
     body.appendChild(tr);
   }
 }
-function escapeHtml(s){ return s.replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
-dateInput.addEventListener('change', render);
-document.getElementById('prevDay').onclick = ()=>{ dateInput.value = shiftDate(dateInput.value,-1); render(); };
-document.getElementById('nextDay').onclick = ()=>{ dateInput.value = shiftDate(dateInput.value,1); render(); };
-document.getElementById('today').onclick = ()=>{ dateInput.value = new Date().toISOString().slice(0,10); render(); };
-function shiftDate(str,delta){ const d=new Date(str+'T00:00:00'); d.setDate(d.getDate()+delta); return d.toISOString().slice(0,10); }
+function esc(s) {
+  if (!s) return "";
+  return s.replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
 
-render();
+function showToast(msg) {
+  const t = document.getElementById("errToast");
+  t.textContent = msg;
+  t.style.display = "block";
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => { t.style.display = "none"; }, 3000);
+}
 </script>
 </body>
 </html>
