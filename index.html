@@ -590,6 +590,15 @@ input[type=date]:focus { outline: none; border-color: var(--green-600); box-shad
 .slot-actions button:hover { opacity: .85; }
 .btn-annuler { background: var(--red-500); }
 .btn-echanger { background: var(--green-700); }
+.slot-req-info {
+  font-size: .6rem;
+  line-height: 1.25;
+  text-align: center;
+  color: var(--amber-500);
+  font-weight: 600;
+  max-width: 92px;
+  margin-top: 1px;
+}
 
 /* ── Legend ── */
 .legend {
@@ -1093,7 +1102,7 @@ input[type=date]:focus { outline: none; border-color: var(--green-600); box-shad
 <div id="pwdModal">
   <div class="pwd-card">
     <h3>🔒 Confirmation requise</h3>
-    <p>Entrez le mot de passe de votre groupe pour annuler cette réservation.</p>
+    <p id="pwdModalText">Entrez le mot de passe de votre groupe pour annuler cette réservation.</p>
     <input type="password" id="pwdInput" placeholder="Mot de passe">
     <div class="pwd-btns">
       <button class="btn-pwd-cancel" id="pwdCancelBtn">Annuler</button>
@@ -1121,13 +1130,16 @@ const firebaseConfig = {
 const fbApp = initializeApp(firebaseConfig);
 const db = getFirestore(fbApp);
 const resCol = collection(db, "reservations");
+const swapReqCol = collection(db, "swapRequests");
 
 const COURTS = ["minifoot","basket","volley"];
+const COURT_LABELS = {minifoot:"Mini-foot",basket:"Basketball",volley:"Volleyball"};
 const S = 8, E = 22;
 const MIN_D = "2026-09-01", MAX_D = "2027-06-30";
 
 let currentUser = null;
 let data = {};
+let swapReqs = {}; // clé de la résa demandeuse -> {targetKey, requesterGroup, targetGroup, ts}
 let swapMode = null;
 
 // ── Validation du format de clé ──
@@ -1166,6 +1178,19 @@ onSnapshot(resCol, snap => {
   }
   render();
 }, err => console.error(err));
+
+onSnapshot(swapReqCol, snap => {
+  swapReqs = {};
+  snap.forEach(d => { swapReqs[d.id] = d.data(); });
+  render();
+}, err => console.error(err));
+
+function findIncomingRequest(targetKey) {
+  for (const [reqKey, req] of Object.entries(swapReqs)) {
+    if (req.targetKey === targetKey) return { reqKey, ...req };
+  }
+  return null;
+}
 
 const key = (d, c, h) => `${d}_${c}_${h}`;
 const esc = s => s ? s.replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])) : "";
@@ -1234,12 +1259,12 @@ const GROUP_PASSWORDS = {
   "Pays Amis 3A – Filles":  "Cannelle45"
 };
 
-// ── Modale mot de passe ──
-let _pendingCancelKey = null;
+// ── Modale mot de passe (générique : annulation ou acceptation d'échange) ──
+let _pendingAction = null; // {type: "cancel"|"acceptSwap", key, reqKey, targetKey}
 document.getElementById("pwdCancelBtn").onclick = () => {
   document.getElementById("pwdModal").classList.remove("open");
   document.getElementById("pwdInput").value = "";
-  _pendingCancelKey = null;
+  _pendingAction = null;
 };
 document.getElementById("pwdConfirmBtn").onclick = () => {
   const input = document.getElementById("pwdInput").value;
@@ -1247,28 +1272,41 @@ document.getElementById("pwdConfirmBtn").onclick = () => {
   document.getElementById("pwdModal").classList.remove("open");
   document.getElementById("pwdInput").value = "";
   if (input.trim() !== pwd) {
-    showToast("Mot de passe incorrect — vous n'avez pas le droit de supprimer une réservation, veuillez contacter votre Responsable.", "red");
-    _pendingCancelKey = null;
+    showToast("Mot de passe incorrect — vous n'avez pas le droit de faire cette action, veuillez contacter votre Responsable.", "red");
+    _pendingAction = null;
     return;
   }
-  if (_pendingCancelKey) {
-    deleteDoc(doc(db,"reservations",_pendingCancelKey)).then(() => showToast("Réservation annulée.", "red"));
-    _pendingCancelKey = null;
+  const action = _pendingAction;
+  _pendingAction = null;
+  if (!action) return;
+  if (action.type === "cancel") {
+    deleteDoc(doc(db,"reservations",action.key)).then(() => {
+      showToast("Réservation annulée.", "red");
+      if (swapMode && swapMode.k === action.key) { clearSwap(); render(); }
+    });
+  } else if (action.type === "acceptSwap") {
+    doAcceptSwap(action.reqKey, action.requesterKey, action.myKey)
+      .then(() => showToast("Échange confirmé ✓", "green"));
   }
 };
 document.getElementById("pwdInput").addEventListener("keydown", e => {
   if (e.key === "Enter") document.getElementById("pwdConfirmBtn").click();
 });
-
-async function reserve(k) { await setDoc(doc(db,"reservations",k),{group:currentUser,ts:Date.now()}); }
-function cancel(k) {
-  if (!GROUP_PASSWORDS[currentUser]) { showToast("Groupe non reconnu.", "red"); return; }
-  _pendingCancelKey = k;
+function openPwdModal(action, text) {
+  _pendingAction = action;
+  document.getElementById("pwdModalText").textContent = text;
   document.getElementById("pwdInput").value = "";
   document.getElementById("pwdModal").classList.add("open");
   setTimeout(() => document.getElementById("pwdInput").focus(), 100);
 }
 
+async function reserve(k) { await setDoc(doc(db,"reservations",k),{group:currentUser,ts:Date.now()}); }
+function cancel(k) {
+  if (!GROUP_PASSWORDS[currentUser]) { showToast("Groupe non reconnu.", "red"); return; }
+  openPwdModal({type:"cancel", key:k}, "Entrez le mot de passe de votre groupe pour annuler cette réservation.");
+}
+
+// Échange direct entre deux créneaux de VOTRE PROPRE groupe (pas de confirmation nécessaire)
 async function doSwap(k1,k2) {
   const g1=data[k1].group, g2=data[k2].group;
   const b=writeBatch(db);
@@ -1277,8 +1315,50 @@ async function doSwap(k1,k2) {
   await b.commit();
 }
 
+// ── Demandes d'échange entre DEUX GROUPES DIFFÉRENTS ──
+async function proposeSwap(fromKey, toKey) {
+  await setDoc(doc(db,"swapRequests",fromKey), {
+    targetKey: toKey,
+    requesterGroup: currentUser,
+    targetGroup: data[toKey]?.group || null,
+    ts: Date.now()
+  });
+}
+async function cancelOutgoingRequest(fromKey) {
+  await deleteDoc(doc(db,"swapRequests",fromKey));
+}
+async function rejectSwapRequest(reqKey) {
+  await deleteDoc(doc(db,"swapRequests",reqKey));
+}
+function acceptSwapRequest(reqKey, requesterKey, myKey) {
+  if (!GROUP_PASSWORDS[currentUser]) { showToast("Groupe non reconnu.", "red"); return; }
+  openPwdModal(
+    {type:"acceptSwap", reqKey, requesterKey, myKey},
+    "Entrez le mot de passe de votre groupe pour accepter cet échange de créneau."
+  );
+}
+async function doAcceptSwap(reqKey, requesterKey, myKey) {
+  const req = swapReqs[reqKey];
+  if (!req || !data[requesterKey] || !data[myKey]) {
+    await deleteDoc(doc(db,"swapRequests",reqKey)); // demande obsolète
+    return;
+  }
+  const g1 = data[requesterKey].group, g2 = data[myKey].group;
+  const b = writeBatch(db);
+  b.set(doc(db,"reservations",requesterKey), {group:g2, ts:Date.now()});
+  b.set(doc(db,"reservations",myKey), {group:g1, ts:Date.now()});
+  b.delete(doc(db,"swapRequests",reqKey));
+  await b.commit();
+}
+
 // ── Init dates ──
-const todayStr = new Date().toISOString().slice(0,10);
+function fmtLocal(dt) {
+  const y = dt.getFullYear();
+  const m = String(dt.getMonth()+1).padStart(2,"0");
+  const d = String(dt.getDate()).padStart(2,"0");
+  return `${y}-${m}-${d}`;
+}
+const todayStr = fmtLocal(new Date());
 const clamp = d => d < MIN_D ? MIN_D : (d > MAX_D ? MAX_D : d);
 const startDate = clamp(todayStr);
 
@@ -1295,7 +1375,7 @@ function setDate(v) {
   document.getElementById("datePickDsk").value = v;
 }
 function shiftDate(s, d) {
-  const dt = new Date(s+"T00:00:00"); dt.setDate(dt.getDate()+d); return dt.toISOString().slice(0,10);
+  const dt = new Date(s+"T00:00:00"); dt.setDate(dt.getDate()+d); return fmtLocal(dt);
 }
 function fmtDate(s) {
   const d = new Date(s+"T00:00:00");
@@ -1339,8 +1419,10 @@ document.getElementById("sidebarUser").onclick = logout;
 });
 
 // ── Swap ──
+const DEFAULT_SWAP_TXT = "Mode échange — sélectionnez votre 2ᵉ créneau (même jour ou un autre jour) pour permuter.";
 function clearSwap() {
   swapMode = null;
+  document.querySelectorAll(".swap-banner span").forEach(s => s.textContent = DEFAULT_SWAP_TXT);
   document.getElementById("swapBannerMob").classList.remove("show");
   document.getElementById("swapBannerDsk").classList.remove("show");
 }
@@ -1409,36 +1491,72 @@ function buildGrid(bodyId, date, myCourtToday) {
       const isBlocked = isFree && myCourtToday.has(court);
 
       const div = document.createElement("div");
+      const outgoingReq = swapReqs[k];              // MA résa a une demande sortante vers ailleurs
+      const incomingReq = findIncomingRequest(k);    // un autre groupe a demandé CE créneau
+
+      function nameBlock(g) {
+        const nd = document.createElement("div");
+        nd.className = "slot-name";
+        const parts = g.split(" – ");
+        nd.innerHTML = `<span class="slot-gp">${esc(parts[0]||g)}</span><span class="slot-genre">${esc(parts[1]||"")}</span>`;
+        return nd;
+      }
 
       if (isMySlot) {
         div.className = "slot mine" + (swapMode && swapMode.k === k ? " swap-selected" : "");
-        const nameDiv = document.createElement("div");
-        nameDiv.className = "slot-name";
-        const parts = group.split(" – ");
-        nameDiv.innerHTML = `<span class="slot-gp">${parts[0] || group}</span><span class="slot-genre">${parts[1] || ""}</span>`;
-        div.appendChild(nameDiv);
+        div.appendChild(nameBlock(group));
         const acts = document.createElement("div");
         acts.className = "slot-actions";
 
-        const bA = document.createElement("button");
-        bA.className = "btn-annuler"; bA.textContent = "Annuler";
-        bA.onclick = e => { e.stopPropagation(); cancel(k); };
+        if (outgoingReq) {
+          // J'attends que l'autre groupe confirme
+          const info = document.createElement("div");
+          info.className = "slot-req-info";
+          info.textContent = `⏳ Demande envoyée à ${outgoingReq.targetGroup} — en attente`;
+          div.appendChild(info);
+          const bC = document.createElement("button");
+          bC.className = "btn-annuler"; bC.textContent = "Annuler la demande";
+          bC.onclick = e => { e.stopPropagation(); cancelOutgoingRequest(k); };
+          acts.appendChild(bC);
 
-        const bS = document.createElement("button");
-        bS.className = "btn-echanger"; bS.textContent = "Échanger";
-        bS.onclick = e => {
-          e.stopPropagation();
-          if (swapMode) {
-            if (swapMode.k === k) { clearSwap(); render(); return; }
-            doSwap(k, swapMode.k).then(() => { clearSwap(); showToast("Créneaux échangés ✓", "green"); });
-          } else {
-            swapMode = { k, date, court, h };
-            document.getElementById("swapBannerMob").classList.add("show");
-            document.getElementById("swapBannerDsk").classList.add("show");
-            render();
-          }
-        };
-        acts.appendChild(bA); acts.appendChild(bS);
+        } else if (incomingReq) {
+          // Un autre groupe me propose un échange
+          const info = document.createElement("div");
+          info.className = "slot-req-info";
+          info.textContent = `🔄 ${incomingReq.requesterGroup} propose un échange`;
+          div.appendChild(info);
+          const bAcc = document.createElement("button");
+          bAcc.className = "btn-echanger"; bAcc.textContent = "Accepter";
+          bAcc.onclick = e => { e.stopPropagation(); acceptSwapRequest(incomingReq.reqKey, incomingReq.reqKey, k); };
+          const bRej = document.createElement("button");
+          bRej.className = "btn-annuler"; bRej.textContent = "Refuser";
+          bRej.onclick = e => { e.stopPropagation(); rejectSwapRequest(incomingReq.reqKey).then(()=>showToast("Demande refusée.","red")); };
+          acts.appendChild(bAcc); acts.appendChild(bRej);
+
+        } else {
+          const bA = document.createElement("button");
+          bA.className = "btn-annuler"; bA.textContent = "Annuler";
+          bA.onclick = e => { e.stopPropagation(); cancel(k); };
+
+          const bS = document.createElement("button");
+          bS.className = "btn-echanger"; bS.textContent = "Échanger";
+          bS.onclick = e => {
+            e.stopPropagation();
+            if (swapMode) {
+              if (swapMode.k === k) { clearSwap(); render(); return; }
+              // Échange direct : les deux créneaux vous appartiennent déjà tous les deux
+              doSwap(k, swapMode.k).then(() => { clearSwap(); showToast("Créneaux échangés ✓", "green"); });
+            } else {
+              swapMode = { k, date, court, h };
+              const pendingTxt = `En attente : ${COURT_LABELS[court]}, ${fmtDate(date)}, ${h}h–${h+1}h. Choisissez le 2ᵉ créneau (même jour ou un autre jour). Si c'est le créneau d'un autre groupe, une demande lui sera envoyée.`;
+              document.querySelectorAll(".swap-banner span").forEach(s => s.textContent = pendingTxt);
+              document.getElementById("swapBannerMob").classList.add("show");
+              document.getElementById("swapBannerDsk").classList.add("show");
+              render();
+            }
+          };
+          acts.appendChild(bA); acts.appendChild(bS);
+        }
         div.appendChild(acts);
 
       } else if (isFree && !isBlocked) {
@@ -1453,12 +1571,31 @@ function buildGrid(bodyId, date, myCourtToday) {
         div.title = "Votre groupe a déjà une réservation sur ce terrain aujourd'hui.";
 
       } else {
+        // Créneau réservé par un AUTRE groupe
         div.className = "slot other";
-        const nameDiv = document.createElement("div");
-        nameDiv.className = "slot-name";
-        const parts = group.split(" – ");
-        nameDiv.innerHTML = `<span class="slot-gp">${parts[0] || group}</span><span class="slot-genre">${parts[1] || ""}</span>`;
-        div.appendChild(nameDiv);
+        div.appendChild(nameBlock(group));
+
+        if (outgoingReq || incomingReq) {
+          const info = document.createElement("div");
+          info.className = "slot-req-info";
+          info.textContent = "⏳ Échange en attente sur ce créneau";
+          div.appendChild(info);
+        } else if (swapMode && swapMode.k !== k) {
+          const bP = document.createElement("button");
+          bP.className = "btn-echanger"; bP.textContent = "Proposer un échange";
+          bP.onclick = e => {
+            e.stopPropagation();
+            const fromKey = swapMode.k;
+            proposeSwap(fromKey, k).then(() => {
+              clearSwap();
+              showToast(`Demande envoyée à ${group} — en attente de confirmation.`, "green");
+            });
+          };
+          const acts = document.createElement("div");
+          acts.className = "slot-actions";
+          acts.appendChild(bP);
+          div.appendChild(acts);
+        }
       }
 
       td.appendChild(div);
