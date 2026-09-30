@@ -995,7 +995,7 @@ input[type=date]:focus { outline: none; border-color: var(--green-600); box-shad
       </div>
     </div>
     <div class="grid-section">
-      <div class="grid-section-title">Créneaux disponibles — 8h à 22h</div>
+      <div class="grid-section-title">Créneaux disponibles — 8h à 21h</div>
       <div class="grid-scroll">
         <table class="grid-table" id="gridMob">
           <thead>
@@ -1115,6 +1115,8 @@ input[type=date]:focus { outline: none; border-color: var(--green-600); box-shad
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot, writeBatch }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
@@ -1129,12 +1131,13 @@ const firebaseConfig = {
 
 const fbApp = initializeApp(firebaseConfig);
 const db = getFirestore(fbApp);
+const auth = getAuth(fbApp);
 const resCol = collection(db, "reservations");
 const swapReqCol = collection(db, "swapRequests");
 
 const COURTS = ["minifoot","basket","volley"];
 const COURT_LABELS = {minifoot:"Mini-foot",basket:"Basketball",volley:"Volleyball"};
-const S = 8, E = 22;
+const S = 8, E = 21; // fin à 21h : les lampes des terrains s'éteignent après (règlement de l'école)
 const MIN_D = "2026-09-01", MAX_D = "2027-06-30";
 
 let currentUser = null;
@@ -1195,68 +1198,68 @@ function findIncomingRequest(targetKey) {
 const key = (d, c, h) => `${d}_${c}_${h}`;
 const esc = s => s ? s.replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])) : "";
 
-// ── Mots de passe par groupe ──
-const GROUP_PASSWORDS = {
-  "G.Info 1A – Garçons":    "Faucon38",
-  "G.Info 1A – Filles":     "Tulipe77",
-  "G.Info 2A – Garçons":    "Cobalt52",
-  "G.Info 2A – Filles":     "Jasmin14",
-  "G.Info 3A – Garçons":    "Orage91",
-  "G.Info 3A – Filles":     "Brume43",
-  "G.MIS 1A – Garçons":     "Volcan29",
-  "G.MIS 1A – Filles":      "Cèdre66",
-  "G.MIS 2A – Garçons":     "Mistral5",
-  "G.MIS 2A – Filles":      "Aurore37",
-  "G.MIS 3A – Garçons":     "Zénith18",
-  "G.MIS 3A – Filles":      "Pivoine8",
-  "G.ProIndus 1A – Garçons":"Torrent4",
-  "G.ProIndus 1A – Filles": "Santal61",
-  "G.ProIndus 2A – Garçons":"Eclat73",
-  "G.ProIndus 2A – Filles": "Lierre26",
-  "G.ProIndus 3A – Garçons":"Basalte9",
-  "G.ProIndus 3A – Filles": "Opale55",
-  "G.Indus 1A – Garçons":   "Silex31",
-  "G.Indus 1A – Filles":    "Mandarine2",
-  "G.Indus 2A – Garçons":   "Phare67",
-  "G.Indus 2A – Filles":    "Glycine48",
-  "G.Indus 3A – Garçons":   "Granit84",
-  "G.Indus 3A – Filles":    "Nacre19",
-  "G.Méca 1A – Garçons":    "Ecorce72",
-  "G.Méca 1A – Filles":     "Safran36",
-  "G.Méca 2A – Garçons":    "Ravier53",
-  "G.Méca 2A – Filles":     "Dahlia97",
-  "G.Méca 3A – Garçons":    "Flint46",
-  "G.Méca 3A – Filles":     "Moraine3",
-  "G.Min 1A – Garçons":     "Bassin64",
-  "G.Min 1A – Filles":      "Corail21",
-  "G.Min 2A – Garçons":     "Nuage85",
-  "G.Min 2A – Filles":      "Vénus12",
-  "G.Min 3A – Garçons":     "Tamaris7",
-  "G.Min 3A – Filles":      "Oxyde44",
-  "G.RT 1A – Garçons":      "Pixel93",
-  "G.RT 1A – Filles":       "Liane58",
-  "G.RT 2A – Garçons":      "Ravin16",
-  "G.RT 2A – Filles":       "Mimosa39",
-  "G.RT 3A – Garçons":      "Forge71",
-  "G.RT 3A – Filles":       "Roseau6",
-  "G.Élec 1A – Garçons":    "Pollen82",
-  "G.Élec 1A – Filles":     "Quartz27",
-  "G.Élec 2A – Garçons":    "Ardoise5",
-  "G.Élec 2A – Filles":     "Limon49",
-  "G.Élec 3A – Garçons":    "Dune76",
-  "G.Élec 3A – Filles":     "Albâtre3",
-  "G.Civ 1A – Garçons":     "Marbre68",
-  "G.Civ 1A – Filles":      "Pivoine22",
-  "G.Civ 2A – Garçons":     "Scorpion9",
-  "G.Civ 2A – Filles":      "Tilleul57",
-  "G.Civ 3A – Garçons":     "Kaolin41",
-  "G.Civ 3A – Filles":      "Grès88",
-  "Pays Amis 1A – Garçons": "Alizé34",
-  "Pays Amis 1A – Filles":  "Mangrove6",
-  "Pays Amis 2A – Garçons": "Obsidien53",
-  "Pays Amis 2A – Filles":  "Verveine17",
-  "Pays Amis 3A – Garçons": "Steppe92",
-  "Pays Amis 3A – Filles":  "Cannelle45"
+// ── Adresses email associées à chaque groupe (authentification Firebase) ──
+const GROUP_EMAILS = {
+  "G.Info 1A – Garçons": "g-info-1a-garcons@drmec.local",
+  "G.Info 1A – Filles": "g-info-1a-filles@drmec.local",
+  "G.Info 2A – Garçons": "g-info-2a-garcons@drmec.local",
+  "G.Info 2A – Filles": "g-info-2a-filles@drmec.local",
+  "G.Info 3A – Garçons": "g-info-3a-garcons@drmec.local",
+  "G.Info 3A – Filles": "g-info-3a-filles@drmec.local",
+  "G.MIS 1A – Garçons": "g-mis-1a-garcons@drmec.local",
+  "G.MIS 1A – Filles": "g-mis-1a-filles@drmec.local",
+  "G.MIS 2A – Garçons": "g-mis-2a-garcons@drmec.local",
+  "G.MIS 2A – Filles": "g-mis-2a-filles@drmec.local",
+  "G.MIS 3A – Garçons": "g-mis-3a-garcons@drmec.local",
+  "G.MIS 3A – Filles": "g-mis-3a-filles@drmec.local",
+  "G.ProIndus 1A – Garçons": "g-proindus-1a-garcons@drmec.local",
+  "G.ProIndus 1A – Filles": "g-proindus-1a-filles@drmec.local",
+  "G.ProIndus 2A – Garçons": "g-proindus-2a-garcons@drmec.local",
+  "G.ProIndus 2A – Filles": "g-proindus-2a-filles@drmec.local",
+  "G.ProIndus 3A – Garçons": "g-proindus-3a-garcons@drmec.local",
+  "G.ProIndus 3A – Filles": "g-proindus-3a-filles@drmec.local",
+  "G.Indus 1A – Garçons": "g-indus-1a-garcons@drmec.local",
+  "G.Indus 1A – Filles": "g-indus-1a-filles@drmec.local",
+  "G.Indus 2A – Garçons": "g-indus-2a-garcons@drmec.local",
+  "G.Indus 2A – Filles": "g-indus-2a-filles@drmec.local",
+  "G.Indus 3A – Garçons": "g-indus-3a-garcons@drmec.local",
+  "G.Indus 3A – Filles": "g-indus-3a-filles@drmec.local",
+  "G.Méca 1A – Garçons": "g-meca-1a-garcons@drmec.local",
+  "G.Méca 1A – Filles": "g-meca-1a-filles@drmec.local",
+  "G.Méca 2A – Garçons": "g-meca-2a-garcons@drmec.local",
+  "G.Méca 2A – Filles": "g-meca-2a-filles@drmec.local",
+  "G.Méca 3A – Garçons": "g-meca-3a-garcons@drmec.local",
+  "G.Méca 3A – Filles": "g-meca-3a-filles@drmec.local",
+  "G.Min 1A – Garçons": "g-min-1a-garcons@drmec.local",
+  "G.Min 1A – Filles": "g-min-1a-filles@drmec.local",
+  "G.Min 2A – Garçons": "g-min-2a-garcons@drmec.local",
+  "G.Min 2A – Filles": "g-min-2a-filles@drmec.local",
+  "G.Min 3A – Garçons": "g-min-3a-garcons@drmec.local",
+  "G.Min 3A – Filles": "g-min-3a-filles@drmec.local",
+  "G.RT 1A – Garçons": "g-rt-1a-garcons@drmec.local",
+  "G.RT 1A – Filles": "g-rt-1a-filles@drmec.local",
+  "G.RT 2A – Garçons": "g-rt-2a-garcons@drmec.local",
+  "G.RT 2A – Filles": "g-rt-2a-filles@drmec.local",
+  "G.RT 3A – Garçons": "g-rt-3a-garcons@drmec.local",
+  "G.RT 3A – Filles": "g-rt-3a-filles@drmec.local",
+  "G.Élec 1A – Garçons": "g-elec-1a-garcons@drmec.local",
+  "G.Élec 1A – Filles": "g-elec-1a-filles@drmec.local",
+  "G.Élec 2A – Garçons": "g-elec-2a-garcons@drmec.local",
+  "G.Élec 2A – Filles": "g-elec-2a-filles@drmec.local",
+  "G.Élec 3A – Garçons": "g-elec-3a-garcons@drmec.local",
+  "G.Élec 3A – Filles": "g-elec-3a-filles@drmec.local",
+  "G.Civ 1A – Garçons": "g-civ-1a-garcons@drmec.local",
+  "G.Civ 1A – Filles": "g-civ-1a-filles@drmec.local",
+  "G.Civ 2A – Garçons": "g-civ-2a-garcons@drmec.local",
+  "G.Civ 2A – Filles": "g-civ-2a-filles@drmec.local",
+  "G.Civ 3A – Garçons": "g-civ-3a-garcons@drmec.local",
+  "G.Civ 3A – Filles": "g-civ-3a-filles@drmec.local",
+  "Pays Amis 1A – Garçons": "pays-amis-1a-garcons@drmec.local",
+  "Pays Amis 1A – Filles": "pays-amis-1a-filles@drmec.local",
+  "Pays Amis 2A – Garçons": "pays-amis-2a-garcons@drmec.local",
+  "Pays Amis 2A – Filles": "pays-amis-2a-filles@drmec.local",
+  "Pays Amis 3A – Garçons": "pays-amis-3a-garcons@drmec.local",
+  "Pays Amis 3A – Filles": "pays-amis-3a-filles@drmec.local"
 };
 
 // ── Modale mot de passe (générique : annulation ou acceptation d'échange) ──
@@ -1266,16 +1269,22 @@ document.getElementById("pwdCancelBtn").onclick = () => {
   document.getElementById("pwdInput").value = "";
   _pendingAction = null;
 };
-document.getElementById("pwdConfirmBtn").onclick = () => {
+document.getElementById("pwdConfirmBtn").onclick = async () => {
   const input = document.getElementById("pwdInput").value;
-  const pwd = GROUP_PASSWORDS[currentUser];
+  const email = GROUP_EMAILS[currentUser];
   document.getElementById("pwdModal").classList.remove("open");
   document.getElementById("pwdInput").value = "";
-  if (input.trim() !== pwd) {
+
+  try {
+    // Vraie vérification côté Firebase Authentication — le mot de passe
+    // n'est jamais comparé ni stocké dans ce fichier.
+    await signInWithEmailAndPassword(auth, email, input);
+  } catch (err) {
     showToast("Mot de passe incorrect — vous n'avez pas le droit de faire cette action, veuillez contacter votre Responsable.", "red");
     _pendingAction = null;
     return;
   }
+
   const action = _pendingAction;
   _pendingAction = null;
   if (!action) return;
@@ -1302,7 +1311,7 @@ function openPwdModal(action, text) {
 
 async function reserve(k) { await setDoc(doc(db,"reservations",k),{group:currentUser,ts:Date.now()}); }
 function cancel(k) {
-  if (!GROUP_PASSWORDS[currentUser]) { showToast("Groupe non reconnu.", "red"); return; }
+  if (!GROUP_EMAILS[currentUser]) { showToast("Groupe non reconnu.", "red"); return; }
   openPwdModal({type:"cancel", key:k}, "Entrez le mot de passe de votre groupe pour annuler cette réservation.");
 }
 
@@ -1331,7 +1340,7 @@ async function rejectSwapRequest(reqKey) {
   await deleteDoc(doc(db,"swapRequests",reqKey));
 }
 function acceptSwapRequest(reqKey, requesterKey, myKey) {
-  if (!GROUP_PASSWORDS[currentUser]) { showToast("Groupe non reconnu.", "red"); return; }
+  if (!GROUP_EMAILS[currentUser]) { showToast("Groupe non reconnu.", "red"); return; }
   openPwdModal(
     {type:"acceptSwap", reqKey, requesterKey, myKey},
     "Entrez le mot de passe de votre groupe pour accepter cet échange de créneau."
