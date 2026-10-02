@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="fr" data-theme="light">
 <head>
+<script>
+  try {
+    var t = localStorage.getItem("theme");
+    if (t === "dark") document.documentElement.setAttribute("data-theme", "dark");
+  } catch(e) {}
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>EMI — Réservation des Terrains</title>
@@ -310,6 +316,14 @@ html, body { min-height: 100vh; background: var(--bg); color: var(--text); }
   text-overflow: ellipsis;
 }
 
+.theme-toggle {
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 1px solid var(--border-strong);
+  background: var(--surface-2);
+  font-size: 1rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  margin-right: 8px;
+}
 .user-chip {
   flex-shrink: 0;
   display: flex;
@@ -970,6 +984,7 @@ input[type=date]:focus { outline: none; border-color: var(--green-600); box-shad
         <div class="topbar-sub" id="topbarDate">—</div>
       </div>
     </div>
+    <button class="theme-toggle" id="themeToggleMob" title="Changer d'apparence">🌙</button>
     <div class="user-chip" id="chipUser">
       <div class="user-avatar" id="chipAvatar"></div>
       <span id="chipLabel"></span>
@@ -1048,6 +1063,16 @@ input[type=date]:focus { outline: none; border-color: var(--green-600); box-shad
         <div class="legend-item"><div class="legend-dot" style="background:var(--slot-mine);border:1.5px solid var(--slot-mine-b)"></div> Mon groupe</div>
         <div class="legend-item"><div class="legend-dot" style="background:var(--slot-other)"></div> Autre groupe</div>
         <div class="legend-item"><div class="legend-dot" style="background:var(--slot-blocked)"></div> Bloqué (1 résa/terrain)</div>
+      </div>
+    </div>
+
+    <div class="sidebar-divider"></div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Affichage</div>
+      <div class="daynav">
+        <button id="themeLightDsk">☀️ Clair</button>
+        <button id="themeDarkDsk">🌙 Sombre</button>
       </div>
     </div>
 
@@ -1296,6 +1321,12 @@ document.getElementById("pwdConfirmBtn").onclick = async () => {
   } else if (action.type === "acceptSwap") {
     doAcceptSwap(action.reqKey, action.requesterKey, action.myKey)
       .then(() => showToast("Échange confirmé ✓", "green"));
+  } else if (action.type === "swapOwn") {
+    doSwap(action.k1, action.k2).then(() => showToast("Créneaux échangés ✓", "green"));
+  } else if (action.type === "proposeSwap") {
+    proposeSwap(action.fromKey, action.toKey).then(() => {
+      showToast(`Demande envoyée à ${action.toGroup} — en attente de confirmation.`, "green");
+    });
   }
 };
 document.getElementById("pwdInput").addEventListener("keydown", e => {
@@ -1427,6 +1458,23 @@ document.getElementById("sidebarUser").onclick = logout;
   document.getElementById("datePick"+sfx).addEventListener("change", e => { setDate(e.target.value); render(); });
 });
 
+// ── Mode d'affichage (clair par défaut / sombre) ──
+function applyTheme(theme) {
+  document.documentElement.setAttribute("data-theme", theme);
+  document.getElementById("themeToggleMob").textContent = theme === "dark" ? "☀️" : "🌙";
+  try { localStorage.setItem("theme", theme); } catch(e) {}
+}
+function currentTheme() {
+  try { return localStorage.getItem("theme") || "light"; } catch(e) { return "light"; }
+}
+applyTheme(currentTheme()); // "simple" (clair) par défaut, sauf si l'utilisateur a déjà choisi sombre sur cet appareil
+
+document.getElementById("themeToggleMob").onclick = () => {
+  applyTheme(currentTheme() === "dark" ? "light" : "dark");
+};
+document.getElementById("themeLightDsk").onclick = () => applyTheme("light");
+document.getElementById("themeDarkDsk").onclick  = () => applyTheme("dark");
+
 // ── Swap ──
 const DEFAULT_SWAP_TXT = "Mode échange — sélectionnez votre 2ᵉ créneau (même jour ou un autre jour) pour permuter.";
 function clearSwap() {
@@ -1553,8 +1601,12 @@ function buildGrid(bodyId, date, myCourtToday) {
             e.stopPropagation();
             if (swapMode) {
               if (swapMode.k === k) { clearSwap(); render(); return; }
-              // Échange direct : les deux créneaux vous appartiennent déjà tous les deux
-              doSwap(k, swapMode.k).then(() => { clearSwap(); showToast("Créneaux échangés ✓", "green"); });
+              // Échange direct entre deux de VOS propres créneaux — nécessite aussi une
+              // vraie authentification désormais (Firestore exige request.auth != null).
+              const k1 = k, k2 = swapMode.k;
+              clearSwap();
+              render();
+              openPwdModal({type:"swapOwn", k1, k2}, "Entrez le mot de passe de votre groupe pour confirmer cet échange.");
             } else {
               swapMode = { k, date, court, h };
               const pendingTxt = `En attente : ${COURT_LABELS[court]}, ${fmtDate(date)}, ${h}h–${h+1}h. Choisissez le 2ᵉ créneau (même jour ou un autre jour). Si c'est le créneau d'un autre groupe, une demande lui sera envoyée.`;
@@ -1595,10 +1647,13 @@ function buildGrid(bodyId, date, myCourtToday) {
           bP.onclick = e => {
             e.stopPropagation();
             const fromKey = swapMode.k;
-            proposeSwap(fromKey, k).then(() => {
-              clearSwap();
-              showToast(`Demande envoyée à ${group} — en attente de confirmation.`, "green");
-            });
+            const toGroup = group;
+            clearSwap();
+            render();
+            openPwdModal(
+              {type:"proposeSwap", fromKey, toKey:k, toGroup},
+              "Entrez le mot de passe de votre groupe pour proposer cet échange."
+            );
           };
           const acts = document.createElement("div");
           acts.className = "slot-actions";
