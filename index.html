@@ -1256,32 +1256,27 @@ function needsMigration(group) {
 }
 
 onSnapshot(resCol, snap => {
-  data = {};
-  const toDelete = [];
+  const next = {};
   snap.forEach(d => {
-    if (!KEY_RE.test(d.id)) {
-      toDelete.push(d.id); // clé hors format → supprimer
-    } else {
-      const entry = d.data();
-      if (needsMigration(entry.group)) {
-        toDelete.push(d.id); // ancien format sans genre → supprimer
-      } else {
-        data[d.id] = entry;
-      }
-    }
+    // Les vieilles données (clé invalide / ancien format) sont simplement ignorées ici.
+    // Leur suppression se fait avec le script clean-reservations.js (les règles de
+    // sécurité interdisent au site de les supprimer, et essayer créait une boucle).
+    if (!KEY_RE.test(d.id)) return;
+    const entry = d.data();
+    if (needsMigration(entry.group)) return;
+    next[d.id] = entry;
   });
-  // Nettoyage silencieux
-  if (toDelete.length) {
-    const b = writeBatch(db);
-    toDelete.forEach(id => b.delete(doc(db, "reservations", id)));
-    b.commit().catch(console.error);
-  }
+  // On ne reconstruit la grille que si les données ont vraiment changé
+  if (JSON.stringify(next) === JSON.stringify(data)) return;
+  data = next;
   render();
 }, err => console.error(err));
 
 onSnapshot(swapReqCol, snap => {
-  swapReqs = {};
-  snap.forEach(d => { swapReqs[d.id] = d.data(); });
+  const next = {};
+  snap.forEach(d => { next[d.id] = d.data(); });
+  if (JSON.stringify(next) === JSON.stringify(swapReqs)) return;
+  swapReqs = next;
   render();
 }, err => console.error(err));
 
@@ -1701,7 +1696,11 @@ function buildGrid(bodyId, date, myCourtToday) {
         div.className = "slot free";
         div.onclick = () => {
           if (!confirm(`Réserver ce créneau (${h}h–${h+1}h) pour ${currentUser} ?`)) return;
-          reserve(k).then(() => showToast(`Réservé ✓ ${h}h–${h+1}h`, "green"));
+          reserve(k).then(() => showToast(`Réservé ✓ ${h}h–${h+1}h`, "green"))
+            .catch(err => {
+              console.error(err);
+              showToast("Réservation impossible sur ce créneau (ancienne donnée bloquante). Contactez le responsable.", "red");
+            });
         };
 
       } else if (isBlocked) {
