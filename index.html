@@ -121,6 +121,8 @@ html, body { min-height: 100vh; background: var(--bg); color: var(--text); }
    LOGIN SCREEN
 ═══════════════════════════════════════════ */
 #loginScreen {
+  position: relative;
+  overflow: hidden;
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -133,7 +135,34 @@ html, body { min-height: 100vh; background: var(--bg); color: var(--text); }
     var(--bg);
 }
 
+/* ── Animation sportive (écran de connexion uniquement) ── */
+.sport-bg { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.sport-bg .court { position: absolute; inset: 0; width: 100%; height: 100%; color: #1A6B47; opacity: .16; }
+.sport-bg .ball {
+  position: absolute; left: var(--x); top: var(--y); width: var(--s); height: var(--s);
+  opacity: .6;
+  animation: ballFloat var(--d) ease-in-out infinite alternate;
+}
+.sport-bg .ball svg { width: 100%; height: 100%; animation: ballSpin var(--r) linear infinite; filter: drop-shadow(0 6px 8px rgba(0,0,0,.25)); }
+@keyframes ballFloat { from { transform: translate(0,0); } to { transform: translate(var(--dx), var(--dy)); } }
+@keyframes ballSpin { to { transform: rotate(360deg); } }
+.sport-bg .bouncer { position: absolute; left: 20%; bottom: 3%; width: 64px; opacity: .75; }
+.sport-bg .bouncer .ball-b { width: 64px; height: 64px; animation: ballBounce 1.6s infinite; }
+.sport-bg .bouncer .ball-b svg { width: 100%; height: 100%; animation: ballSpin 3.2s linear infinite; }
+.sport-bg .bouncer .shadow { width: 48px; height: 8px; margin: 2px auto 0; border-radius: 50%; background: rgba(0,0,0,.35); animation: shadowPulse 1.6s infinite; }
+@keyframes ballBounce {
+  0%   { transform: translateY(-170px); animation-timing-function: cubic-bezier(.5,0,1,.5); }
+  50%  { transform: translateY(0);      animation-timing-function: cubic-bezier(0,.5,.5,1); }
+  100% { transform: translateY(-170px); }
+}
+@keyframes shadowPulse { 0%,100% { transform: scale(.5); opacity: .15; } 50% { transform: scale(1); opacity: .5; } }
+@media (prefers-reduced-motion: reduce) {
+  .sport-bg .ball, .sport-bg .ball svg, .sport-bg .bouncer * { animation: none !important; }
+}
+
 .login-wrap {
+  position: relative;
+  z-index: 1;
   width: 100%;
   max-width: 420px;
   display: flex;
@@ -324,6 +353,7 @@ html, body { min-height: 100vh; background: var(--bg); color: var(--text); }
   display: flex; align-items: center; justify-content: center;
   margin-right: 8px;
 }
+.login-theme { position: absolute; top: max(16px, env(safe-area-inset-top)); right: 16px; z-index: 2; margin: 0; width: 42px; height: 42px; font-size: 1.15rem; }
 .user-chip {
   flex-shrink: 0;
   display: flex;
@@ -916,6 +946,48 @@ input[type=date]:focus { outline: none; border-color: var(--green-600); box-shad
      LOGIN
 ══════════════════════════════════════ -->
 <div id="loginScreen">
+  <button class="theme-toggle login-theme" id="themeToggleLogin" title="Changer d'apparence">🌙</button>
+  <div class="sport-bg" aria-hidden="true">
+    <svg width="0" height="0" style="position:absolute">
+      <defs>
+        <symbol id="b-soccer" viewBox="0 0 100 100">
+          <clipPath id="cp-s"><circle cx="50" cy="50" r="47"/></clipPath>
+          <circle cx="50" cy="50" r="47" fill="#f7f7f7" stroke="#1d1d1d" stroke-width="3"/>
+          <g clip-path="url(#cp-s)" fill="#1d1d1d" stroke="#1d1d1d" stroke-width="2" stroke-linejoin="round">
+            <polygon points="50,34 65,45 59,63 41,63 35,45"/>
+            <path d="M50 34 L50 14 M65 45 L84 38 M59 63 L71 80 M41 63 L29 80 M35 45 L16 38" fill="none"/>
+            <circle cx="50" cy="6" r="9"/><circle cx="92" cy="38" r="9"/><circle cx="76" cy="88" r="9"/><circle cx="24" cy="88" r="9"/><circle cx="8" cy="38" r="9"/>
+          </g>
+        </symbol>
+        <symbol id="b-basket" viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="47" fill="#e8782a" stroke="#3a1a08" stroke-width="3"/>
+          <g fill="none" stroke="#3a1a08" stroke-width="3" stroke-linecap="round">
+            <path d="M50 3 V97 M3 50 H97"/><path d="M20 15 C40 33 40 67 20 85"/><path d="M80 15 C60 33 60 67 80 85"/>
+          </g>
+        </symbol>
+        <symbol id="b-volley" viewBox="0 0 100 100">
+          <clipPath id="cp-v"><circle cx="50" cy="50" r="47"/></clipPath>
+          <circle cx="50" cy="50" r="47" fill="#f6efd2" stroke="#2a5da8" stroke-width="3"/>
+          <g clip-path="url(#cp-v)" fill="none" stroke="#2a5da8" stroke-width="3.5" stroke-linecap="round">
+            <path d="M-5 36 C30 22 62 44 105 28"/><path d="M-5 72 C32 56 64 80 105 64"/>
+            <path d="M40 -5 C58 30 34 62 52 105"/><path d="M72 -5 C86 28 70 60 84 105" stroke="#e0b020"/>
+          </g>
+        </symbol>
+      </defs>
+    </svg>
+    <svg class="court" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice" fill="none" stroke="currentColor" stroke-width="3">
+      <rect x="40" y="40" width="720" height="520" rx="8"/><line x1="400" y1="40" x2="400" y2="560"/>
+      <circle cx="400" cy="300" r="90"/><rect x="40" y="190" width="120" height="220"/><rect x="640" y="190" width="120" height="220"/>
+      <path d="M160 240 A60 60 0 0 1 160 360"/><path d="M640 240 A60 60 0 0 0 640 360"/>
+    </svg>
+    <div class="ball" style="--x:6%;--y:9%;--s:72px;--d:7s;--r:16s;--dx:28px;--dy:36px"><svg><use href="#b-soccer"/></svg></div>
+    <div class="ball" style="--x:80%;--y:12%;--s:82px;--d:9s;--r:20s;--dx:-30px;--dy:30px"><svg><use href="#b-basket"/></svg></div>
+    <div class="ball" style="--x:10%;--y:68%;--s:76px;--d:8s;--r:18s;--dx:32px;--dy:-34px"><svg><use href="#b-volley"/></svg></div>
+    <div class="ball" style="--x:84%;--y:60%;--s:54px;--d:6s;--r:12s;--dx:-24px;--dy:-30px"><svg><use href="#b-soccer"/></svg></div>
+    <div class="ball" style="--x:42%;--y:3%;--s:46px;--d:10s;--r:14s;--dx:40px;--dy:20px"><svg><use href="#b-basket"/></svg></div>
+    <div class="ball" style="--x:62%;--y:86%;--s:56px;--d:7.5s;--r:15s;--dx:-36px;--dy:-18px"><svg><use href="#b-volley"/></svg></div>
+    <div class="bouncer"><div class="ball-b"><svg><use href="#b-basket"/></svg></div><div class="shadow"></div></div>
+  </div>
   <div class="login-wrap">
     <div class="login-brand">
       <div class="login-emblem">🏟️</div>
@@ -1461,7 +1533,9 @@ document.getElementById("sidebarUser").onclick = logout;
 // ── Mode d'affichage (clair par défaut / sombre) ──
 function applyTheme(theme) {
   document.documentElement.setAttribute("data-theme", theme);
-  document.getElementById("themeToggleMob").textContent = theme === "dark" ? "☀️" : "🌙";
+  const icon = theme === "dark" ? "☀️" : "🌙";
+  document.getElementById("themeToggleMob").textContent = icon;
+  document.getElementById("themeToggleLogin").textContent = icon;
   try { localStorage.setItem("theme", theme); } catch(e) {}
 }
 function currentTheme() {
@@ -1470,6 +1544,9 @@ function currentTheme() {
 applyTheme(currentTheme()); // "simple" (clair) par défaut, sauf si l'utilisateur a déjà choisi sombre sur cet appareil
 
 document.getElementById("themeToggleMob").onclick = () => {
+  applyTheme(currentTheme() === "dark" ? "light" : "dark");
+};
+document.getElementById("themeToggleLogin").onclick = () => {
   applyTheme(currentTheme() === "dark" ? "light" : "dark");
 };
 document.getElementById("themeLightDsk").onclick = () => applyTheme("light");
