@@ -345,6 +345,48 @@ html, body { min-height: 100vh; background: var(--bg); color: var(--text); }
   text-overflow: ellipsis;
 }
 
+#teamModal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0,0,0,.55);
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+#teamModal.open { display: flex; }
+.team-btns{display:flex;gap:10px;margin:14px 0 4px}.team-btns button{flex:1;padding:14px;border-radius:12px;border:1px solid var(--border-strong);background:var(--surface-2);color:inherit;font-size:1rem;font-weight:700;cursor:pointer}.team-btns button.active{outline:2px solid var(--green-700)}.team-later{display:block;margin:6px auto 0;background:none;border:none;color:inherit;opacity:.65;cursor:pointer;text-decoration:underline;font-size:.8rem}
+.team-btn{width:auto!important;border-radius:18px!important;padding:0 10px;font-weight:700;font-size:.8rem}
+#modeModal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0,0,0,.55);
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+#modeModal.open { display: flex; }
+#annModal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0,0,0,.55);
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+#annModal.open { display: flex; }
+.ann-item{border:1px solid var(--border-strong);border-radius:12px;padding:10px 12px;margin:8px 0;font-size:.88rem}
+.ann-item.done{opacity:.55}.ann-top{display:flex;justify-content:space-between;gap:8px;margin-bottom:4px}
+.ann-top span{opacity:.75;font-size:.8rem;text-align:right}.ann-note{font-style:italic;opacity:.8;margin-top:2px}
+.ann-rep{margin-top:6px;font-size:.82rem;opacity:.9}.ann-act{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px}
+.ann-act button,.ann-act select{padding:7px 10px;border-radius:8px;border:1px solid var(--border-strong);background:var(--surface-2);color:inherit;cursor:pointer;font-size:.82rem}
+.ann-input{width:100%;margin:8px 0;padding:9px;border-radius:8px;border:1px solid var(--border-strong);background:var(--surface-2);color:inherit}
+.ann-empty{opacity:.65;font-size:.85rem;margin:10px 0}
 .theme-toggle {
   width: 36px; height: 36px; border-radius: 50%;
   border: 1px solid var(--border-strong);
@@ -1030,6 +1072,10 @@ input[type=date]:focus { outline: none; border-color: var(--green-600); box-shad
           <option value="Filles">Filles</option>
         </select>
       </div>
+      <div class="login-field">
+        <label for="loginPwd">Mot de passe du groupe</label>
+        <input type="password" id="loginPwd" autocomplete="current-password" placeholder="Mot de passe" style="width:100%;padding:13px 14px;border-radius:12px;border:1px solid var(--border-strong);background:var(--surface-2);color:inherit;font-size:1rem">
+      </div>
       <button class="btn-primary" id="btnLogin">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
         Accéder à la plateforme
@@ -1037,7 +1083,7 @@ input[type=date]:focus { outline: none; border-color: var(--green-600); box-shad
     </div>
     <div class="login-footer">
       Mini-foot · Basketball · Volleyball<br>
-      Chaque groupe (Génie · Promo · Genre) : 1 réservation par terrain par jour
+      Connexion avec le mot de passe de votre groupe · l'équipe (1 ou 2) se choisit après
     </div>
   </div>
 </div>
@@ -1056,6 +1102,8 @@ input[type=date]:focus { outline: none; border-color: var(--green-600); box-shad
         <div class="topbar-sub" id="topbarDate">—</div>
       </div>
     </div>
+    <button class="theme-toggle team-btn" id="annBtnMob" title="Annonces">📣<span id="annCountMob"></span></button>
+    <button class="theme-toggle team-btn" id="teamBtnMob" title="Changer d'équipe" style="display:none">É?</button>
     <button class="theme-toggle" id="themeToggleMob" title="Changer d'apparence">🌙</button>
     <div class="user-chip" id="chipUser">
       <div class="user-avatar" id="chipAvatar"></div>
@@ -1141,6 +1189,16 @@ input[type=date]:focus { outline: none; border-color: var(--green-600); box-shad
     <div class="sidebar-divider"></div>
 
     <div class="sidebar-section">
+      <div class="sidebar-label">Annonces</div>
+      <div class="daynav"><button id="annBtnDsk">📣 Voir les annonces<span id="annCountDsk"></span></button></div>
+    </div>
+
+    <div class="sidebar-section" id="teamSecDsk" style="display:none">
+      <div class="sidebar-label">Équipe</div>
+      <div class="daynav"><button id="teamBtn1Dsk">Équipe 1</button><button id="teamBtn2Dsk">Équipe 2</button></div>
+    </div>
+
+    <div class="sidebar-section">
       <div class="sidebar-label">Affichage</div>
       <div class="daynav">
         <button id="themeLightDsk">☀️ Clair</button>
@@ -1196,6 +1254,36 @@ input[type=date]:focus { outline: none; border-color: var(--green-600); box-shad
 
 </div>
 
+<div id="modeModal">
+  <div class="pwd-card">
+    <h3>⚽ Type de réservation</h3>
+    <p id="modeSub"></p>
+    <div class="team-btns" style="flex-direction:column">
+      <button id="modeFull">👥 Groupe complet (10 joueurs)</button>
+      <button id="modeOpen">⚔️ Match 5 vs 5 — je cherche une équipe adverse</button>
+    </div>
+    <button class="team-later" id="modeCancel">Annuler</button>
+  </div>
+</div>
+
+<div id="annModal">
+  <div class="pwd-card" style="max-width:540px;width:94%;max-height:88vh;overflow:auto;text-align:left">
+    <h3>📣 Annonces</h3>
+    <div id="annList"></div>
+    <div id="annForm"></div>
+    <button class="team-later" id="annClose">Fermer</button>
+  </div>
+</div>
+
+<div id="teamModal">
+  <div class="pwd-card">
+    <h3>⚽ Quelle équipe réserve ?</h3>
+    <p>Choisissez l'équipe de votre génie pour cette session.</p>
+    <div class="team-btns"><button id="teamPick1">Équipe 1</button><button id="teamPick2">Équipe 2</button></div>
+    <button class="team-later" id="teamLater">Plus tard (consultation seulement)</button>
+  </div>
+</div>
+
 <div id="pwdModal">
   <div class="pwd-card">
     <h3>🔒 Confirmation requise</h3>
@@ -1212,9 +1300,9 @@ input[type=date]:focus { outline: none; border-color: var(--green-600); box-shad
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword }
+import { getAuth, signInWithEmailAndPassword, signOut }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot, writeBatch }
+import { getFirestore, collection, doc, setDoc, updateDoc, deleteField, deleteDoc, onSnapshot, writeBatch }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -1231,6 +1319,7 @@ const db = getFirestore(fbApp);
 const auth = getAuth(fbApp);
 const resCol = collection(db, "reservations");
 const swapReqCol = collection(db, "swapRequests");
+const annCol = collection(db, "announcements");
 
 const COURTS = ["minifoot","basket","volley"];
 const COURT_LABELS = {minifoot:"Mini-foot",basket:"Basketball",volley:"Volleyball"};
@@ -1278,6 +1367,13 @@ onSnapshot(swapReqCol, snap => {
   if (JSON.stringify(next) === JSON.stringify(swapReqs)) return;
   swapReqs = next;
   render();
+}, err => console.error(err));
+
+let announcements = {};
+onSnapshot(annCol, snap => {
+  const next = {}; snap.forEach(d => { next[d.id] = d.data(); });
+  if (JSON.stringify(next) === JSON.stringify(announcements)) return;
+  announcements = next; updateAnnBadge(); if (document.getElementById("annModal").classList.contains("open")) renderAnn();
 }, err => console.error(err));
 
 function findIncomingRequest(targetKey) {
@@ -1407,7 +1503,7 @@ function openPwdModal(action, text) {
   setTimeout(() => document.getElementById("pwdInput").focus(), 100);
 }
 
-async function reserve(k) { await setDoc(doc(db,"reservations",k),{group:currentUser,ts:Date.now()}); }
+async function reserve(k, mode) { await setDoc(doc(db,"reservations",k),{group:currentUser,team:currentTeam,ts:Date.now(),...(mode==="open"?{mode:"open"}:{})}); }
 function cancel(k) {
   if (!GROUP_EMAILS[currentUser]) { showToast("Groupe non reconnu.", "red"); return; }
   openPwdModal({type:"cancel", key:k}, "Entrez le mot de passe de votre groupe pour annuler cette réservation.");
@@ -1415,10 +1511,11 @@ function cancel(k) {
 
 // Échange direct entre deux créneaux de VOTRE PROPRE groupe (pas de confirmation nécessaire)
 async function doSwap(k1,k2) {
-  const g1=data[k1].group, g2=data[k2].group;
+  // Entre vos deux créneaux : on échange l'équipe (1 ↔ 2) qui occupe chacun
+  const g1=data[k1].group, g2=data[k2].group, t1=data[k1].team??1, t2=data[k2].team??1;
   const b=writeBatch(db);
-  b.set(doc(db,"reservations",k1),{group:g2,ts:Date.now()});
-  b.set(doc(db,"reservations",k2),{group:g1,ts:Date.now()});
+  b.set(doc(db,"reservations",k1),{group:g1,team:t2,ts:Date.now()});
+  b.set(doc(db,"reservations",k2),{group:g2,team:t1,ts:Date.now()});
   await b.commit();
 }
 
@@ -1451,9 +1548,10 @@ async function doAcceptSwap(reqKey, requesterKey, myKey) {
     return;
   }
   const g1 = data[requesterKey].group, g2 = data[myKey].group;
+  const t1 = data[requesterKey].team ?? 1, t2 = data[myKey].team ?? 1;
   const b = writeBatch(db);
-  b.set(doc(db,"reservations",requesterKey), {group:g2, ts:Date.now()});
-  b.set(doc(db,"reservations",myKey), {group:g1, ts:Date.now()});
+  b.set(doc(db,"reservations",requesterKey), {group:g2, team:t2, ts:Date.now(), swapReq:reqKey});
+  b.set(doc(db,"reservations",myKey), {group:g1, team:t1, ts:Date.now(), swapReq:reqKey});
   b.delete(doc(db,"swapRequests",reqKey));
   await b.commit();
 }
@@ -1490,13 +1588,122 @@ function fmtDate(s) {
 }
 
 // ── Login ──
-document.getElementById("btnLogin").onclick = () => {
+const MAX_DAYS_AHEAD = 7;
+let currentTeam = null;
+const teamCount = () => /^G\.(RT|MIS) /.test(currentUser || "") ? 1 : 2;
+function updateTeamUI() {
+  const two = teamCount() === 2;
+  document.getElementById("teamBtnMob").style.display = two ? "flex" : "none";
+  document.getElementById("teamSecDsk").style.display = two ? "block" : "none";
+  document.getElementById("teamBtnMob").textContent = currentTeam ? "É" + currentTeam : "É?";
+  [1,2].forEach(n => document.getElementById("teamBtn"+n+"Dsk").classList.toggle("active", currentTeam === n));
+  [1,2].forEach(n => document.getElementById("teamPick"+n).classList.toggle("active", currentTeam === n));
+}
+function askTeam() { updateTeamUI(); document.getElementById("teamModal").classList.add("open"); }
+function setTeam(t) { currentTeam = t; document.getElementById("teamModal").classList.remove("open"); updateTeamUI(); render(); }
+document.getElementById("teamPick1").onclick = () => setTeam(1);
+document.getElementById("teamPick2").onclick = () => setTeam(2);
+document.getElementById("teamBtn1Dsk").onclick = () => setTeam(1);
+document.getElementById("teamBtn2Dsk").onclick = () => setTeam(2);
+document.getElementById("teamBtnMob").onclick = askTeam;
+document.getElementById("teamLater").onclick = () => document.getElementById("teamModal").classList.remove("open");
+
+
+// ── Match 5 vs 5 ──
+let _pendingMode = null;
+function openMode(k, court, h) {
+  if (teamCount() === 2 && !currentTeam) { askTeam(); return; }
+  _pendingMode = { k, h };
+  document.getElementById("modeSub").textContent = `${COURT_LABELS[court]} · ${h}h–${h+1}h` + (currentTeam ? ` · Équipe ${currentTeam}` : "");
+  document.getElementById("modeModal").classList.add("open");
+}
+async function doReserve(mode) {
+  const m = _pendingMode; _pendingMode = null;
+  document.getElementById("modeModal").classList.remove("open");
+  if (!m) return;
+  try { await reserve(m.k, mode); showToast(mode === "open" ? "Match 5 vs 5 créé — en attente d'un adversaire ✓" : `Réservé ✓ ${m.h}h–${m.h+1}h`, "green"); }
+  catch (err) { console.error(err); showToast("Réservation impossible (" + (err.code || err.message) + ").", "red"); }
+}
+document.getElementById("modeFull").onclick = () => doReserve("full");
+document.getElementById("modeOpen").onclick = () => doReserve("open");
+document.getElementById("modeCancel").onclick = () => { _pendingMode = null; document.getElementById("modeModal").classList.remove("open"); };
+async function joinMatch(k) { await updateDoc(doc(db,"reservations",k), { guest: currentUser, guestTeam: currentTeam ?? 1 }); }
+async function leaveMatch(k) { await updateDoc(doc(db,"reservations",k), { guest: deleteField(), guestTeam: deleteField() }); }
+
+// ── Annonces (structurées) ──
+const slotParts = k => { const [d,c,h] = k.split("_"); return { d, c, h: +h }; };
+const isPastKey = k => { const { d, h } = slotParts(k); const t = fmtLocal(new Date()); return d < t || (d === t && h < new Date().getHours()); };
+const heldBy = e => !!e && (e.group === currentUser || e.guest === currentUser);
+const annLabel = k => { const { d, c, h } = slotParts(k); return `${COURT_LABELS[c]} · ${d.slice(8)}/${d.slice(5,7)} · ${h}h–${h+1}h`; };
+function activeAnns() {
+  return Object.entries(announcements).filter(([k]) => !isPastKey(k) && data[k])
+    .sort(([a],[b]) => (a.split("_")[0] + a.split("_")[2].padStart(2,"0")).localeCompare(b.split("_")[0] + b.split("_")[2].padStart(2,"0")));
+}
+function updateAnnBadge() {
+  const n = currentUser ? activeAnns().filter(([,a]) => a.status === "open" && a.group !== currentUser).length : 0;
+  ["Mob","Dsk"].forEach(x => { document.getElementById("annCount"+x).textContent = n ? ` (${n})` : ""; });
+}
+function renderAnn() {
+  const items = activeAnns();
+  document.getElementById("annList").innerHTML = items.length ? items.map(([k,a]) => {
+    const mine = a.group === currentUser, open = a.status === "open";
+    const reps = Object.entries(a.replies || {}).filter(([,r]) => r.n > 0), my = (a.replies || {})[currentUser]?.n || 0;
+    let h = `<div class="ann-item${open ? "" : " done"}"><div class="ann-top"><b>${esc(annLabel(k))}</b><span>${esc(a.group.replace(" – "," "))}${a.team ? " · É"+a.team : ""}</span></div>`;
+    h += open ? `<div>Il manque <b>${a.missing}</b> joueur${a.missing > 1 ? "s" : ""}</div>` : `<div>✅ Complet</div>`;
+    if (a.note) h += `<div class="ann-note">${esc(a.note)}</div>`;
+    if (mine) {
+      if (reps.length) h += `<div class="ann-rep">${reps.map(([g,r]) => `• ${esc(g.replace(" – "," "))} peut envoyer ${r.n}`).join("<br>")}</div>`;
+      h += `<div class="ann-act">${open ? `<button data-act="full" data-k="${k}">Marquer complet</button>` : ""}<button data-act="del" data-k="${k}">Supprimer</button></div>`;
+    } else if (open) {
+      h += my ? `<div class="ann-rep">Votre réponse : ${my} joueur(s)</div><div class="ann-act"><button data-act="unreply" data-k="${k}">Retirer</button></div>`
+        : `<div class="ann-act"><select id="rn-${k}">${Array.from({length:a.missing},(_,i)=>`<option>${i+1}</option>`).join("")}</select><button data-act="reply" data-k="${k}">On peut envoyer</button></div>`;
+    }
+    return h + "</div>";
+  }).join("") : `<p class="ann-empty">Aucune annonce pour le moment.</p>`;
+  const slots = Object.keys(data).filter(k => heldBy(data[k]) && !isPastKey(k) && !announcements[k]).sort();
+  const nAct = items.filter(([,a]) => a.group === currentUser && a.status === "open").length;
+  document.getElementById("annForm").innerHTML = slots.length && nAct < 3
+    ? `<hr><b>Nouvelle annonce</b><div class="ann-act"><select id="af-slot">${slots.map(k => `<option value="${k}">${esc(annLabel(k))}</option>`).join("")}</select><select id="af-n">${[1,2,3,4,5].map(n => `<option>${n}</option>`).join("")}</select> joueur(s) manquant(s)</div><input id="af-note" class="ann-input" maxlength="60" placeholder="Note (facultatif, 60 caractères)"><button class="btn-primary" data-act="publish">Publier l'annonce</button>`
+    : `<hr><p class="ann-empty">${nAct >= 3 ? "Limite de 3 annonces actives atteinte." : "Réservez un créneau pour pouvoir publier une annonce."}</p>`;
+}
+function openAnn() { renderAnn(); document.getElementById("annModal").classList.add("open"); }
+["annBtnMob","annBtnDsk"].forEach(id => document.getElementById(id).onclick = openAnn);
+document.getElementById("annClose").onclick = () => document.getElementById("annModal").classList.remove("open");
+document.getElementById("annModal").addEventListener("click", async e => {
+  const b = e.target.closest("button[data-act]"); if (!b) return;
+  const k = b.dataset.k, act = b.dataset.act;
+  try {
+    if (act === "publish") {
+      const k2 = document.getElementById("af-slot").value, n = +document.getElementById("af-n").value;
+      const note = document.getElementById("af-note").value.trim().slice(0,60);
+      await setDoc(doc(db,"announcements",k2), { slotKey:k2, group:currentUser, team:currentTeam ?? 1, missing:n, note, status:"open", replies:{}, ts:Date.now() });
+      showToast("Annonce publiée ✓", "green");
+    } else if (act === "full") await updateDoc(doc(db,"announcements",k), { status:"full" });
+    else if (act === "del") await deleteDoc(doc(db,"announcements",k));
+    else if (act === "reply" || act === "unreply") {
+      const n = act === "reply" ? +document.getElementById("rn-"+k).value : 0;
+      await updateDoc(doc(db,"announcements",k), { replies: { ...(announcements[k].replies || {}), [currentUser]: { n, ts: Date.now() } } });
+      if (act === "reply") showToast("Réponse envoyée ✓", "green");
+    }
+  } catch (err) { console.error(err); showToast("Action impossible (" + (err.code || err.message) + ").", "red"); }
+});
+
+// ── Login (vraie vérification du mot de passe par Firebase) ──
+document.getElementById("btnLogin").onclick = async () => {
   const g  = document.getElementById("selGenie").value;
   const p  = document.getElementById("selPromo").value;
   const gr = document.getElementById("selGenre").value;
-  if (!g || !p || !gr) { showToast("Remplir tous les champs.", "red"); return; }
-  currentUser = `${g} ${p} – ${gr === "Garçons" ? "Garçons" : "Filles"}`;
-  const initials = g.replace("G.","").slice(0,2).toUpperCase() + p.replace("A","");
+  const pwd = document.getElementById("loginPwd").value;
+  if (!g || !p || !gr || !pwd) { showToast("Remplir tous les champs, y compris le mot de passe.", "red"); return; }
+  const grp = `${g} ${p} – ${gr === "Garçons" ? "Garçons" : "Filles"}`;
+  const email = GROUP_EMAILS[grp];
+  if (!email) { showToast("Groupe non reconnu.", "red"); return; }
+  const btn = document.getElementById("btnLogin"); btn.disabled = true;
+  try { await signInWithEmailAndPassword(auth, email, pwd); }
+  catch (err) { btn.disabled = false; showToast("Mot de passe incorrect.", "red"); return; }
+  btn.disabled = false;
+  document.getElementById("loginPwd").value = "";
+  currentUser = grp;
   const genderIcon = gr === "Filles" ? "♀" : "♂";
   document.getElementById("chipAvatar").textContent = genderIcon;
   document.getElementById("chipLabel").textContent = `${g} ${p}`;
@@ -1504,12 +1711,16 @@ document.getElementById("btnLogin").onclick = () => {
   document.getElementById("sidebarName").textContent = currentUser;
   document.getElementById("loginScreen").style.display = "none";
   document.getElementById("appScreen").classList.add("active");
+  currentTeam = teamCount() === 1 ? 1 : null;
+  updateTeamUI(); updateAnnBadge();
   render();
+  if (teamCount() === 2) askTeam();
 };
 
 function logout() {
   if (!confirm("Changer de groupe ?")) return;
-  currentUser = null; swapMode = null;
+  currentUser = null; swapMode = null; currentTeam = null; updateAnnBadge();
+  signOut(auth).catch(()=>{});
   document.getElementById("appScreen").classList.remove("active");
   document.getElementById("loginScreen").style.display = "flex";
   clearSwap();
@@ -1590,7 +1801,8 @@ function render() {
   const myCourtToday = new Set();
   COURTS.forEach(court => {
     for (let h = S; h < E; h++) {
-      if (data[key(date,court,h)]?.group === currentUser) { myCourtToday.add(court); break; }
+      const e = data[key(date,court,h)];
+      if ((e?.group === currentUser && (e.team ?? currentTeam) === currentTeam) || e?.guest === currentUser) { myCourtToday.add(court); break; }
     }
   });
 
@@ -1599,6 +1811,16 @@ function render() {
 }
 
 function buildGrid(bodyId, date, myCourtToday) {
+  const todayS = fmtLocal(new Date()), nowH = new Date().getHours(), maxS = shiftDate(todayS, MAX_DAYS_AHEAD);
+  function blockReason(court, h) {
+    if (date < todayS || (date === todayS && h < nowH)) return "Passé";
+    if (date > maxS) return `${MAX_DAYS_AHEAD} j max`;
+    if (court === "minifoot" && /Filles$/.test(currentUser)) return "Garçons";
+    const held = e => e?.group === currentUser || e?.guest === currentUser;
+    if (held(data[key(date,court,h-1)]) || held(data[key(date,court,h+1)])) return "Consécutif";
+    if (myCourtToday.has(court)) return "1 / jour";
+    return "";
+  }
   const body = document.getElementById(bodyId);
   body.innerHTML = "";
 
@@ -1616,24 +1838,56 @@ function buildGrid(bodyId, date, myCourtToday) {
       const entry = data[k];
       const group = entry?.group ?? null;
       const isMySlot  = group === currentUser;
+      const isGuest   = entry?.guest === currentUser;
       const isFree    = !group;
-      const isBlocked = isFree && myCourtToday.has(court);
+      const reason = isFree ? blockReason(court, h) : "";
+      const isBlocked = !!reason;
 
       const div = document.createElement("div");
       const outgoingReq = swapReqs[k];              // MA résa a une demande sortante vers ailleurs
       const incomingReq = findIncomingRequest(k);    // un autre groupe a demandé CE créneau
 
-      function nameBlock(g) {
+      function nameBlock(g, team) {
         const nd = document.createElement("div");
         nd.className = "slot-name";
         const parts = g.split(" – ");
-        nd.innerHTML = `<span class="slot-gp">${esc(parts[0]||g)}</span><span class="slot-genre">${esc(parts[1]||"")}</span>`;
+        nd.innerHTML = `<span class="slot-gp">${esc(parts[0]||g)}</span><span class="slot-genre">${esc(parts[1]||"")}${team ? " · É"+team : ""}</span>`;
         return nd;
       }
 
-      if (isMySlot) {
+      function matchLine(role) {
+        if (!entry?.mode) return;
+        const info = document.createElement("div"); info.className = "slot-req-info";
+        info.textContent = entry.guest ? `⚔️ vs ${entry.guest.replace(" – "," ")}${entry.guestTeam ? " É"+entry.guestTeam : ""}` : "5 vs 5 · cherche adversaire";
+        div.appendChild(info);
+        if (role === "other" && !entry.guest) {
+          const why = blockReason(court, h);
+          const acts2 = document.createElement("div"); acts2.className = "slot-actions";
+          if (why) { info.textContent += ` (${why})`; }
+          else {
+            const bJ = document.createElement("button"); bJ.className = "btn-echanger"; bJ.textContent = "Rejoindre (5)";
+            bJ.onclick = e => { e.stopPropagation();
+              if (teamCount() === 2 && !currentTeam) { askTeam(); return; }
+              joinMatch(k).then(() => showToast("Vous avez rejoint le match ✓", "green"))
+                .catch(err => { console.error(err); showToast("Impossible de rejoindre ce match (" + (err.code || err.message) + ").", "red"); }); };
+            acts2.appendChild(bJ); div.appendChild(acts2);
+          }
+        }
+      }
+
+      if (isGuest) {
+        div.className = "slot mine";
+        div.appendChild(nameBlock(group, entry?.team));
+        matchLine("guest");
+        const acts3 = document.createElement("div"); acts3.className = "slot-actions";
+        const bL = document.createElement("button"); bL.className = "btn-annuler"; bL.textContent = "Se retirer";
+        bL.onclick = e => { e.stopPropagation(); leaveMatch(k).then(() => showToast("Vous avez quitté le match.", "red")); };
+        acts3.appendChild(bL); div.appendChild(acts3);
+
+      } else if (isMySlot) {
         div.className = "slot mine" + (swapMode && swapMode.k === k ? " swap-selected" : "");
-        div.appendChild(nameBlock(group));
+        div.appendChild(nameBlock(group, entry?.team));
+        matchLine("host");
         const acts = document.createElement("div");
         acts.className = "slot-actions";
 
@@ -1688,36 +1942,34 @@ function buildGrid(bodyId, date, myCourtToday) {
               render();
             }
           };
-          acts.appendChild(bA); acts.appendChild(bS);
+          acts.appendChild(bA); if (!entry?.mode) acts.appendChild(bS);
         }
         div.appendChild(acts);
 
       } else if (isFree && !isBlocked) {
         div.className = "slot free";
         div.onclick = () => {
-          if (!confirm(`Réserver ce créneau (${h}h–${h+1}h) pour ${currentUser} ?`)) return;
-          reserve(k).then(() => showToast(`Réservé ✓ ${h}h–${h+1}h`, "green"))
-            .catch(err => {
-              console.error(err);
-              showToast("Réservation impossible sur ce créneau (ancienne donnée bloquante). Contactez le responsable.", "red");
-            });
+          if (!currentTeam) { askTeam(); return; }
+          openMode(k, court, h);
         };
 
       } else if (isBlocked) {
         div.className = "slot blocked";
-        div.title = "Votre groupe a déjà une réservation sur ce terrain aujourd'hui.";
+        div.title = reason;
+        const rl = document.createElement("div"); rl.className = "slot-req-info"; rl.textContent = reason; div.appendChild(rl);
 
       } else {
         // Créneau réservé par un AUTRE groupe
         div.className = "slot other";
-        div.appendChild(nameBlock(group));
+        div.appendChild(nameBlock(group, entry?.team));
+        matchLine("other");
 
         if (outgoingReq || incomingReq) {
           const info = document.createElement("div");
           info.className = "slot-req-info";
           info.textContent = "⏳ Échange en attente sur ce créneau";
           div.appendChild(info);
-        } else if (swapMode && swapMode.k !== k) {
+        } else if (swapMode && swapMode.k !== k && !entry?.mode) {
           const bP = document.createElement("button");
           bP.className = "btn-echanger"; bP.textContent = "Proposer un échange";
           bP.onclick = e => {
