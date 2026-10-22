@@ -1300,7 +1300,7 @@ input[type=date]:focus { outline: none; border-color: var(--green-600); box-shad
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, signOut }
+import { getAuth, signInWithEmailAndPassword, signOut, setPersistence, browserSessionPersistence }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getFirestore, collection, doc, setDoc, updateDoc, deleteField, deleteDoc, onSnapshot, writeBatch }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
@@ -1317,6 +1317,8 @@ const firebaseConfig = {
 const fbApp = initializeApp(firebaseConfig);
 const db = getFirestore(fbApp);
 const auth = getAuth(fbApp);
+// Chaque onglet a sa propre connexion (évite qu'un autre onglet change le groupe vu par Firebase)
+setPersistence(auth, browserSessionPersistence).catch(console.error);
 const resCol = collection(db, "reservations");
 const swapReqCol = collection(db, "swapRequests");
 const annCol = collection(db, "announcements");
@@ -1375,6 +1377,13 @@ onSnapshot(annCol, snap => {
   if (JSON.stringify(next) === JSON.stringify(announcements)) return;
   announcements = next; updateAnnBadge(); if (document.getElementById("annModal").classList.contains("open")) renderAnn();
 }, err => console.error(err));
+
+function errMsg(err) {
+  const mine = GROUP_EMAILS[currentUser];
+  if (err?.code === "permission-denied" && auth.currentUser && mine && auth.currentUser.email !== mine)
+    return "votre connexion appartient à un autre groupe (autre onglet ?), reconnectez-vous";
+  return err?.code || err?.message || "erreur";
+}
 
 function findIncomingRequest(targetKey) {
   for (const [reqKey, req] of Object.entries(swapReqs)) {
@@ -1622,7 +1631,7 @@ async function doReserve(mode) {
   document.getElementById("modeModal").classList.remove("open");
   if (!m) return;
   try { await reserve(m.k, mode); showToast(mode === "open" ? "Match 5 vs 5 créé — en attente d'un adversaire ✓" : `Réservé ✓ ${m.h}h–${m.h+1}h`, "green"); }
-  catch (err) { console.error(err); showToast("Réservation impossible (" + (err.code || err.message) + ").", "red"); }
+  catch (err) { console.error(err); showToast("Réservation impossible (" + errMsg(err) + ").", "red"); }
 }
 document.getElementById("modeFull").onclick = () => doReserve("full");
 document.getElementById("modeOpen").onclick = () => doReserve("open");
@@ -1685,7 +1694,7 @@ document.getElementById("annModal").addEventListener("click", async e => {
       await updateDoc(doc(db,"announcements",k), { replies: { ...(announcements[k].replies || {}), [currentUser]: { n, ts: Date.now() } } });
       if (act === "reply") showToast("Réponse envoyée ✓", "green");
     }
-  } catch (err) { console.error(err); showToast("Action impossible (" + (err.code || err.message) + ").", "red"); }
+  } catch (err) { console.error(err); showToast("Action impossible (" + errMsg(err) + ").", "red"); }
 });
 
 // ── Login (vraie vérification du mot de passe par Firebase) ──
@@ -1802,7 +1811,7 @@ function render() {
   COURTS.forEach(court => {
     for (let h = S; h < E; h++) {
       const e = data[key(date,court,h)];
-      if ((e?.group === currentUser && (e.team ?? currentTeam) === currentTeam) || e?.guest === currentUser) { myCourtToday.add(court); break; }
+      if ((e?.group === currentUser && (e.team ?? currentTeam) === currentTeam) || (e?.guest === currentUser && (e.guestTeam ?? currentTeam) === currentTeam)) { myCourtToday.add(court); break; }
     }
   });
 
@@ -1869,7 +1878,7 @@ function buildGrid(bodyId, date, myCourtToday) {
             bJ.onclick = e => { e.stopPropagation();
               if (teamCount() === 2 && !currentTeam) { askTeam(); return; }
               joinMatch(k).then(() => showToast("Vous avez rejoint le match ✓", "green"))
-                .catch(err => { console.error(err); showToast("Impossible de rejoindre ce match (" + (err.code || err.message) + ").", "red"); }); };
+                .catch(err => { console.error(err); showToast("Impossible de rejoindre ce match (" + errMsg(err) + ").", "red"); }); };
             acts2.appendChild(bJ); div.appendChild(acts2);
           }
         }
