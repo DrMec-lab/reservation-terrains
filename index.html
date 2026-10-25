@@ -387,6 +387,12 @@ html, body { min-height: 100vh; background: var(--bg); color: var(--text); }
 .ann-act button,.ann-act select{padding:7px 10px;border-radius:8px;border:1px solid var(--border-strong);background:var(--surface-2);color:inherit;cursor:pointer;font-size:.82rem}
 .ann-input{width:100%;margin:8px 0;padding:9px;border-radius:8px;border:1px solid var(--border-strong);background:var(--surface-2);color:inherit}
 .ann-empty{opacity:.65;font-size:.85rem;margin:10px 0}
+.home-btn{display:flex;align-items:center;gap:14px;width:100%;padding:16px;border-radius:14px;border:1px solid var(--border-strong);background:var(--surface-2);color:inherit;cursor:pointer;text-align:left;margin:0 0 12px;font-size:1rem;font-family:inherit}
+.home-btn:last-child{margin-bottom:0}.home-btn:first-child{background:var(--green-700);color:#fff;border-color:transparent}
+.home-btn b{display:block;font-size:1.05rem}.home-btn small{display:block;opacity:.7;font-size:.78rem;font-weight:400;margin-top:2px}.home-ico{font-size:1.7rem}
+.view-banner{display:none;align-items:center;justify-content:space-between;gap:10px;padding:9px 12px;margin:0 0 12px;border-radius:12px;border:1px solid var(--border-strong);background:var(--surface-2);font-size:.82rem}
+.view-banner button{padding:6px 12px;border-radius:8px;border:none;background:var(--green-700);color:#fff;cursor:pointer;font-weight:600}
+.slot.viewer-free{cursor:default;opacity:.55}
 .theme-toggle {
   width: 36px; height: 36px; border-radius: 50%;
   border: 1px solid var(--border-strong);
@@ -1036,7 +1042,12 @@ input[type=date]:focus { outline: none; border-color: var(--green-600); box-shad
       <h1>École Mohammadia d'Ingénieurs</h1>
       <p>Réservation des terrains sportifs<br>Année scolaire 2026–2027</p>
     </div>
-    <div class="login-card">
+    <div class="login-card" id="homeCard">
+      <button class="home-btn" id="btnGoReserve"><span class="home-ico">🗓️</span><span><b>Réserver</b><small>Se connecter avec le mot de passe du groupe</small></span></button>
+      <button class="home-btn alt" id="btnGoView"><span class="home-ico">👁️</span><span><b>Consulter</b><small>Voir les réservations, sans se connecter</small></span></button>
+    </div>
+    <div class="login-card" id="loginCard" style="display:none">
+      <button class="team-later" id="btnBackHome" style="margin:0 0 12px">← Retour</button>
       <div class="field-group">
         <label>Génie</label>
         <select id="selGenie">
@@ -1113,6 +1124,7 @@ input[type=date]:focus { outline: none; border-color: var(--green-600); box-shad
 
   <!-- MOBILE: content -->
   <div class="mobile-content">
+    <div class="view-banner" id="viewBannerMob">👁️ Mode consultation (lecture seule) <button id="viewToReserveMob">Réserver</button></div>
     <div id="swapBannerMob" class="swap-banner">
       <span>Mode échange — sélectionnez votre 2ᵉ créneau pour permuter.</span>
       <button class="btn-cancel-swap" id="cancelSwapMob">Annuler</button>
@@ -1221,7 +1233,7 @@ input[type=date]:focus { outline: none; border-color: var(--green-600); box-shad
       <div class="sidebar-user-avatar" id="sidebarAvatar"></div>
       <div class="sidebar-user-info">
         <div class="sidebar-user-name" id="sidebarName"></div>
-        <div class="sidebar-user-role">Changer de groupe</div>
+        <div class="sidebar-user-role" id="sidebarRole">Changer de groupe</div>
       </div>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
     </div>
@@ -1231,8 +1243,9 @@ input[type=date]:focus { outline: none; border-color: var(--green-600); box-shad
   <div class="main-area">
     <div class="main-header">
       <h2 id="mainHeaderDate">Créneaux du jour</h2>
-      <p>Cliquez sur un créneau libre pour réserver · 1 réservation par terrain par jour</p>
+      <p id="mainHint">Cliquez sur un créneau libre pour réserver · 1 réservation par terrain par jour</p>
     </div>
+    <div class="view-banner" id="viewBannerDsk">👁️ Mode consultation (lecture seule) <button id="viewToReserveDsk">Réserver</button></div>
     <div id="swapBannerDsk" class="swap-banner" style="margin-bottom:18px">
       <span>Mode échange actif — sélectionnez votre 2ᵉ créneau pour permuter les groupes.</span>
       <button class="btn-cancel-swap" id="cancelSwapDsk">Annuler</button>
@@ -1599,9 +1612,10 @@ function fmtDate(s) {
 // ── Login ──
 const MAX_DAYS_AHEAD = 7;
 let currentTeam = null;
+let viewerMode = false;
 const teamCount = () => /^G\.(RT|MIS) /.test(currentUser || "") ? 1 : 2;
 function updateTeamUI() {
-  const two = teamCount() === 2;
+  const two = !viewerMode && teamCount() === 2;
   document.getElementById("teamBtnMob").style.display = two ? "flex" : "none";
   document.getElementById("teamSecDsk").style.display = two ? "block" : "none";
   document.getElementById("teamBtnMob").textContent = currentTeam ? "É" + currentTeam : "É?";
@@ -1697,6 +1711,45 @@ document.getElementById("annModal").addEventListener("click", async e => {
   } catch (err) { console.error(err); showToast("Action impossible (" + errMsg(err) + ").", "red"); }
 });
 
+// ── Accueil : Réserver / Consulter ──
+function showHome() {
+  document.getElementById("homeCard").style.display = "";
+  document.getElementById("loginCard").style.display = "none";
+}
+function showLoginForm() {
+  document.getElementById("homeCard").style.display = "none";
+  document.getElementById("loginCard").style.display = "";
+  setTimeout(() => document.getElementById("selGenie").focus(), 50);
+}
+function setViewerUI(on) {
+  ["Mob","Dsk"].forEach(x => { document.getElementById("viewBanner"+x).style.display = on ? "flex" : "none"; });
+  document.getElementById("sidebarRole").textContent = on ? "Retour à l'accueil" : "Changer de groupe";
+  document.getElementById("mainHint").textContent = on ? "Mode consultation : les créneaux réservés sont visibles, sans possibilité de réserver" : "Cliquez sur un créneau libre pour réserver · 1 réservation par terrain par jour";
+  document.getElementById("annBtnMob").style.display = on ? "none" : "";
+  document.getElementById("annBtnDsk").closest(".sidebar-section").style.display = on ? "none" : "";
+}
+function enterViewer() {
+  viewerMode = true; currentUser = null; currentTeam = null; swapMode = null;
+  signOut(auth).catch(() => {});
+  document.getElementById("chipAvatar").textContent = "👁";
+  document.getElementById("chipLabel").textContent = "Consultation";
+  document.getElementById("sidebarAvatar").textContent = "👁";
+  document.getElementById("sidebarName").textContent = "Mode consultation";
+  document.getElementById("loginScreen").style.display = "none";
+  document.getElementById("appScreen").classList.add("active");
+  setViewerUI(true); updateTeamUI(); updateAnnBadge(); clearSwap(); render();
+}
+function exitViewer() {
+  viewerMode = false;
+  document.getElementById("appScreen").classList.remove("active");
+  document.getElementById("loginScreen").style.display = "flex";
+  setViewerUI(false); showHome();
+}
+document.getElementById("btnGoReserve").onclick = showLoginForm;
+document.getElementById("btnGoView").onclick = enterViewer;
+document.getElementById("btnBackHome").onclick = showHome;
+["Mob","Dsk"].forEach(x => document.getElementById("viewToReserve"+x).onclick = () => { exitViewer(); showLoginForm(); });
+
 // ── Login (vraie vérification du mot de passe par Firebase) ──
 document.getElementById("btnLogin").onclick = async () => {
   const g  = document.getElementById("selGenie").value;
@@ -1712,6 +1765,7 @@ document.getElementById("btnLogin").onclick = async () => {
   catch (err) { btn.disabled = false; showToast("Mot de passe incorrect.", "red"); return; }
   btn.disabled = false;
   document.getElementById("loginPwd").value = "";
+  viewerMode = false; setViewerUI(false);
   currentUser = grp;
   const genderIcon = gr === "Filles" ? "♀" : "♂";
   document.getElementById("chipAvatar").textContent = genderIcon;
@@ -1727,12 +1781,14 @@ document.getElementById("btnLogin").onclick = async () => {
 };
 
 function logout() {
+  if (viewerMode) { exitViewer(); return; }
   if (!confirm("Changer de groupe ?")) return;
   currentUser = null; swapMode = null; currentTeam = null; updateAnnBadge();
   signOut(auth).catch(()=>{});
   document.getElementById("appScreen").classList.remove("active");
   document.getElementById("loginScreen").style.display = "flex";
   clearSwap();
+  showHome();
 }
 document.getElementById("chipUser").onclick = logout;
 document.getElementById("sidebarUser").onclick = logout;
@@ -1792,7 +1848,7 @@ function showToast(msg, type="") {
 
 // ── Render ──
 function render() {
-  if (!currentUser) return;
+  if (!currentUser && !viewerMode) return;
   const date = getDate();
   const oor = date < MIN_D || date > MAX_D;
   const fmted = fmtDate(date);
@@ -1884,7 +1940,22 @@ function buildGrid(bodyId, date, myCourtToday) {
         }
       }
 
-      if (isGuest) {
+      if (viewerMode) {
+        if (entry && group) {
+          div.className = "slot other";
+          div.appendChild(nameBlock(group, entry.team));
+          if (entry.mode) {
+            const vi = document.createElement("div"); vi.className = "slot-req-info";
+            vi.textContent = entry.guest ? `⚔️ vs ${entry.guest.replace(" – "," ")}${entry.guestTeam ? " É"+entry.guestTeam : ""}` : "5 vs 5 · cherche adversaire";
+            div.appendChild(vi);
+          }
+        } else {
+          div.className = "slot viewer-free";
+          const lb = document.createElement("div"); lb.className = "slot-req-info";
+          lb.textContent = (date < todayS || (date === todayS && h < nowH)) ? "Passé" : "Libre";
+          div.appendChild(lb);
+        }
+      } else if (isGuest) {
         div.className = "slot mine";
         div.appendChild(nameBlock(group, entry?.team));
         matchLine("guest");
