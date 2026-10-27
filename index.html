@@ -18,33 +18,38 @@
    TOKENS
 ═══════════════════════════════════════════ */
 :root {
-  --green-950: #052015;
-  --green-900: #0A3D2B;
-  --green-800: #0F5235;
-  --green-700: #1A6B47;
-  --green-600: #1D8055;
-  --green-500: #22C55E;
-  --green-400: #4ADE80;
-  --green-100: #DCFCE7;
-  --green-50:  #F0FDF4;
+  /* « green-* » = noir encre (surfaces sombres, boutons) + or (accents) */
+  --green-950: #0A0A0B;
+  --green-900: #111113;
+  --green-800: #1D1D21;
+  --green-700: #2A2A2F;
+  --green-600: #3A3A40;
+  --green-500: #F2B600;
+  --green-400: #FFD23F;
+  --green-100: #FFF1BF;
+  --green-50:  #FFFAE8;
 
-  --slate-950: #020617;
-  --slate-900: #0F172A;
-  --slate-700: #334155;
-  --slate-500: #64748B;
-  --slate-300: #CBD5E1;
-  --slate-200: #E2E8F0;
-  --slate-100: #F1F5F9;
-  --slate-50:  #F8FAFC;
+  --slate-950: #0A0A0B;
+  --slate-900: #111113;
+  --slate-700: #3A3A40;
+  --slate-500: #6B6B73;
+  --slate-400: #A3A19A;
+  --slate-300: #D2CFC6;
+  --slate-200: #E6E4DE;
+  --slate-100: #F3F2EE;
+  --slate-50:  #FAFAF8;
   --white:     #FFFFFF;
 
-  --amber-500: #F59E0B;
-  --amber-100: #FEF3C7;
-  --amber-800: #92400E;
+  --amber-500: #B98300;
+  --amber-100: #FFF1BF;
+  --amber-800: #5C4200;
 
-  --red-500:   #EF4444;
-  --red-100:   #FEE2E2;
-  --red-800:   #991B1B;
+  --red-500:   #C8102E;
+  --red-100:   #FCE4E8;
+  --red-800:   #7A0A1B;
+
+  --gold:   #F2B600;
+  --gold-d: #C99700;
 
   /* Semantic */
   --bg:         var(--slate-50);
@@ -55,15 +60,15 @@
   --border:     var(--slate-200);
   --border-strong: var(--slate-300);
 
-  --slot-free:     var(--green-50);
-  --slot-free-h:   var(--green-100);
-  --slot-mine:     var(--amber-100);
-  --slot-mine-t:   var(--amber-800);
-  --slot-mine-b:   var(--amber-500);
-  --slot-other:    var(--green-100);
-  --slot-other-t:  var(--green-700);
-  --slot-blocked:  var(--slate-100);
-  --slot-blocked-t:var(--slate-400);
+  --slot-free:     #FFFFFF;
+  --slot-free-h:   #FFF4CC;
+  --slot-mine:     #FFD84D;
+  --slot-mine-t:   #111113;
+  --slot-mine-b:   #D9A400;
+  --slot-other:    #17171A;
+  --slot-other-t:  #F4F4F5;
+  --slot-blocked:  #F1F0EC;
+  --slot-blocked-t:#A3A19A;
 
   --radius-sm: 6px;
   --radius:    10px;
@@ -76,42 +81,29 @@
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg:         #0B1512;
-    --surface:    #111C17;
-    --surface-2:  #182419;
-    --text:       #E2E8F0;
-    --text-muted: #64748B;
-    --border:     #1E2D26;
-    --border-strong: #2A3F35;
-
-    --slot-free:     #0D2318;
-    --slot-free-h:   #122B1F;
-    --slot-mine:     #2C1A00;
-    --slot-mine-t:   #FCD34D;
-    --slot-mine-b:   #92400E;
-    --slot-other:    #0A2B1A;
-    --slot-other-t:  #4ADE80;
-    --slot-blocked:  #0D1611;
-    --slot-blocked-t:#2D4A38;
+    --bg:#0B0B0C; --surface:#141416; --surface-2:#1C1C1F; --text:#F2F2F2; --text-muted:#8E8E96;
+    --border:#26262A; --border-strong:#38383E; --slot-free:#161618; --slot-free-h:#2A2410;
+    --slot-mine:#FFD84D; --slot-mine-t:#111113; --slot-mine-b:#D9A400; --slot-other:#2E2E33;
+    --slot-other-t:#F4F4F5; --slot-blocked:#0F0F11; --slot-blocked-t:#4B4B52;
   }
 }
 :root[data-theme="dark"] {
-  --bg:         #0B1512;
-  --surface:    #111C17;
-  --surface-2:  #182419;
-  --text:       #E2E8F0;
-  --text-muted: #64748B;
-  --border:     #1E2D26;
-  --border-strong: #2A3F35;
-  --slot-free:     #0D2318;
-  --slot-free-h:   #122B1F;
-  --slot-mine:     #2C1A00;
-  --slot-mine-t:   #FCD34D;
-  --slot-mine-b:   #92400E;
-  --slot-other:    #0A2B1A;
-  --slot-other-t:  #4ADE80;
-  --slot-blocked:  #0D1611;
-  --slot-blocked-t:#2D4A38;
+  --bg:         #0B0B0C;
+  --surface:    #141416;
+  --surface-2:  #1C1C1F;
+  --text:       #F2F2F2;
+  --text-muted: #8E8E96;
+  --border:     #26262A;
+  --border-strong: #38383E;
+  --slot-free:     #161618;
+  --slot-free-h:   #2A2410;
+  --slot-mine:     #FFD84D;
+  --slot-mine-t:   #111113;
+  --slot-mine-b:   #D9A400;
+  --slot-other:    #2E2E33;
+  --slot-other-t:  #F4F4F5;
+  --slot-blocked:  #0F0F11;
+  --slot-blocked-t:#4B4B52;
 }
 
 *, *::before, *::after { box-sizing: inherit; margin: 0; padding: 0; }
@@ -131,7 +123,7 @@ html, body { min-height: 100vh; background: var(--bg); color: var(--text); }
   padding-top: max(24px, env(safe-area-inset-top));
   padding-bottom: max(24px, env(safe-area-inset-bottom));
   background:
-    radial-gradient(ellipse 80% 60% at 50% -10%, #1A6B4722 0%, transparent 70%),
+    radial-gradient(ellipse 80% 60% at 50% -10%, #F2B60026 0%, transparent 70%),
     var(--bg);
 }
 
@@ -187,7 +179,7 @@ html, body { min-height: 100vh; background: var(--bg); color: var(--text); }
   align-items: center;
   justify-content: center;
   font-size: 28px;
-  box-shadow: 0 0 0 4px #1A6B4730;
+  box-shadow: 0 0 0 4px #F2B60055;
 }
 
 .login-brand h1 {
@@ -247,7 +239,7 @@ html, body { min-height: 100vh; background: var(--bg); color: var(--text); }
 .field-group select:focus {
   outline: none;
   border-color: var(--green-600);
-  box-shadow: 0 0 0 3px #1A6B4720;
+  box-shadow: 0 0 0 3px #F2B60040;
 }
 
 .login-divider {
@@ -471,7 +463,7 @@ input[type=date] {
   font-size: .9rem;
   cursor: pointer;
 }
-input[type=date]:focus { outline: none; border-color: var(--green-600); box-shadow: 0 0 0 3px #1A6B4720; }
+input[type=date]:focus { outline: none; border-color: var(--green-600); box-shadow: 0 0 0 3px #F2B60040; }
 
 .daynav {
   display: grid;
@@ -511,7 +503,7 @@ input[type=date]:focus { outline: none; border-color: var(--green-600); box-shad
 /* ── Swap banner ── */
 .swap-banner {
   display: none;
-  background: #FFF7ED;
+  background: #FFF8E1;
   border: 1.5px solid var(--amber-500);
   border-radius: var(--radius);
   padding: 10px 14px;
@@ -781,7 +773,7 @@ input[type=date]:focus { outline: none; border-color: var(--green-600); box-shad
   .sidebar input[type=date]:focus {
     outline: none;
     border-color: var(--green-500);
-    box-shadow: 0 0 0 3px #22C55E25;
+    box-shadow: 0 0 0 3px #F2B60040;
   }
   .sidebar input[type=date]::-webkit-calendar-picker-indicator { filter: invert(1); opacity: .5; }
 
@@ -927,7 +919,7 @@ input[type=date]:focus { outline: none; border-color: var(--green-600); box-shad
 }
 .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 .toast.green { background: var(--green-900); }
-.toast.red { background: #7F1D1D; }
+.toast.red { background: #7A0A1B; }
 
 /* ── Modale mot de passe ── */
 #pwdModal {
@@ -972,7 +964,7 @@ input[type=date]:focus { outline: none; border-color: var(--green-600); box-shad
   font-family: inherit;
   font-size: .95rem;
 }
-.pwd-card input:focus { outline: none; border-color: var(--red-500); box-shadow: 0 0 0 3px #EF444420; }
+.pwd-card input:focus { outline: none; border-color: var(--red-500); box-shadow: 0 0 0 3px #C8102E30; }
 .pwd-btns { display: flex; gap: 8px; }
 .pwd-btns button {
   flex: 1;
@@ -986,6 +978,25 @@ input[type=date]:focus { outline: none; border-color: var(--green-600); box-shad
 }
 .btn-pwd-cancel { background: var(--surface-2); color: var(--text); border: 1px solid var(--border) !important; }
 .btn-pwd-confirm { background: var(--red-500); color: #fff; }
+
+/* ── Thème « Parade EMI » : noir · blanc · jaune · rouge ── */
+.slot.free::after { color: var(--gold-d); opacity: .9; }
+.slot.other .slot-req-info { color: #FFD23F; }
+.slot.mine .slot-req-info { color: #4A3800; }
+.slot.other .btn-echanger { background: var(--gold); color: #111113; }
+.btn-primary:hover { background: var(--gold); color: #111113; }
+.login-card { border-top: 3px solid var(--red-500); }
+.login-emblem { box-shadow: 0 0 0 4px #F2B60055; }
+.topbar { border-bottom: 2px solid var(--gold); }
+.sidebar { border-right: 2px solid var(--gold); }
+.sidebar .btn-today { background: var(--gold) !important; color: #111113 !important; }
+.daynav .btn-today { background: var(--green-900); color: #fff; }
+.daynav .btn-today:hover { background: var(--gold); color: #111113; }
+.home-btn:first-child { border: 1px solid var(--gold); }
+.sport-bg .court { color: var(--text); opacity: .10; }
+.toast.green { background: #111113; border-left: 4px solid var(--gold); }
+.slot.swap-selected { outline-color: var(--red-500); }
+.sidebar .legend-dot { outline: 1px solid rgba(255,255,255,.45); outline-offset: 0; }
 </style>
 </head>
 <body>
